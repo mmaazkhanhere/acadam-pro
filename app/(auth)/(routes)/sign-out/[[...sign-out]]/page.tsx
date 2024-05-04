@@ -2,7 +2,9 @@ import { SignUp } from '@clerk/nextjs'
 
 const SignUpPage = () => {
     return (
-        <SignUp />
+        <SignUp
+            forceRedirectUrl={'/user'}
+        />
     )
 }
 
