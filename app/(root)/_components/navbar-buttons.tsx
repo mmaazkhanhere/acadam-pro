@@ -12,7 +12,8 @@ const NavbarButtons = (props: Props) => {
     const { userId } = auth();
 
     return (
-        <nav className='flex items-center gap-x-4'>
+        <nav className='flex items-center gap-x-2 md:gap-x-4'>
+
             {
                 userId ? (
                     <UserButton />
@@ -36,8 +37,9 @@ const NavbarButtons = (props: Props) => {
                 >
                     <Button
                         size='sm'
+                        className='hidden md:block'
                     >
-                        Courses
+                        My Courses
                     </Button>
                 </Link>
 
