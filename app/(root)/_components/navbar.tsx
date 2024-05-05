@@ -9,9 +9,9 @@ type Props = {}
 const Navbar = (props: Props) => {
     return (
         <header className='flex items-center justify-between'>
-
-            <MobileMenu />
-
+            <nav className='lg:hidden'>
+                <MobileMenu />
+            </nav>
             <Logo className='hidden lg:block' />
             <NavbarMenu />
             <NavbarButtons />

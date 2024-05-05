@@ -50,7 +50,7 @@ const MobileMenu = (props: Props) => {
     }
 
     return (
-        <Sheet>
+        <Sheet >
             <SheetTrigger>
                 <Menu className='w-7 h-7' />
             </SheetTrigger>
@@ -82,7 +82,7 @@ const MobileMenu = (props: Props) => {
                     >
                         <Button
                             size='sm'
-                            className='w-full'
+                            className='w-full md:hidden'
                         >
                             My Courses
                         </Button>
