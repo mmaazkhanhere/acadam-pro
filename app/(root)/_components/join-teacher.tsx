@@ -27,8 +27,8 @@ const JoinTeacher = (props: Props) => {
 
             {/*Right Grid */}
             <div
-                className='flex flex-col items-start justify-center gap-y-4 lg:gap-y-6
-                lg:text-right order-1 lg:order-2'
+                className='flex flex-col items-start lg:items-end justify-center 
+                gap-y-4 lg:gap-y-6 lg:text-right order-1 lg:order-2'
             >
 
                 {/*Span */}
