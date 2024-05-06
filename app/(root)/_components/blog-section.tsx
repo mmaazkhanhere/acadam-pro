@@ -39,9 +39,9 @@ const BlogSection = (props: Props) => {
                         <Globe />
                         <span>News & Articles</span>
                     </div>
-                    <h1 className='text-2xl md:text-3xl font-bold'>
+                    <h2 className='text-2xl md:text-3xl font-bold'>
                         Read Our Latest News
-                    </h1>
+                    </h2>
 
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mt-10'>
                         {

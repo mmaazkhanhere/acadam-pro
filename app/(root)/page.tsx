@@ -4,6 +4,7 @@ import FeatureGrid from './_components/feature-grid'
 import AboutUsSection from './_components/about-us-section'
 import JoinTeacher from './_components/join-teacher'
 import BlogSection from './_components/blog-section'
+import FAQS from './_components/faqs'
 
 type Props = {}
 
@@ -15,6 +16,7 @@ const RootPage = (props: Props) => {
       <AboutUsSection />
       <JoinTeacher />
       <BlogSection />
+      <FAQS />
     </div>
   )
 }
