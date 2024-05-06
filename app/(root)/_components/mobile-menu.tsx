@@ -4,12 +4,7 @@ import React from 'react'
 
 import {
     Sheet,
-    SheetClose,
     SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { Menu } from 'lucide-react'
@@ -81,10 +76,11 @@ const MobileMenu = (props: Props) => {
                         href={`/dashboard`}
                     >
                         <Button
+                            onClick={() => onClick('/dashboard')}
                             size='sm'
                             className='w-full md:hidden'
                         >
-                            My Courses
+                            Dashboard
                         </Button>
                     </Link>
 

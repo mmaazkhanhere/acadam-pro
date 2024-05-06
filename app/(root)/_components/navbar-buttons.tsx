@@ -1,9 +1,11 @@
-import { ThemeButton } from '@/components/theme-button'
-import { Button } from '@/components/ui/button'
-import { SignInButton, UserButton } from '@clerk/nextjs'
-import { auth } from '@clerk/nextjs/server'
+
 import Link from 'next/link'
 import React from 'react'
+import { SignInButton, UserButton } from '@clerk/nextjs'
+import { auth } from '@clerk/nextjs/server'
+
+import { ThemeButton } from '@/components/theme-button'
+import { Button } from '@/components/ui/button'
 
 type Props = {}
 
@@ -39,7 +41,7 @@ const NavbarButtons = (props: Props) => {
                         size='sm'
                         className='hidden md:block'
                     >
-                        My Courses
+                        Dashboard
                     </Button>
                 </Link>
 

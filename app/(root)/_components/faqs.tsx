@@ -12,7 +12,7 @@ type Props = {}
 
 const FAQS = (props: Props) => {
     return (
-        <section className='pt-[1300px] md:pt-[900px] flex flex-col items-center'>
+        <section className='pt-[1300px] md:pt-[900px] flex flex-col items-center mb-10'>
             <h2 className='text-2xl md:text-3xl font-bold'>
                 Frequently Asked Questions
             </h2>
