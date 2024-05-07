@@ -1,40 +1,40 @@
 
+"use client"
+
 import Link from 'next/link'
 import React from 'react'
-import { SignInButton, UserButton } from '@clerk/nextjs'
-import { auth } from '@clerk/nextjs/server'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 import { ThemeButton } from '@/components/theme-button'
 import { Button } from '@/components/ui/button'
+import { UserAvatar } from '@/components/user-avatar'
+import SignInButton from '@/components/sign-in-button'
+
 
 type Props = {}
 
 const NavbarButtons = (props: Props) => {
 
-    const { userId } = auth();
+    const router = useRouter();
+    const { status } = useSession();
+
+    console.log(status)
 
     return (
         <nav className='flex items-center gap-x-2 md:gap-x-4'>
 
             {
-                userId ? (
-                    <UserButton />
+                status == 'authenticated' ? (
+                    <UserAvatar />
                 ) : (
-                    <SignInButton
-                    >
-                        <Button
-                            variant='outline'
-                            className='hover:bg-violet-500 transition duration-300
-                            hover:text-white border-violet-500'
-                        >
-                            Join Us
-                        </Button>
-                    </SignInButton>
+
+                    <SignInButton />
                 )
             }
 
             {
-                userId && <Link
+                status == 'authenticated' && <Link
                     href={`/dashboard`}
                 >
                     <Button

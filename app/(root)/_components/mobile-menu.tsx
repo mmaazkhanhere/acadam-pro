@@ -1,18 +1,20 @@
 "use client"
 
 import React from 'react'
+import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
 import {
     Sheet,
     SheetContent,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { Menu } from 'lucide-react'
+
 import Logo from '@/components/logo'
-import { redirect } from 'next/navigation'
-import { useAuth } from '@clerk/nextjs'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+
+import { Menu } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 
 type Props = {}
 
@@ -38,7 +40,7 @@ const routes = [
 
 const MobileMenu = (props: Props) => {
 
-    const { userId } = useAuth();
+    const { status } = useSession();
 
     const onClick = (href: string) => {
         redirect(href)
@@ -69,7 +71,7 @@ const MobileMenu = (props: Props) => {
 
                 {
 
-                    userId && <Link
+                    status == 'authenticated' && <Link
                         href={`/dashboard`}
                     >
                         <Button
