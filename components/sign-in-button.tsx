@@ -9,7 +9,6 @@ import {
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
-    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -19,15 +18,15 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 
-import { Button } from "@/components/ui/button"
+import { Input } from "./ui/input"
+import SignUpButton from "./sign-up-button"
+
 
 const formSchema = z.object({
     username: z.string().min(1, {
@@ -40,6 +39,13 @@ const formSchema = z.object({
 
 const SignInButton = () => {
 
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: "",
+            password: "",
+        },
+    })
 
     return (
         <AlertDialog>
@@ -52,15 +58,59 @@ const SignInButton = () => {
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
-                    </AlertDialogDescription>
+                    <AlertDialogTitle className="text-center">Sign In</AlertDialogTitle>
+                    <div className="grid ">
+                        <Form {...form}>
+                            <form onSubmit={() => { }}>
+                                <FormField
+                                    control={form.control}
+                                    name='username'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Username</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Enter your username"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name='password'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="password"
+                                                    placeholder="Enter your password"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+
+                                />
+                            </form>
+                        </Form>
+                    </div>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
+                <AlertDialogFooter className="flex justify-between w-full items-center">
+                    <button className="text-xs mr-44">
+                        New user? <SignUpButton />
+                    </button>
+                    <div className="flex items-center gap-2">
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction>Sign In</AlertDialogAction>
+                    </div>
+
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
