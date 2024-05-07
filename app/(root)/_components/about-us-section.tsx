@@ -7,7 +7,7 @@ type Props = {}
 const AboutUsSection = (props: Props) => {
     return (
         <section
-            className='grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-5 mt-20 md:mt-32 lg:mt-40'
+            className='grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-5 mt-10 md:mt-16 lg:mt-20'
         >
             <div className='flex flex-col items-start justify-center gap-y-4 lg:gap-y-6'>
 

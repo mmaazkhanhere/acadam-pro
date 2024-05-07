@@ -56,16 +56,13 @@ const MobileMenu = (props: Props) => {
                 <Logo />
                 {
                     routes.map((route) => (
-                        <>
-                            <button
-                                key={route.label}
-                                onClick={() => onClick(route.href)}
-                                className='flex flex-col items-center'
-                            >
-                                {route.label}
-                            </button>
-
-                        </>
+                        <button
+                            key={route.label}
+                            onClick={() => onClick(route.href)}
+                            className='flex flex-col items-center'
+                        >
+                            {route.label}
+                        </button>
 
                     ))
                 }

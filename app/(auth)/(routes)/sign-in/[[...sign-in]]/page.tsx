@@ -4,6 +4,7 @@ const SignInPage = () => {
     return (
         <SignIn
             forceRedirectUrl={'/dashboard'}
+            signUpForceRedirectUrl={'/user'}
         />
     )
 }
