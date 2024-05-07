@@ -1,14 +1,23 @@
-import NextAuth, { AuthOptions } from "next-auth";
+
+import type { NextAuthConfig } from "next-auth"
+
+import GithubProvider from "next-auth/providers/github"
+import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
-import bcrypt from 'bcryptjs'
-import prisma from '@/lib/prismadb'
+import prisma from './lib/prismadb'
+import bcrypt from "bcryptjs";
 
-export const authOptions: AuthOptions = {
-
-    adapter: PrismaAdapter(prisma),
+export default {
     providers: [
+        GithubProvider({
+            clientId: process.env.GITHUB_ID as string,
+            clientSecret: process.env.GITHUB_SECRET as string,
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
+        }),
         CredentialsProvider({
             name: 'credentials',
             credentials: {
@@ -17,14 +26,14 @@ export const authOptions: AuthOptions = {
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
-                    throw new Error('Missing credentials');
+                    throw new Error("Invalid credentials");
                 }
 
                 const user = await prisma.user.findUnique({
                     where: {
                         emailAddress: credentials.email
                     }
-                });
+                })
 
                 if (!user || !user?.hashedPassword) {
                     throw new Error("User doesn't exists");
@@ -36,41 +45,23 @@ export const authOptions: AuthOptions = {
                 );
 
                 if (!isCorrectPassword) {
-                    throw new Error('Invalid credentials');
+                    throw new Error("Invalid credentials")
                 }
 
-                return {
-                    ...user,
-                    email: user.emailAddress
-
-                }
+                return user;
             }
+
+
         })
     ],
     callbacks: {
         async session({ session, token, user }) {
-            // Ensure the session.user object exists
             session.user = session.user || {};
 
-            // Now that you've ensured session.user exists, you can safely assign email to it
             if (user?.email) {
                 session.user.email = user.email;
             }
             return session;
         }
-    },
-
-    debug: process.env.NODE_ENV === 'development',
-    session: {
-        strategy: "jwt",
-    },
-    jwt: {
-        secret: process.env.NEXTAUTH_JWT_SECRET,
-    },
-    secret: process.env.NEXTAUTH_SECRET,
-}
-
-
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
+    }
+} satisfies NextAuthConfig

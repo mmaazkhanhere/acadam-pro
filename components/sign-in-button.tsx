@@ -26,10 +26,11 @@ import {
 
 import { Input } from "./ui/input"
 import SignUpButton from "./sign-up-button"
+import { signIn } from "next-auth/react"
 
 
 const formSchema = z.object({
-    username: z.string().min(1, {
+    emailAddress: z.string().min(1, {
         message: "Please enter your username",
     }),
     password: z.string().min(1, {
@@ -39,13 +40,28 @@ const formSchema = z.object({
 
 const SignInButton = () => {
 
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            emailAddress: "",
             password: "",
         },
     })
+
+    const { isSubmitting, isValid } = form.formState
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            const result = await signIn('credentials', { values });
+
+            if (result?.ok) {
+
+            }
+        } catch (error) {
+
+        }
+    }
 
     return (
         <AlertDialog>
@@ -64,13 +80,14 @@ const SignInButton = () => {
                             <form onSubmit={() => { }}>
                                 <FormField
                                     control={form.control}
-                                    name='username'
+                                    name='emailAddress'
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Username</FormLabel>
+                                            <FormLabel>Email Address</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="Enter your username"
+                                                    type='email'
+                                                    placeholder="Enter your email address"
                                                     {...field}
                                                 />
                                             </FormControl>
