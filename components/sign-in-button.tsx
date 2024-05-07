@@ -27,11 +27,13 @@ import {
 import { Input } from "./ui/input"
 import SignUpButton from "./sign-up-button"
 import { signIn } from "next-auth/react"
+import { useToast } from "./ui/use-toast"
+import { useRouter } from "next/navigation"
 
 
 const formSchema = z.object({
     emailAddress: z.string().min(1, {
-        message: "Please enter your username",
+        message: "Please enter your email address",
     }),
     password: z.string().min(1, {
         message: "Please enter your password",
@@ -49,17 +51,30 @@ const SignInButton = () => {
         },
     })
 
+    const { toast } = useToast();
+    const router = useRouter();
+
     const { isSubmitting, isValid } = form.formState
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+        console.log('called')
         try {
             const result = await signIn('credentials', { values });
 
             if (result?.ok) {
+                toast({
+                    title: 'Successful Login',
+                    variant: 'default'
+                })
 
+                router.push('/dashboard')
             }
         } catch (error) {
-
+            toast({
+                title: 'Check your credentials again',
+                variant: 'destructive'
+            })
         }
     }
 
@@ -74,10 +89,10 @@ const SignInButton = () => {
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle className="text-center">Sign In</AlertDialogTitle>
+                    <AlertDialogTitle className="lg:text-center">Sign In</AlertDialogTitle>
                     <div className="grid ">
                         <Form {...form}>
-                            <form onSubmit={() => { }}>
+                            <form onSubmit={form.handleSubmit(onSubmit)}>
                                 <FormField
                                     control={form.control}
                                     name='emailAddress'
@@ -115,20 +130,25 @@ const SignInButton = () => {
                                     )}
 
                                 />
+
+                                <AlertDialogFooter className="flex justify-between w-full items-center">
+                                    <button className="text-xs mr-44">
+                                        New user? <SignUpButton />
+                                    </button>
+
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        type="submit"
+                                    >
+                                        Sign In
+                                    </AlertDialogAction>
+
+                                </AlertDialogFooter>
                             </form>
                         </Form>
                     </div>
                 </AlertDialogHeader>
-                <AlertDialogFooter className="flex justify-between w-full items-center">
-                    <button className="text-xs mr-44">
-                        New user? <SignUpButton />
-                    </button>
-                    <div className="flex items-center gap-2">
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Sign In</AlertDialogAction>
-                    </div>
 
-                </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
     )
