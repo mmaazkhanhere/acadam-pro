@@ -38,7 +38,6 @@ import {
 
 import { Input } from "./ui/input"
 import { Separator } from "./ui/separator"
-import AuthSocialButton from "./auth-social-button"
 import { useToast } from "./ui/use-toast"
 
 import { BsGithub, BsGoogle } from 'react-icons/bs';
@@ -116,177 +115,146 @@ const SignUpButton = (props: Props) => {
         }
     };
 
-    const socialAction = (action: string) => {
-        signIn(action).then((callback) => {
-            if (callback?.error) {
-                toast({
-                    title: 'Invalid credentials',
-                    variant: 'destructive'
-                })
-            }
-            if (callback?.ok && !callback.error) {
-                toast({
-                    title: 'Successful Login',
-
-                })
-            }
-        })
-    }
 
     return (
-        <AlertDialog>
+        <AlertDialog
+
+        >
             <AlertDialogTrigger
                 className="text-purple-500 hover:underline hover:text-purple-400 
                 transition duration-300"
             >
                 Sign Up
             </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle className="text-center">Sign In</AlertDialogTitle>
-                    <div className="grid ">
-                        <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)}>
-                                <FormField
-                                    control={form.control}
-                                    name='name'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Name</FormLabel>
+            <AlertDialogContent
+            >
+                <AlertDialogTitle className="text-center">Sign Up</AlertDialogTitle>
+                <div className="grid grid-cols-1 items-start gap-2">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <FormField
+                                control={form.control}
+                                name='name'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Name</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="e.g Jack Smith"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name='username'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Username</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                placeholder="e.g jacksmith"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name='emailAddress'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email Address</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type='email'
+                                                placeholder="e.g jacksmith@example.com"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name='password'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="password"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name='role'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Role</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
                                             <FormControl>
-                                                <Input
-                                                    placeholder="e.g Jack Smith"
-                                                    {...field}
-                                                />
+                                                <SelectTrigger className="w-[180px]">
+                                                    <SelectValue placeholder="Select your role" />
+                                                </SelectTrigger>
+
                                             </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectLabel>Role</SelectLabel>
+                                                    <SelectItem value="student">Student</SelectItem>
+                                                    <SelectItem value="Teacher">Teacher</SelectItem>
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
 
-                                />
+                            />
 
-                                <FormField
-                                    control={form.control}
-                                    name='username'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Username</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="e.g jacksmith"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name='emailAddress'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Email Address</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type='email'
-                                                    placeholder="e.g jacksmith@example.com"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name='password'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Password</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="password"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name='role'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Role</FormLabel>
-                                            <Select
-                                                onValueChange={field.onChange}
-                                                defaultValue={field.value}
-                                            >
-                                                <FormControl>
-                                                    <SelectTrigger className="w-[180px]">
-                                                        <SelectValue placeholder="Select your role" />
-                                                    </SelectTrigger>
-
-                                                </FormControl>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <SelectLabel>Role</SelectLabel>
-                                                        <SelectItem value="student">Student</SelectItem>
-                                                        <SelectItem value="Teacher">Teacher</SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-
-                                />
-
-                                <AlertDialogFooter >
+                            <AlertDialogFooter className="mt-3">
 
 
-                                    <AlertDialogCancel disabled={isSubmitting}>
-                                        Cancel
-                                    </AlertDialogCancel>
+                                <AlertDialogCancel disabled={isSubmitting}>
+                                    Cancel
+                                </AlertDialogCancel>
 
-                                    <AlertDialogAction
-                                        type="submit"
-                                        disabled={!isValid || isSubmitting}
+                                <AlertDialogAction
+                                    type="submit"
+                                    disabled={!isValid || isSubmitting}
 
-                                    >
-                                        Sign up
-                                    </AlertDialogAction>
+                                >
+                                    Sign up
+                                </AlertDialogAction>
 
-                                </AlertDialogFooter>
+                            </AlertDialogFooter>
 
-                            </form>
-                        </Form>
-                    </div>
-                </AlertDialogHeader>
-
-                <Separator />
-
-                <div className="justify-center flex gap-x-4">
-                    <AuthSocialButton
-                        icon={BsGithub}
-                        onClick={() => socialAction('github')}
-                        label="Continue with Github"
-                    />
-
-                    <AuthSocialButton
-                        icon={BsGoogle}
-                        onClick={() => socialAction('google')}
-                        label="Continue with Google"
-                    />
+                        </form>
+                    </Form>
                 </div>
 
             </AlertDialogContent>

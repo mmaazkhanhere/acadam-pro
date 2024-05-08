@@ -12,7 +12,6 @@ import {
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogFooter,
-    AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
@@ -32,7 +31,6 @@ import { Input } from "./ui/input"
 
 import SignUpButton from "./sign-up-button"
 import { useToast } from "./ui/use-toast"
-import AuthSocialButton from "./auth-social-button"
 
 import { BsGithub, BsGoogle } from 'react-icons/bs';
 
@@ -85,23 +83,6 @@ const SignInButton = () => {
         }
     }
 
-    const socialAction = (action: string) => {
-        signIn(action).then((callback) => {
-            if (callback?.error) {
-                toast({
-                    title: 'Invalid credentials',
-                    variant: 'destructive'
-                })
-            }
-            if (callback?.ok && !callback.error) {
-                toast({
-                    title: 'Successful Login',
-
-                })
-            }
-        })
-    }
-
     return (
         <AlertDialog>
             <AlertDialogTrigger
@@ -112,93 +93,83 @@ const SignInButton = () => {
                 Join Us
             </AlertDialogTrigger>
             <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle className="lg:text-center">Sign In</AlertDialogTitle>
-                    <div className="grid ">
-                        <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)}>
-                                <FormField
-                                    control={form.control}
-                                    name='emailAddress'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Email Address</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type='email'
-                                                    placeholder="Enter your email address"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
 
-                                />
+                <AlertDialogTitle className="lg:text-center">Sign In</AlertDialogTitle>
+                <div className="grid gap-4">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <FormField
+                                control={form.control}
+                                name='emailAddress'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email Address</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type='email'
+                                                placeholder="Enter your email address"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
 
-                                <FormField
-                                    control={form.control}
-                                    name='password'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Password</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="password"
-                                                    placeholder="Enter your password"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
+                            />
 
-                                />
+                            <FormField
+                                control={form.control}
+                                name='password'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="password"
+                                                placeholder="Enter your password"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
 
-                                <AlertDialogFooter className="flex justify-between w-full items-center lg:mt-5">
-                                    <button
-                                        aria-label="Sign Up Button"
-                                        type="button"
-                                        className="text-xs lg:mr-44">
-                                        New user? <SignUpButton />
-                                    </button>
+                            />
 
-                                    <AlertDialogCancel disabled={isSubmitting}>
-                                        Cancel
-                                    </AlertDialogCancel>
+                            <AlertDialogFooter
+                                className="grid grid-cols-2 w-full mt-5 "
+                            >
+                                <button
+                                    aria-label="Sign Up Button"
+                                    type="button"
+                                    className="text-xs w-full text-left">
+                                    New user? <SignUpButton />
+                                </button>
+
+                                <div className="space-x-3 flex items-center place-content-end">
+
 
                                     <AlertDialogAction
                                         type="submit"
                                         disabled={!isValid || isSubmitting}
+                                        className="w-16 lg:w-20 text-xs -mb-2 md:mb-0"
                                     >
                                         Sign In
                                     </AlertDialogAction>
-
-                                </AlertDialogFooter>
-                            </form>
-                        </Form>
-                    </div>
-                </AlertDialogHeader>
-
-
-                <Separator />
-
-                <div className="justify-center flex gap-x-4">
-                    <AuthSocialButton
-                        icon={BsGithub}
-                        onClick={() => socialAction('github')}
-                        label="Sign in with Github"
-                    />
-
-                    <AuthSocialButton
-                        icon={BsGoogle}
-                        onClick={() => socialAction('google')}
-                        label="Sign in with Google"
-                    />
+                                    <AlertDialogCancel
+                                        disabled={isSubmitting}
+                                        className="w-16 lg:w-20 text-xs"
+                                    >
+                                        Cancel
+                                    </AlertDialogCancel>
+                                </div>
+                            </AlertDialogFooter>
+                        </form>
+                    </Form>
                 </div>
 
             </AlertDialogContent>
-        </AlertDialog>
+        </AlertDialog >
     )
 }
 
