@@ -68,6 +68,8 @@ const SignUpButton = (props: Props) => {
         },
     })
 
+    const { isSubmitting, isValid } = form.formState
+
     return (
         <AlertDialog>
             <AlertDialogTrigger
@@ -185,18 +187,33 @@ const SignUpButton = (props: Props) => {
                                     )}
 
                                 />
+
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        type="submit"
+                                        disabled={!isValid || isSubmitting}
+                                    >
+                                        Sign Up
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+
                             </form>
                         </Form>
                     </div>
                 </AlertDialogHeader>
+
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>
+                        Cancel
+                    </AlertDialogCancel>
                     <AlertDialogAction
                         type="submit"
                     >
                         Sign In
                     </AlertDialogAction>
                 </AlertDialogFooter>
+
             </AlertDialogContent>
         </AlertDialog>
     )

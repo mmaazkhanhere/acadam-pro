@@ -28,7 +28,13 @@ import { Input } from "./ui/input"
 import SignUpButton from "./sign-up-button"
 import { signIn } from "next-auth/react"
 import { useToast } from "./ui/use-toast"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
+import { Button } from "./ui/button"
+import { Separator } from "@/components/ui/separator"
+import AuthSocialButton from "./auth-social-button"
+
+import { BsGithub, BsGoogle } from 'react-icons/bs';
+
 
 
 const formSchema = z.object({
@@ -76,6 +82,23 @@ const SignInButton = () => {
                 variant: 'destructive'
             })
         }
+    }
+
+    const socialAction = (action: string) => {
+        signIn(action).then((callback) => {
+            if (callback?.error) {
+                toast({
+                    title: 'Invalid credentials',
+                    variant: 'destructive'
+                })
+            }
+            if (callback?.ok && !callback.error) {
+                toast({
+                    title: 'Successful Login',
+
+                })
+            }
+        })
     }
 
     return (
@@ -131,14 +154,18 @@ const SignInButton = () => {
 
                                 />
 
-                                <AlertDialogFooter className="flex justify-between w-full items-center">
-                                    <button className="text-xs mr-44">
+                                <AlertDialogFooter className="flex justify-between w-full items-center lg:mt-5">
+                                    <button className="text-xs lg:mr-44">
                                         New user? <SignUpButton />
                                     </button>
 
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel disabled={isSubmitting}>
+                                        Cancel
+                                    </AlertDialogCancel>
+
                                     <AlertDialogAction
                                         type="submit"
+                                        disabled={!isValid || isSubmitting}
                                     >
                                         Sign In
                                     </AlertDialogAction>
@@ -148,6 +175,23 @@ const SignInButton = () => {
                         </Form>
                     </div>
                 </AlertDialogHeader>
+
+
+                <Separator />
+
+                <div className="justify-center flex gap-x-4">
+                    <AuthSocialButton
+                        icon={BsGithub}
+                        onClick={() => socialAction('github')}
+                        label="Sign in with Github"
+                    />
+
+                    <AuthSocialButton
+                        icon={BsGoogle}
+                        onClick={() => socialAction('google')}
+                        label="Sign in with Google"
+                    />
+                </div>
 
             </AlertDialogContent>
         </AlertDialog>
