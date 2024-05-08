@@ -64,9 +64,9 @@ const SignInButton = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-        console.log('called')
         try {
-            const result = await signIn('credentials', { values });
+            const { emailAddress, password } = values
+            const result = await signIn('credentials', { email: emailAddress, password: password });
 
             if (result?.ok) {
                 toast({
@@ -155,7 +155,9 @@ const SignInButton = () => {
                                 />
 
                                 <AlertDialogFooter className="flex justify-between w-full items-center lg:mt-5">
-                                    <button className="text-xs lg:mr-44">
+                                    <button
+                                        type="button"
+                                        className="text-xs lg:mr-44">
                                         New user? <SignUpButton />
                                     </button>
 

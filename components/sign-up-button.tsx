@@ -34,6 +34,17 @@ import {
 
 
 import { Input } from "./ui/input"
+import SignInButton from "./sign-in-button"
+import { Separator } from "./ui/separator"
+import AuthSocialButton from "./auth-social-button"
+
+import { BsGithub, BsGoogle } from 'react-icons/bs';
+import { signIn } from "next-auth/react"
+import { useToast } from "./ui/use-toast"
+
+import axios from 'axios'
+import { useRouter } from "next/navigation"
+
 
 const formSchema = z.object({
     name: z.string().min(1, {
@@ -50,12 +61,15 @@ const formSchema = z.object({
     }),
     role: z.string().min(1, {
         message: "Please select a role",
-    })
+    }),
 })
 
 type Props = {}
 
 const SignUpButton = (props: Props) => {
+
+    const router = useRouter();
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -64,11 +78,62 @@ const SignUpButton = (props: Props) => {
             username: "",
             emailAddress: "",
             password: "",
-            role: ""
+            role: ''
         },
     })
 
-    const { isSubmitting, isValid } = form.formState
+    const { isSubmitting, isValid } = form.formState;
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+
+            await axios.post('/api/register', values);
+
+            const { emailAddress, password } = values
+
+            const result = await signIn('credentials', { email: emailAddress, password: password });
+
+            if (result?.ok) {
+                toast({
+                    title: 'Successful Register'
+                });
+                router.push('/dashboard');
+            }
+            else {
+                toast({
+                    title: 'Something went wrong',
+                    variant: 'destructive'
+                })
+            }
+        } catch (error: any) {
+
+            console.error('[USER_SIGNUP_ONSUBMIT_FUNCTION_ERROR]')
+
+            if (axios.isAxiosError(error) && error?.response?.status === 405) {
+                toast({
+                    title: 'User already registered',
+                    variant: 'destructive'
+                })
+            }
+        }
+    };
+
+    const socialAction = (action: string) => {
+        signIn(action).then((callback) => {
+            if (callback?.error) {
+                toast({
+                    title: 'Invalid credentials',
+                    variant: 'destructive'
+                })
+            }
+            if (callback?.ok && !callback.error) {
+                toast({
+                    title: 'Successful Login',
+
+                })
+            }
+        })
+    }
 
     return (
         <AlertDialog>
@@ -83,7 +148,7 @@ const SignUpButton = (props: Props) => {
                     <AlertDialogTitle className="text-center">Sign In</AlertDialogTitle>
                     <div className="grid ">
                         <Form {...form}>
-                            <form onSubmit={() => { }}>
+                            <form onSubmit={form.handleSubmit(onSubmit)}>
                                 <FormField
                                     control={form.control}
                                     name='name'
@@ -160,7 +225,7 @@ const SignUpButton = (props: Props) => {
 
                                 <FormField
                                     control={form.control}
-                                    name='password'
+                                    name='role'
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Role</FormLabel>
@@ -188,14 +253,21 @@ const SignUpButton = (props: Props) => {
 
                                 />
 
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogFooter >
+
+
+                                    <AlertDialogCancel disabled={isSubmitting}>
+                                        Cancel
+                                    </AlertDialogCancel>
+
                                     <AlertDialogAction
                                         type="submit"
                                         disabled={!isValid || isSubmitting}
+
                                     >
-                                        Sign Up
+                                        Sign up
                                     </AlertDialogAction>
+
                                 </AlertDialogFooter>
 
                             </form>
@@ -203,16 +275,21 @@ const SignUpButton = (props: Props) => {
                     </div>
                 </AlertDialogHeader>
 
-                <AlertDialogFooter>
-                    <AlertDialogCancel>
-                        Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                        type="submit"
-                    >
-                        Sign In
-                    </AlertDialogAction>
-                </AlertDialogFooter>
+                <Separator />
+
+                <div className="justify-center flex gap-x-4">
+                    <AuthSocialButton
+                        icon={BsGithub}
+                        onClick={() => socialAction('github')}
+                        label="Continue with Github"
+                    />
+
+                    <AuthSocialButton
+                        icon={BsGoogle}
+                        onClick={() => socialAction('google')}
+                        label="Continue with Google"
+                    />
+                </div>
 
             </AlertDialogContent>
         </AlertDialog>
