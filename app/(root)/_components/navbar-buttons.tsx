@@ -10,6 +10,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/user-avatar'
 import SignInButton from '@/components/sign-in-button'
+import SignOutButton from '@/components/sign-out-button'
 
 
 type Props = {}
@@ -19,19 +20,8 @@ const NavbarButtons = (props: Props) => {
     const router = useRouter();
     const { status } = useSession();
 
-    console.log(status)
-
     return (
         <nav className='flex items-center gap-x-2 md:gap-x-4'>
-
-            {
-                status == 'authenticated' ? (
-                    <UserAvatar />
-                ) : (
-
-                    <SignInButton />
-                )
-            }
 
             {
                 status == 'authenticated' && <Link
@@ -48,7 +38,22 @@ const NavbarButtons = (props: Props) => {
 
             }
 
+            {
+                status == 'authenticated' ? (
+                    <UserAvatar />
+                ) : (
+
+                    <SignInButton />
+                )
+            }
+
             <ThemeButton />
+
+            {
+                status == 'authenticated' && <div className='hidden lg:block'>
+                    <SignOutButton />
+                </div>
+            }
 
         </nav>
     )

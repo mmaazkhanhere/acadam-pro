@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 
 import { Menu } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import SignOutButton from '@/components/sign-out-button'
 
 type Props = {}
 
@@ -86,6 +87,10 @@ const MobileMenu = (props: Props) => {
                     </Link>
 
 
+                }
+
+                {
+                    status == 'authenticated' && <SignOutButton label='Sign Out' />
                 }
 
             </SheetContent>
