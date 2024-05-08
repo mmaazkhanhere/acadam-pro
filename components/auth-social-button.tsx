@@ -15,6 +15,7 @@ const AuthSocialButton = ({ icon: Icon, onClick, label }: Props) => {
             onClick={onClick}
             className="flex justify-center gap-x-2 border-black text-xs"
             variant='outline'
+            aria-label="Social Auth Button"
         >
             <Icon className="w-4 h-4" />
             {label}

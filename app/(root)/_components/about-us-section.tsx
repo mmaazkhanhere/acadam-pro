@@ -29,12 +29,14 @@ const AboutUsSection = (props: Props) => {
                 {/*Buttons */}
                 <div className='flex items-center gap-x-5'>
                     <Button
+                        aria-label='Course button'
                         size='sm'
                     >
                         Our Courses
                     </Button>
 
                     <Button
+                        aria-label='Courses button'
                         variant='outline'
                         size='sm'
                     >

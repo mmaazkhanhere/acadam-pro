@@ -86,6 +86,7 @@ const BlogSection = (props: Props) => {
                                         text-black dark:text-white dark:hover:bg-slate-500
                                         transition duration-300'
                                         variant='outline'
+                                        aria-label='Read More button'
                                     >
                                         Read More
                                         <ArrowRight />

@@ -40,6 +40,7 @@ const NavbarButtons = (props: Props) => {
                     <Button
                         size='sm'
                         className='hidden md:block'
+                        aria-label='dashboard button'
                     >
                         Dashboard
                     </Button>

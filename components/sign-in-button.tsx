@@ -3,6 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 import {
     AlertDialog,
@@ -24,13 +26,12 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
-import { Input } from "./ui/input"
-import SignUpButton from "./sign-up-button"
-import { signIn } from "next-auth/react"
-import { useToast } from "./ui/use-toast"
-import { redirect, useRouter } from "next/navigation"
-import { Button } from "./ui/button"
 import { Separator } from "@/components/ui/separator"
+
+import { Input } from "./ui/input"
+
+import SignUpButton from "./sign-up-button"
+import { useToast } from "./ui/use-toast"
 import AuthSocialButton from "./auth-social-button"
 
 import { BsGithub, BsGoogle } from 'react-icons/bs';
@@ -156,6 +157,7 @@ const SignInButton = () => {
 
                                 <AlertDialogFooter className="flex justify-between w-full items-center lg:mt-5">
                                     <button
+                                        aria-label="Sign Up Button"
                                         type="button"
                                         className="text-xs lg:mr-44">
                                         New user? <SignUpButton />

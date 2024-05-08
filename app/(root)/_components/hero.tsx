@@ -35,7 +35,10 @@ const Hero = (props: Props) => {
                             Unlock Your Potential and Thrive with Our Innovative Learning Platform!
                         </p>
 
-                        <Button variant='secondary'>
+                        <Button
+                            aria-label='Courses Button'
+                            variant='secondary'
+                        >
                             View All Courses
                         </Button>
                     </div>

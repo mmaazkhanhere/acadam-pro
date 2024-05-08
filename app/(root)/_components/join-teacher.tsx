@@ -47,6 +47,7 @@ const JoinTeacher = (props: Props) => {
                 {/*Join Now Button */}
                 <div className='flex items-center gap-x-5'>
                     <Button
+                        aria-label='Join Button'
                         size='sm'
                     >
                         Join Now

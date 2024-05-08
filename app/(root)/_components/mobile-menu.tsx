@@ -62,6 +62,7 @@ const MobileMenu = (props: Props) => {
                             key={route.label}
                             onClick={() => onClick(route.href)}
                             className='flex flex-col items-center'
+                            aria-label={`${route.label} button`}
                         >
                             {route.label}
                         </button>
@@ -78,6 +79,7 @@ const MobileMenu = (props: Props) => {
                             onClick={() => onClick('/dashboard')}
                             size='sm'
                             className='w-full md:hidden'
+                            aria-label='Dashboard Button'
                         >
                             Dashboard
                         </Button>
