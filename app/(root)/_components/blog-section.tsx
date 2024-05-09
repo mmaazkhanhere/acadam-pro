@@ -1,7 +1,9 @@
-import { Button } from '@/components/ui/button'
-import { ArrowRight, Calendar, Globe, User } from 'lucide-react'
+
 import Image from 'next/image'
-import React from 'react'
+
+import { Button } from '@/components/ui/button'
+
+import { ArrowRight, Calendar, Globe, User } from 'lucide-react'
 
 type Props = {}
 

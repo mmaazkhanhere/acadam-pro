@@ -1,14 +1,37 @@
+import { auth } from "@clerk/nextjs/server"
+
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
 
-export function UserAvatar() {
+import prismadb from '@/lib/prismadb'
+import Link from "next/link";
+
+
+export async function UserAvatar() {
+
+    const { userId } = auth();
+
+    const user = await prismadb.user.findUnique({
+        where: {
+            id: userId as string
+        },
+        select: {
+            imageUrl: true,
+        }
+    })
+
     return (
-        <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <Link
+            href='/user'
+        >
+            <Avatar>
+                <AvatarImage src={user?.imageUrl!} alt="User Avatar" />
+                <AvatarFallback>AV</AvatarFallback>
+            </Avatar>
+        </Link>
+
     )
 }

@@ -1,6 +1,7 @@
+
 import { cn } from '@/lib/utils'
+
 import { CircleDollarSign, Clock7, Gauge, Users } from 'lucide-react'
-import React from 'react'
 
 type Props = {}
 
@@ -21,7 +22,7 @@ const features = [
     },
     {
         title: 'Learn At Your Own Pace',
-        description: 'You can learn at your own pace revisiting the course anytime you want, improving learning experience',
+        description: 'You can learn at your own pace revisiting the course anytime you want',
         headingColor: 'text-purple-700',
         bgColor: 'bg-purple-100',
         icon: Gauge
@@ -37,7 +38,10 @@ const features = [
 
 const FeatureGrid = (props: Props) => {
     return (
-        <section className='grid grid-cols-2 lg:grid-cols-4 gap-5 pt-[930px] md:pt-[1100px] lg:pt-[700px]'>
+        <section
+            className='grid grid-cols-2 w-full items-start lg:grid-cols-4 gap-5 
+        pt-[930px] md:pt-[1100px] lg:pt-[700px]'
+        >
             {
                 features.map((feature => (
                     <div

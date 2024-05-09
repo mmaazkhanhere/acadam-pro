@@ -1,8 +1,7 @@
 import Logo from '@/components/logo'
-import React from 'react'
+import NavbarButtons from './navbar-buttons'
 import MobileMenu from './mobile-menu'
 import NavbarMenu from './navbar-menu'
-import NavbarButtons from './navbar-buttons'
 
 type Props = {}
 

@@ -1,8 +1,8 @@
-import Sidebar from "../../components/sidebar"
+
 
 type Props = {}
 
-const Dashboard = (props: Props) => {
+const Dashboard = async (props: Props) => {
     return (
         <div>
             Dashboard

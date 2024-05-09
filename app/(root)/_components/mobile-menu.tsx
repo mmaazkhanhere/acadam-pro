@@ -1,8 +1,9 @@
 "use client"
 
-import React from 'react'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+
+import { SignOutButton, useAuth } from '@clerk/nextjs'
 
 import {
     Sheet,
@@ -13,9 +14,7 @@ import {
 import Logo from '@/components/logo'
 import { Button } from '@/components/ui/button'
 
-import { Menu } from 'lucide-react'
-import { useSession } from 'next-auth/react'
-import SignOutButton from '@/components/sign-out-button'
+import { LogOut, Menu } from 'lucide-react'
 
 type Props = {}
 
@@ -41,7 +40,7 @@ const routes = [
 
 const MobileMenu = (props: Props) => {
 
-    const { status } = useSession();
+    const { userId } = useAuth();
 
     const onClick = (href: string) => {
         redirect(href)
@@ -73,7 +72,7 @@ const MobileMenu = (props: Props) => {
 
                 {
 
-                    status == 'authenticated' && <Link
+                    userId && <Link
                         href={`/dashboard`}
                     >
                         <Button
@@ -90,7 +89,12 @@ const MobileMenu = (props: Props) => {
                 }
 
                 {
-                    status == 'authenticated' && <SignOutButton label='Sign Out' />
+                    userId && <SignOutButton>
+                        <Button variant='ghost'>
+                            <LogOut /> Sign Out
+                        </Button>
+
+                    </SignOutButton>
                 }
 
             </SheetContent>

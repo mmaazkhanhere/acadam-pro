@@ -1,13 +1,19 @@
-import authConfig from './auth.config'
-import NextAuth from 'next-auth'
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-const { auth } = NextAuth(authConfig)
+const isPublicRoute = createRouteMatcher([
+    '/',
+    '/api/webhook'
+])
 
-export default auth((req) => {
+export default clerkMiddleware((auth, request) => {
+    if (!isPublicRoute(request)) {
+        auth().protect();
+    }
 
-})
+    return NextResponse.next();
+});
 
-// Optionally, don't invoke Middleware on some paths
 export const config = {
-    matcher: ['/((?!.*\\..*|_next|^/$).*)', '/(api|trpc)(.*)', '/dashboard'],
-}
+    matcher: ['/((?!.*\\..*|_next).*)', '/(api|trpc)(.*)'],
+};

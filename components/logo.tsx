@@ -1,4 +1,3 @@
-import React from 'react'
 import { Pacifico } from 'next/font/google'
 import Link from 'next/link'
 

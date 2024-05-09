@@ -1,10 +1,24 @@
-import { Button } from '@/components/ui/button'
+"use client"
+
 import Image from 'next/image'
-import React from 'react'
+import { redirect } from 'next/navigation'
+
+import { useAuth } from '@clerk/nextjs'
+
+import { Button } from '@/components/ui/button'
 
 type Props = {}
 
 const AboutUsSection = (props: Props) => {
+
+    const { userId } = useAuth();
+
+    const onClick = () => {
+        if (userId) {
+            redirect('/dashboard')
+        }
+    }
+
     return (
         <section
             className='grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-5 mt-10 md:mt-16 lg:mt-20'
@@ -31,6 +45,7 @@ const AboutUsSection = (props: Props) => {
                     <Button
                         aria-label='Course button'
                         size='sm'
+                        onClick={onClick}
                     >
                         Our Courses
                     </Button>

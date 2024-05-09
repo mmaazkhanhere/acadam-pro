@@ -1,30 +1,27 @@
 
-"use client"
-
 import Link from 'next/link'
-import React from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 
-import { ThemeButton } from '@/components/theme-button'
+import { auth } from '@clerk/nextjs/server'
+import { SignInButton, SignOutButton } from '@clerk/nextjs'
+
+import { ThemeButton } from '@/components/ui/theme-button'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/user-avatar'
-import SignInButton from '@/components/sign-in-button'
-import SignOutButton from '@/components/sign-out-button'
+
+import { LogOut } from 'lucide-react'
 
 
 type Props = {}
 
 const NavbarButtons = (props: Props) => {
 
-    const router = useRouter();
-    const { status } = useSession();
+    const { userId } = auth();
 
     return (
         <nav className='flex items-center gap-x-2 md:gap-x-4'>
 
             {
-                status == 'authenticated' && <Link
+                userId && <Link
                     href={`/dashboard`}
                 >
                     <Button
@@ -38,21 +35,33 @@ const NavbarButtons = (props: Props) => {
 
             }
 
-            {
-                status == 'authenticated' ? (
-                    <UserAvatar />
-                ) : (
-
-                    <SignInButton />
-                )
-            }
-
             <ThemeButton />
 
             {
-                status == 'authenticated' && <div className='hidden lg:block'>
-                    <SignOutButton />
-                </div>
+                userId ? (
+                    <UserAvatar />
+                ) : (
+
+                    <SignInButton>
+                        <Button
+                            variant='outline'
+                            className='hover:bg-purple-500 hover:text-white'
+                        >
+                            Join Us
+                        </Button>
+                    </SignInButton>
+                )
+            }
+
+            {
+                userId && <SignOutButton>
+                    <Button variant='ghost'
+                        className='hidden lg:block'
+                    >
+                        <LogOut />
+                    </Button>
+
+                </SignOutButton>
             }
 
         </nav>
