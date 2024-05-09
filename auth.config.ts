@@ -1,8 +1,6 @@
 
 import type { NextAuthConfig } from "next-auth"
 
-import GitHub from "next-auth/providers/github"
-import Google from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import prismadb from './lib/prismadb'
@@ -14,7 +12,8 @@ export default {
             name: 'credentials',
             credentials: {
                 email: { label: 'email', type: 'text' },
-                password: { label: 'password', type: 'password' }
+                password: { label: 'password', type: 'password' },
+                role: { label: 'role', type: 'text' }
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {

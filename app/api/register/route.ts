@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/auth"
 import prismadb from '@/lib/prismadb'
 import bcrypt from "bcryptjs"
 
@@ -30,11 +29,11 @@ export const POST = async (request: Request) => {
 
             const user = await prismadb.user.create({
                 data: {
-                    name: body.name,
-                    username: body.username,
-                    emailAddress: body.emailAddress,
+                    name: name,
+                    username: username,
+                    emailAddress: emailAddress,
                     hashedPassword,
-                    role: body.role
+                    userType: role
                 }
             })
 

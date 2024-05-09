@@ -1,8 +1,6 @@
 import authConfig from './auth.config'
 import NextAuth from 'next-auth'
 
-import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, publicRoutes } from './routes'
-
 const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
@@ -11,5 +9,5 @@ export default auth((req) => {
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
-    matcher: ['/((?!.*\\..*|_next|^/$).*)', '/(api|trpc)(.*)'],
+    matcher: ['/((?!.*\\..*|_next|^/$).*)', '/(api|trpc)(.*)', '/dashboard'],
 }

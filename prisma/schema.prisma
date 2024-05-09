@@ -14,10 +14,39 @@ datasource db {
 }
 
 model User {
-  id  String @id @default(uuid())
+  id String @id @default(uuid())
   name String?
-  emailAddress String @unique
   username String @unique
-  hashedPassword String
-  role String
+  emailAddress String @unique
+  hashedPassword String 
+  imageUrl String?
+  biography String? @db.Text
+
+  userType UserType @default(Student)
+
+  coursesTeaching Course[] // for teachers
+  coursesEnrolled Course[] @relation("EnrolledCourses") // for students
 }
+
+enum UserType {
+  Student
+  Teacher
+}
+
+model Course{
+  id String @id @default(uuid())
+  title String 
+  description String? @db.Text
+  imageUrl String?
+  price Float?
+  isPublished Boolean @default(false)
+
+  teacherId String
+  teacher User @relation(fields: [teacherId], references: [id])
+
+  studentsEnrolled User[] @relation("EnrolledCourses")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
