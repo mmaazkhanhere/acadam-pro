@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
     '/',
-    '/api/webhook'
+    '/api/webhook/clerk-webhook',
+
 ])
 
 export default clerkMiddleware((auth, request) => {

@@ -21,16 +21,12 @@ export async function POST(request: Request) {
     const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET; /*retrieve the 
     clerk webhook secret from the environment variables */
 
-    console.log(WEBHOOK_SECRET)
-
-
     if (!WEBHOOK_SECRET) {
         throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local');
     }
 
     const payload = await request.json(); //get the payload from the request
 
-    console.log(payload)
 
     const headersList = headers();
     const heads = {

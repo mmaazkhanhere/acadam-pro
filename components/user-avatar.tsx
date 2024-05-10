@@ -25,7 +25,7 @@ export async function UserAvatar() {
 
     return (
         <Link
-            href='/user'
+            href={`/user/${userId}`}
         >
             <Avatar>
                 <AvatarImage src={user?.imageUrl!} alt="User Avatar" />
