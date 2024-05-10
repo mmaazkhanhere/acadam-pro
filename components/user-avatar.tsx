@@ -1,3 +1,6 @@
+
+import Link from "next/link";
+
 import { auth } from "@clerk/nextjs/server"
 
 import {
@@ -7,10 +10,17 @@ import {
 } from "@/components/ui/avatar"
 
 import prismadb from '@/lib/prismadb'
-import Link from "next/link";
 
 
-export async function UserAvatar() {
+import React from 'react'
+import { cn } from "@/lib/utils";
+
+
+type Props = {
+    userPage?: boolean
+}
+
+export async function UserAvatar({ userPage }: Props) {
 
     const { userId } = auth();
 
@@ -27,7 +37,11 @@ export async function UserAvatar() {
         <Link
             href={`/user/${userId}`}
         >
-            <Avatar>
+            <Avatar
+                className={cn(
+                    userPage && ` w-40 h-40 ring-offset-2 border-8 border-white`
+                )}
+            >
                 <AvatarImage src={user?.imageUrl!} alt="User Avatar" />
                 <AvatarFallback>AV</AvatarFallback>
             </Avatar>
