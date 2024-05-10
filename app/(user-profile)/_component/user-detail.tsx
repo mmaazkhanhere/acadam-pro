@@ -9,6 +9,7 @@ import { UserAvatar } from '@/components/user-avatar'
 import UserNameForm from './user-name-form'
 
 import { isAdmin } from '@/helpers/isAdmin'
+import UserRole from './user-role'
 
 
 
@@ -33,10 +34,16 @@ const UserDetail = ({ user }: Props) => {
                 <UserAvatar
                     userPage
                 />
+                <div className='flex flex-col items-start'>
+                    <UserNameForm
+                        name={user.name}
+                    />
 
-                <UserNameForm
-                    name={user.name}
-                />
+                    <UserRole
+                        userType={user.userType}
+                    />
+                </div>
+
             </div>
 
 
