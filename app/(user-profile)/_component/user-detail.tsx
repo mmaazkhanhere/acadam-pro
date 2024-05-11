@@ -6,10 +6,10 @@ import { auth } from '@clerk/nextjs/server'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/user-avatar'
 
-import UserNameForm from './user-name-form'
+import UserNameForm from './forms/user-name-form'
 
 import { isAdmin } from '@/helpers/isAdmin'
-import UserRole from './user-role'
+import UserRole from './forms/user-role'
 
 
 
