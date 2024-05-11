@@ -3,13 +3,16 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useRouter } from "next/navigation"
+import axios from "axios"
+
+import { useAuth } from "@clerk/nextjs"
 
 import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
-    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -28,9 +31,11 @@ import {
 
 import { Textarea } from "@/components/ui/textarea"
 
+import { useToast } from "@/components/ui/use-toast"
+
 import { Pencil } from 'lucide-react'
-import { useRouter } from "next/navigation"
-import { cn } from "@/lib/utils"
+
+
 
 type Props = {
     biography?: string
@@ -44,7 +49,9 @@ const formSchema = z.object({
 
 const BiographyEditForm = ({ biography }: Props) => {
 
+    const { userId } = useAuth();
     const router = useRouter();
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,8 +60,25 @@ const BiographyEditForm = ({ biography }: Props) => {
         }
     })
 
-    const onSubmit = () => {
-        console.log('onSubmit')
+    const { isSubmitting, isValid } = form.formState;
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+        try {
+
+            await axios.patch(`/api/user/${userId}`, values)
+            toast({
+                title: 'User updated'
+            })
+
+            router.refresh()
+        }
+        catch (error) {
+            console.log(error)
+            toast({
+                title: 'Something went wrong'
+            })
+        }
     }
 
     return (
@@ -92,7 +116,11 @@ const BiographyEditForm = ({ biography }: Props) => {
                                 />
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction type="submit">Edit</AlertDialogAction>
+                                    <AlertDialogAction
+                                        disabled={!isValid || isSubmitting}
+                                        type="submit">
+                                        Edit
+                                    </AlertDialogAction>
                                 </AlertDialogFooter>
                             </form>
                         </Form>

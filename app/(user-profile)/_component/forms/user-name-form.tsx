@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import axios from "axios"
 
 import {
     AlertDialog,
@@ -30,6 +31,8 @@ import { Input } from "@/components/ui/input"
 
 import { Pencil } from 'lucide-react'
 import { useRouter } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast"
+import { useAuth } from "@clerk/nextjs"
 
 type Props = {
     name?: string
@@ -43,7 +46,9 @@ const formSchema = z.object({
 
 const UserNameForm = ({ name }: Props) => {
 
+    const { toast } = useToast();
     const router = useRouter();
+    const { userId } = useAuth();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -52,8 +57,25 @@ const UserNameForm = ({ name }: Props) => {
         }
     })
 
-    const onSubmit = () => {
-        console.log('onSubmit')
+    const { isSubmitting, isValid } = form.formState;
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+        try {
+
+            await axios.patch(`/api/user/${userId}`, values)
+            toast({
+                title: 'User updated'
+            })
+
+            router.refresh()
+        }
+        catch (error) {
+            console.log(error)
+            toast({
+                title: 'Something went wrong'
+            })
+        }
     }
 
     return (
@@ -63,7 +85,7 @@ const UserNameForm = ({ name }: Props) => {
             </h2>
             <div>
                 <AlertDialog>
-                    <AlertDialogTrigger asChild>
+                    <AlertDialogTrigger asChild className="cursor-pointer">
                         <Pencil />
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -90,7 +112,12 @@ const UserNameForm = ({ name }: Props) => {
                                 />
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction type="submit">Edit</AlertDialogAction>
+                                    <AlertDialogAction
+                                        type="submit"
+                                        disabled={!isValid || isSubmitting}
+                                    >
+                                        Edit
+                                    </AlertDialogAction>
                                 </AlertDialogFooter>
                             </form>
                         </Form>

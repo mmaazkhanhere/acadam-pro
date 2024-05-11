@@ -37,6 +37,9 @@ import {
 
 
 import { Pencil } from 'lucide-react'
+import axios from "axios"
+import { useToast } from "@/components/ui/use-toast"
+import { useAuth } from "@clerk/nextjs"
 
 
 type Props = {
@@ -52,6 +55,8 @@ const formSchema = z.object({
 
 const UserRole = ({ userType }: Props) => {
 
+    const { userId } = useAuth();
+    const { toast } = useToast();
     const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -61,8 +66,25 @@ const UserRole = ({ userType }: Props) => {
         }
     })
 
-    const onSubmit = () => {
-        console.log('onSubmit')
+    const { isSubmitting, isValid } = form.formState;
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+        try {
+
+            await axios.patch(`/api/user/${userId}`, values)
+            toast({
+                title: 'User updated'
+            })
+
+            router.refresh()
+        }
+        catch (error) {
+            console.log(error)
+            toast({
+                title: 'Something went wrong'
+            })
+        }
     }
 
     return (
@@ -107,7 +129,11 @@ const UserRole = ({ userType }: Props) => {
                                 />
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction type="submit">Edit</AlertDialogAction>
+                                    <AlertDialogAction
+                                        disabled={!isValid || isSubmitting}
+                                        type="submit">
+                                        Edit
+                                    </AlertDialogAction>
                                 </AlertDialogFooter>
                             </form>
                         </Form>
