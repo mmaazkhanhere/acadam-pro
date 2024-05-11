@@ -6,7 +6,7 @@ type Props = {}
 const Sidebar = (props: Props) => {
     return (
         <div
-            className="flex flex-col items-center p-4 shadow-md h-full border-r
+            className="flex flex-col items-center p-4 shadow-sm h-full
         overflow-y-auto"
         >
             <Logo />
