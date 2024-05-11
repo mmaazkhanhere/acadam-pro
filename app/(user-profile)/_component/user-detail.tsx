@@ -46,7 +46,6 @@ const UserDetail = ({ user }: Props) => {
 
             </div>
 
-
             {
                 admin && <Button variant='outline' className='text-black'>
                     Create Courses
