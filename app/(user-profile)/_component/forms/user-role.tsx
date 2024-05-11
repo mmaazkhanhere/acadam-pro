@@ -88,8 +88,8 @@ const UserRole = ({ userType }: Props) => {
     }
 
     return (
-        <div className='flex items-center justify-center gap-x-4 pt-5'>
-            <p className='text-xl text-white'>
+        <div className='flex items-center justify-center gap-x-4 pt-2 lg:pt-5'>
+            <p className='lg:text-xl text-white'>
                 {
                     !userType ? 'No role selected' : userType
                 }

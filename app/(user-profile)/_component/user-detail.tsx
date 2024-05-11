@@ -28,9 +28,10 @@ const UserDetail = ({ user }: Props) => {
     const admin = isAdmin(userId!);
 
     return (
-        <section className='max-w-[1400px] mx-auto flex justify-between items-center mt-32'>
+        <section
+            className='max-w-[1400px] mx-auto flex flex-col lg:flex-row justify-between lg:items-center mt-16 lg:mt-32'>
 
-            <div className='flex items-start justify-center gap-x-5'>
+            <div className='flex flex-col lg:flex-row items-start justify-center gap-x-5'>
                 <UserAvatar
                     userPage
                 />
@@ -47,7 +48,7 @@ const UserDetail = ({ user }: Props) => {
             </div>
 
             {
-                admin && <Button variant='outline' className='text-black'>
+                admin && <Button variant='outline' className='text-black mt-5 lg:mt-0 w-full md:w-32'>
                     Create Courses
                 </Button>
             }

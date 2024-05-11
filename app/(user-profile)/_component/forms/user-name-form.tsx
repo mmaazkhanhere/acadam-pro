@@ -80,13 +80,13 @@ const UserNameForm = ({ name }: Props) => {
 
     return (
         <div className='flex items-center justify-center gap-x-4 pt-5'>
-            <h2 className='text-3xl font-bold text-white'>
+            <h2 className='text-2xl lg:text-3xl font-bold text-white'>
                 {name}
             </h2>
             <div>
                 <AlertDialog>
                     <AlertDialogTrigger asChild className="cursor-pointer">
-                        <Pencil />
+                        <Pencil className="w-5 lg:w-6 h-5 lg:h-6" />
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>

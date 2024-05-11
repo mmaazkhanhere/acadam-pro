@@ -22,10 +22,11 @@ const UserHero = async (props: Props) => {
         }
     })
 
+
     return (
         <>
             <section
-                className="absolute w-full left-0 bg-purple-500 text-white h-[250px] px-2"
+                className="absolute w-full left-0 bg-purple-500 text-white h-[400px] lg:h-[250px] px-2"
             >
                 <UserDetail user={user} />
             </section>

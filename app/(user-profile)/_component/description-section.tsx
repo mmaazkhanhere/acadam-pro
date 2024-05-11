@@ -9,9 +9,9 @@ type Props = {
 
 const DescriptionSection = ({ biography }: Props) => {
     return (
-        <section className=" pt-[330px] px-2">
+        <section className=" pt-[430px] pb-20 lg:pt-[330px] px-2">
             <div className='flex items-center justify-start gap-2'>
-                <h1 className="text-3xl font-bold">
+                <h1 className="text-2xl lg:text-3xl font-bold">
                     Biography
                 </h1>
 
@@ -19,7 +19,7 @@ const DescriptionSection = ({ biography }: Props) => {
             </div>
 
             <p className={cn(
-                'mt-2',
+                'mt-2 text-sm lg:text-base',
                 !biography && 'text-gray-500 italic'
             )}>
                 {

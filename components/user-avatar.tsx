@@ -39,7 +39,7 @@ export async function UserAvatar({ userPage }: Props) {
         >
             <Avatar
                 className={cn(
-                    userPage && ` w-40 h-40 ring-offset-2 border-8 border-white`
+                    userPage && ` w-32 lg:w-40 h-32 lg:h-40 ring-offset-2 border-8 border-white`
                 )}
             >
                 <AvatarImage src={user?.imageUrl!} alt="User Avatar" />
