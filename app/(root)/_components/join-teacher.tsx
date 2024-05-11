@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
 
 import { Button } from '@/components/ui/button'
+import { isAdmin } from '@/helpers/isAdmin'
 
 type Props = {}
 
@@ -14,8 +15,9 @@ const JoinTeacher = (props: Props) => {
     const { userId } = useAuth();
 
     const onClick = () => {
+
         if (userId) {
-            redirect('/dashboard')
+            redirect('/dashboard/teacher')
         }
     }
 

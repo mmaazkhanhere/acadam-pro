@@ -8,21 +8,32 @@ import { ThemeButton } from '@/components/ui/theme-button'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/user-avatar'
 
+import prismadb from '@/lib/prismadb'
+
 import { LogOut } from 'lucide-react'
 
 
 type Props = {}
 
-const NavbarButtons = (props: Props) => {
+const NavbarButtons = async (props: Props) => {
 
     const { userId } = auth();
+
+    const user = await prismadb.user.findUnique({
+        where: {
+            id: userId as string,
+        },
+        select: {
+            userType: true
+        }
+    })
 
     return (
         <nav className='flex items-center gap-x-2 md:gap-x-4'>
 
             {
                 userId && <Link
-                    href={`/dashboard`}
+                    href={`/${user?.userType.toLowerCase()}/dashboard`}
                 >
                     <Button
                         size='sm'

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeButton } from '@/components/ui/theme-button';
 
 import { LogOut } from 'lucide-react';
+import Link from 'next/link';
 
 
 type Props = {}
@@ -27,9 +28,11 @@ const NavbarButton = (props: Props) => {
     return (
         <nav className='hidden md:flex items-center justify-center gap-x-4'>
             {
-                userId && <Button onClick={onClick}>
-                    Dashboard
-                </Button>
+                userId && <Link href='/dashboard'>
+                    <Button onClick={onClick}>
+                        Dashboard
+                    </Button>
+                </Link>
             }
 
             <ThemeButton />
