@@ -9,12 +9,12 @@ import { isTeacher } from "@/helpers/isAdmin";
 
 const f = createUploadthing();
 
-const handleAuth = () => {
+const handleAuth = async () => {
 
     const { userId } = auth();
-    const isAuthorized = isTeacher(userId);
+    const isAuthorized = await isTeacher(userId!);
 
-    if (!userId || isAuthorized) {
+    if (!userId || !isAuthorized) {
         throw new Error("Unauthorized")
     }
 

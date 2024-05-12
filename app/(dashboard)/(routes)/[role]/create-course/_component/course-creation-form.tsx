@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -26,8 +25,14 @@ import {
 
 import { Input } from "@/components/ui/input"
 
+import { Switch } from "@/components/ui/switch"
+
 import { Category } from "@prisma/client"
 import { Textarea } from "@/components/ui/textarea"
+import FileUpload from "@/components/file-upload"
+import Image from "next/image"
+
+
 
 
 
@@ -41,6 +46,7 @@ const formSchema = z.object({
     imageUrl: z.string().min(1),
     category: z.string().min(1),
     price: z.coerce.number(),
+    isFree: z.boolean()
 })
 
 const CourseCreationForm = ({ categories }: Props) => {
@@ -52,8 +58,11 @@ const CourseCreationForm = ({ categories }: Props) => {
             description: '',
             imageUrl: '',
             price: 0,
+            isFree: false
         }
     })
+
+    const { isValid, isSubmitting } = form.formState
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values)
@@ -108,7 +117,7 @@ const CourseCreationForm = ({ categories }: Props) => {
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select a category for the course" />
+                                            <SelectValue placeholder="Select category" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
@@ -131,6 +140,35 @@ const CourseCreationForm = ({ categories }: Props) => {
                 </div>
                 <div className="w-full space-y-5">
 
+                    <FormField
+                        control={form.control}
+                        name="imageUrl"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Course Image</FormLabel>
+                                <FormControl>
+                                    <div>
+                                        {
+                                            form.watch('imageUrl') == '' ? (
+                                                <FileUpload
+                                                    endpoint="courseImage"
+                                                    onChange={field.onChange}
+                                                />
+                                            ) : (
+                                                <Image
+                                                    src={form.watch('imageUrl')}
+                                                    alt='Form Image'
+                                                    width={500}
+                                                    height={500}
+                                                />
+                                            )
+                                        }
+
+                                    </div>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
 
                     <FormField
                         control={form.control}
@@ -149,7 +187,32 @@ const CourseCreationForm = ({ categories }: Props) => {
                             </FormItem>
                         )}
                     />
+
+                    <FormField
+                        control={form.control}
+                        name="isFree"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center gap-x-4">
+                                <FormLabel>Is course free?</FormLabel>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
                 </div>
+
+                <Button
+                    type="submit"
+                    className="w-20 mt-5"
+                    disabled={!isValid || isSubmitting}
+                >
+                    Create
+                </Button>
             </form>
         </Form>
     )
