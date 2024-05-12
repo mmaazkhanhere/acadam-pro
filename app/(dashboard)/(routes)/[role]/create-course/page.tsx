@@ -1,4 +1,4 @@
-import { isAdmin } from '@/helpers/isAdmin'
+import { isTeacher } from '@/helpers/isAdmin'
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import React from 'react'
@@ -16,7 +16,7 @@ const CourseCreation = async ({ params }: Props) => {
     const { userId } = auth();
 
     const role = params.role;
-    const admin = isAdmin(userId!)
+    const teacher = await isTeacher(userId!)
 
     const categories = await prismadb.category.findMany({
         orderBy: {
@@ -24,7 +24,7 @@ const CourseCreation = async ({ params }: Props) => {
         }
     })
 
-    if (!admin || role !== 'teacher') {
+    if (!teacher || role !== 'teacher') {
         redirect('/')
     }
 

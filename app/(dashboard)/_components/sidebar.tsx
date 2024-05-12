@@ -1,9 +1,11 @@
 import Logo from "@/components/logo"
 import SidebarRoutes from "./sidebar-routes"
 
-type Props = {}
+type Props = {
+    teacher?: boolean
+}
 
-const Sidebar = (props: Props) => {
+const Sidebar = ({ teacher }: Props) => {
     return (
         <div
             className="flex flex-col items-center p-4 shadow-sm h-full
@@ -12,7 +14,7 @@ const Sidebar = (props: Props) => {
             <Logo />
 
             <div className="flex flex-col w-full">
-                <SidebarRoutes />
+                <SidebarRoutes teacher={teacher} />
             </div>
         </div>
     )

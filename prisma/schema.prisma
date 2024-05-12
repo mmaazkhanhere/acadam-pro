@@ -43,6 +43,7 @@ model Course{
   price Float?
   isPublished Boolean @default(false)
   forPro Boolean?
+  isFree Boolean @default(false)
 
   teacherId String
   teacher User @relation(fields: [teacherId], references: [id])

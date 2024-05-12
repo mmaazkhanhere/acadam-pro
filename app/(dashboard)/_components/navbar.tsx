@@ -7,11 +7,10 @@ import { ThemeButton } from "@/components/ui/theme-button"
 import MobileSidebar from "./mobile-sidebar"
 
 type Props = {
-    admin?: boolean;
-    isTeacher?: boolean;
+    teacher?: boolean;
 }
 
-const Navbar = ({ admin, isTeacher }: Props) => {
+const Navbar = ({ teacher }: Props) => {
 
 
     return (
@@ -25,7 +24,7 @@ const Navbar = ({ admin, isTeacher }: Props) => {
 
             <nav className="flex items-center gap-x-2">
                 {
-                    (admin || isTeacher) && <Button
+                    teacher && <Button
                         className="hidden md:block"
                     >
                         Create Course

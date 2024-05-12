@@ -1,17 +1,17 @@
-import { isAdmin } from "@/helpers/isAdmin";
+import { isTeacher } from "@/helpers/isAdmin";
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation";
 
 
 type Props = {}
 
-const Dashboard = (props: Props) => {
+const Dashboard = async (props: Props) => {
 
     const { userId } = auth();
 
-    const admin = isAdmin(userId!);
+    const teacher = await isTeacher(userId!);
 
-    if (!admin) {
+    if (!teacher) {
         redirect('/user')
     }
 

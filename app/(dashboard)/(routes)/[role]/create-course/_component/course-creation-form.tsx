@@ -27,6 +27,7 @@ import {
 import { Input } from "@/components/ui/input"
 
 import { Category } from "@prisma/client"
+import { Textarea } from "@/components/ui/textarea"
 
 
 
@@ -39,7 +40,7 @@ const formSchema = z.object({
     description: z.string().min(1),
     imageUrl: z.string().min(1),
     category: z.string().min(1),
-    price: z.coerce.number()
+    price: z.coerce.number(),
 })
 
 const CourseCreationForm = ({ categories }: Props) => {
@@ -58,8 +59,6 @@ const CourseCreationForm = ({ categories }: Props) => {
         console.log(values)
     }
 
-    console.log(categories[0])
-
     return (
         <Form {...form}>
             <form
@@ -76,6 +75,23 @@ const CourseCreationForm = ({ categories }: Props) => {
                                 <FormControl>
                                     <Input
                                         placeholder="e.g Film Animation"
+                                        {...field}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Course Description</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        className="min-h-[200px]"
+                                        placeholder="e.g This is a course about..."
                                         {...field}
                                     />
                                 </FormControl>
@@ -112,18 +128,21 @@ const CourseCreationForm = ({ categories }: Props) => {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit">Submit</Button>
                 </div>
-                <div className="w-full">
+                <div className="w-full space-y-5">
+
+
                     <FormField
                         control={form.control}
-                        name="description"
+                        name="price"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Course Description</FormLabel>
+                                <FormLabel>Course Price</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="e.g This is a course about..."
+                                        type="number"
+                                        step="0.1"
+                                        min={0}
                                         {...field}
                                     />
                                 </FormControl>

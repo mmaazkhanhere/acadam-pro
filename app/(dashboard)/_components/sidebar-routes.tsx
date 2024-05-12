@@ -2,14 +2,16 @@
 
 import { usePathname } from 'next/navigation'
 
-import { UserButton, useAuth } from '@clerk/nextjs'
+import { useAuth } from '@clerk/nextjs'
 
-import { isAdmin } from '@/helpers/isAdmin'
+import { isTeacher } from '@/helpers/isAdmin'
 
 import { BarChartBig, BookOpen, Compass, Files, LayoutDashboard } from 'lucide-react'
 import SidebarItems from './sidebar-items'
 
-type Props = {}
+type Props = {
+    teacher?: boolean;
+}
 
 const studentRoutes = [
     {
@@ -48,17 +50,11 @@ const teacherRoutes = [
     },
 ]
 
-const SidebarRoutes = (props: Props) => {
+const SidebarRoutes = ({ teacher }: Props) => {
 
     const pathname = usePathname();
 
-    const { userId } = useAuth();
-
-    const admin = isAdmin(userId!);
-
-    const isTeacherPage = pathname.includes('/teacher') || admin
-
-    const page = isTeacherPage ? teacherRoutes : studentRoutes
+    const page = teacher ? teacherRoutes : studentRoutes
 
     return (
         <div className='flex flex-col w-full mt-10 '>

@@ -8,7 +8,7 @@ import { UserAvatar } from '@/components/user-avatar'
 
 import UserNameForm from './forms/user-name-form'
 
-import { isAdmin } from '@/helpers/isAdmin'
+import { isTeacher } from '@/helpers/isAdmin'
 import UserRole from './forms/user-role'
 
 
@@ -21,11 +21,11 @@ type Props = {
     }
 }
 
-const UserDetail = ({ user }: Props) => {
+const UserDetail = async ({ user }: Props) => {
 
     const { userId } = auth();
 
-    const admin = isAdmin(userId!);
+    const teacher = await isTeacher(userId!);
 
     return (
         <section
@@ -48,7 +48,7 @@ const UserDetail = ({ user }: Props) => {
             </div>
 
             {
-                admin && <Button variant='outline' className='text-black mt-5 lg:mt-0 w-full md:w-32'>
+                teacher && <Button variant='outline' className='text-black mt-5 lg:mt-0 w-full md:w-32'>
                     Create Courses
                 </Button>
             }
