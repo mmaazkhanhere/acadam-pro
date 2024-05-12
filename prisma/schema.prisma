@@ -48,8 +48,8 @@ model Course{
   teacherId String
   teacher User @relation(fields: [teacherId], references: [id])
 
-  categoryId String?
-  category Category? @relation(fields: [categoryId], references: [id])
+  categoryLabel String?
+  category Category? @relation(fields: [categoryLabel], references: [name])
 
   studentsEnrolled User[] @relation("EnrolledCourses")
 
@@ -59,6 +59,6 @@ model Course{
 
 model Category{
   id String @id @default(uuid())
-  name String
+  name String @unique
   courses Course[]
 }

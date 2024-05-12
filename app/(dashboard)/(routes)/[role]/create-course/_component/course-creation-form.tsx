@@ -31,6 +31,9 @@ import { Category } from "@prisma/client"
 import { Textarea } from "@/components/ui/textarea"
 import FileUpload from "@/components/file-upload"
 import Image from "next/image"
+import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
+import axios from "axios"
 
 
 
@@ -44,12 +47,15 @@ const formSchema = z.object({
     title: z.string().min(1),
     description: z.string().min(1),
     imageUrl: z.string().min(1),
-    category: z.string().min(1),
+    categoryLabel: z.string().min(1),
     price: z.coerce.number(),
     isFree: z.boolean()
 })
 
 const CourseCreationForm = ({ categories }: Props) => {
+
+    const { toast } = useToast();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -57,6 +63,7 @@ const CourseCreationForm = ({ categories }: Props) => {
             title: '',
             description: '',
             imageUrl: '',
+            categoryLabel: '',
             price: 0,
             isFree: false
         }
@@ -64,8 +71,24 @@ const CourseCreationForm = ({ categories }: Props) => {
 
     const { isValid, isSubmitting } = form.formState
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            const response = await axios.post('/api/course', values);
+            if (response.status === 200) {
+                toast({
+                    title: "Course created"
+                })
+                router.push(`/teacher/dashboard/courses/${response.data.id}`)
+            }
+        } catch (error) {
+
+            console.log(error);
+
+            toast({
+                title: "Something went wrong",
+                variant: 'destructive',
+            })
+        }
     }
 
     return (
@@ -110,7 +133,7 @@ const CourseCreationForm = ({ categories }: Props) => {
 
                     <FormField
                         control={form.control}
-                        name="category"
+                        name="categoryLabel"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Course Category</FormLabel>
@@ -170,23 +193,26 @@ const CourseCreationForm = ({ categories }: Props) => {
                         )}
                     />
 
-                    <FormField
-                        control={form.control}
-                        name="price"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Course Price</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="number"
-                                        step="0.1"
-                                        min={0}
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
+                    {
+                        !form.watch('isFree') && <FormField
+                            control={form.control}
+                            name="price"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Course Price</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="number"
+                                            step="0.1"
+                                            min={0}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                    }
+
 
                     <FormField
                         control={form.control}

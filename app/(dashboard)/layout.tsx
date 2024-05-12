@@ -3,7 +3,6 @@ import { auth } from "@clerk/nextjs/server"
 import Navbar from "./_components/navbar"
 import Sidebar from "./_components/sidebar"
 import { isTeacher } from "@/helpers/isAdmin"
-import prismadb from '@/lib/prismadb'
 
 type Props = {
     children: React.ReactNode

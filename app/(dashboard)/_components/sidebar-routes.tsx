@@ -41,7 +41,7 @@ const teacherRoutes = [
     {
         icon: Files,
         label: 'My Courses',
-        href: '/teacher/dashboard/my-courses',
+        href: '/teacher/dashboard/courses',
     },
     {
         icon: BarChartBig,
