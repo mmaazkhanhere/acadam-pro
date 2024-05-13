@@ -41,12 +41,12 @@ const teacherRoutes = [
     {
         icon: Files,
         label: 'My Courses',
-        href: '/teacher/dashboard/courses',
+        href: '/teacher/courses',
     },
     {
         icon: BarChartBig,
         label: 'Analytics',
-        href: '/teacher/dashboard/analytics',
+        href: '/teacher/analytics',
     },
 ]
 
@@ -57,7 +57,7 @@ const SidebarRoutes = ({ teacher }: Props) => {
     const page = teacher ? teacherRoutes : studentRoutes
 
     return (
-        <div className='flex flex-col w-full mt-10 '>
+        <div className='flex flex-col w-full mt-10'>
             <div>
                 {
                     page.map((route) => (

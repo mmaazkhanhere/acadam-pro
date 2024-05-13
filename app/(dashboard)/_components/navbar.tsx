@@ -15,7 +15,8 @@ const Navbar = ({ teacher }: Props) => {
 
     return (
         <header
-            className="p-4 h-full flex items-center justify-between shadow-sm bg-white"
+            className="p-4 h-full flex items-center justify-between shadow-sm 
+            light:bg-white dark:bg-muted-foreground/10"
         >
 
             <MobileSidebar
