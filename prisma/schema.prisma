@@ -26,6 +26,11 @@ model User {
   coursesTeaching Course[] // for teachers
   coursesEnrolled Course[] @relation("EnrolledCourses") // for students
 
+  purchases Purchase[]
+  reviews Review[]
+
+  subscriptions Subscription[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -42,7 +47,7 @@ model Course{
   imageUrl String?
   price Float?
   isPublished Boolean @default(false)
-  forPro Boolean?
+  isPro Boolean?
   isFree Boolean @default(false)
 
   teacherId String
@@ -53,6 +58,11 @@ model Course{
 
   studentsEnrolled User[] @relation("EnrolledCourses")
 
+  reviews Review[]
+  chapters Chapter[]
+  attachments Attachment[]
+  purhcases Purchase[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -61,4 +71,126 @@ model Category{
   id String @id @default(uuid())
   name String @unique
   courses Course[]
+}
+
+model Chapter{
+  id String @id @default(uuid())
+  title String
+  description String? @db.Text
+  videoUrl String? @db.Text
+  position Int
+  isPublished Boolean @default(false)
+  isFree Boolean @default(false)
+
+  muxData MuxData?
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  userProgress UserProgress[]
+
+  notes Notes[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model MuxData{
+  id String @id @default(uuid())
+  assetId String
+  playbackId String?
+  
+  chapterId String @unique
+  chapter Chapter @relation(fields: [chapterId],references: [id], onDelete: Cascade)
+}
+
+model Notes{
+  id String @id @default(uuid())
+  body String? @db.Text
+  
+  chapterId String
+  chapter Chapter @relation(fields: [chapterId],references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserProgress{
+  id String @id @default(uuid())
+  userId String
+
+  chapterId String
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  isComleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Review{
+  id  String @id @default(uuid())
+  description String? @db.Text
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  rating Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Attachment{
+  id String @id @default(uuid())
+  name String
+  url String @db.Text
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Subscription{
+  id String @id @default(uuid())
+  
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Purchase{
+  id String @id @default(uuid())
+  
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
+
+model StripeCustomer{
+  id String @id @default(uuid())
+  
+  userId String @unique
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
