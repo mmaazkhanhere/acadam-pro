@@ -27,25 +27,24 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
-import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 
 import { useToast } from "@/components/ui/use-toast"
 
 import { Pencil } from "lucide-react"
 
 
-
 type Props = {
-    initialTitle: string
+    initialDescription: string
     courseId: string
 }
 
 
 const formSchema = z.object({
-    title: z.string().min(2)
+    description: z.string().min(2)
 })
 
-const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
+const CourseDescriptionForm = ({ initialDescription, courseId }: Props) => {
 
     const router = useRouter();
     const { toast } = useToast();
@@ -53,7 +52,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: initialTitle
+            description: initialDescription
         }
     })
 
@@ -63,7 +62,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
         try {
             await axios.patch(`/api/course/${courseId}`, values);
             toast({
-                title: 'Course title updated',
+                title: 'Course description updated',
             })
 
             router.refresh();
@@ -84,7 +83,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
         >
             <div className="flex items-center justify-between">
                 <h2 className="text-lg font-medium">
-                    Course Title
+                    Course Description
                 </h2>
 
                 <div className="flex items-center gap-x-2 text-sm">
@@ -92,24 +91,25 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
                     <AlertDialog>
                         <AlertDialogTrigger className="flex items-center gap-x-2">
                             <Pencil className="w-4 h-4" />
-                            Edit Title
+                            Edit Description
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Edit course title</AlertDialogTitle>
+                                <AlertDialogTitle>Edit course description</AlertDialogTitle>
                             </AlertDialogHeader>
 
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                     <FormField
                                         control={form.control}
-                                        name="title"
+                                        name="description"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Course title</FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        placeholder={initialTitle}
+                                                    <Textarea
+                                                        className="min-h-[150px]"
+                                                        placeholder={initialDescription}
                                                         {...field}
                                                     />
                                                 </FormControl>
@@ -136,10 +136,10 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
             </div>
 
             <p className="text-sm text-gray-600">
-                {initialTitle}
+                {initialDescription}
             </p>
         </section>
     )
 }
 
-export default CourseTitleForm
+export default CourseDescriptionForm

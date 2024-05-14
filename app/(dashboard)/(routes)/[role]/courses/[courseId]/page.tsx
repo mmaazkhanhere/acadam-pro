@@ -4,6 +4,7 @@ import prismadb from "@/lib/prismadb"
 import ActionButtons from "./_components/action-button"
 import CourseTitleForm from "./_components/course-title-form"
 import { redirect } from "next/navigation"
+import CourseDescriptionForm from "./_components/course-description-form"
 
 type Props = {
     params: {
@@ -80,10 +81,16 @@ const CoursePage = async ({ params }: Props) => {
 
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full p-5">
-                <div className="w-full">
+            <div
+                className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full p-5 ">
+                <div className="w-full space-y-6">
                     <CourseTitleForm
                         initialTitle={course?.title}
+                        courseId={course?.id}
+                    />
+
+                    <CourseDescriptionForm
+                        initialDescription={course?.description as string}
                         courseId={course?.id}
                     />
                 </div>
