@@ -9,6 +9,7 @@ import CourseCategoryForm from "./_components/course-category-form"
 import CoursePriceForm from "./_components/course-price-form"
 import IsCourseFree from "./_components/course-is-free-form"
 import CourseImageForm from "./_components/course-image-form"
+import ChapterForm from "./_components/chapter-form"
 
 type Props = {
     params: {
@@ -53,8 +54,12 @@ const CoursePage = async ({ params }: Props) => {
         course?.categoryLabel,
         course?.chapters.some(chapter => chapter.isPublished),
         course?.isFree,
-        course?.price,
+
     ]
+
+    if (!course?.isFree) {
+        requiredFields.push(course?.price)
+    }
 
     const totalFields = requiredFields.length;
 
@@ -63,6 +68,7 @@ const CoursePage = async ({ params }: Props) => {
     const completionText = `(${completedFields}/${totalFields})`
 
     const isCompleted = requiredFields.every(Boolean)
+
 
     return (
         <div>
@@ -125,11 +131,16 @@ const CoursePage = async ({ params }: Props) => {
                     />
 
                     {
-                        course.isFree && <CoursePriceForm
+                        !course.isFree && <CoursePriceForm
                             initialPrice={course.price as number}
                             courseId={course.id}
                         />
                     }
+
+                    <ChapterForm
+                        courseId={course.id}
+                        course={course}
+                    />
 
                 </div>
             </div>
