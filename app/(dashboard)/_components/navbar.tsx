@@ -16,12 +16,12 @@ const Navbar = ({ teacher }: Props) => {
     return (
         <header
             className="p-4 h-full flex items-center justify-between shadow-sm 
-            light:bg-white dark:bg-muted-foreground/10"
+            bg-white dark:bg-muted-foreground/10"
         >
 
             <MobileSidebar
             />
-            <div className="hidden lg:block" />
+            <div className="hidden md:block" />
 
             <nav className="flex items-center gap-x-2">
                 {

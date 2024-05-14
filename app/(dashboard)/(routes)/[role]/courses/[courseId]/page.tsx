@@ -5,6 +5,7 @@ import ActionButtons from "./_components/action-button"
 import CourseTitleForm from "./_components/course-title-form"
 import { redirect } from "next/navigation"
 import CourseDescriptionForm from "./_components/course-description-form"
+import CourseCategoryForm from "./_components/course-category-form"
 
 type Props = {
     params: {
@@ -29,6 +30,12 @@ const CoursePage = async ({ params }: Props) => {
                     createdAt: "asc"
                 }
             }
+        }
+    })
+
+    const categories = await prismadb.category.findMany({
+        orderBy: {
+            name: 'asc'
         }
     })
 
@@ -92,6 +99,12 @@ const CoursePage = async ({ params }: Props) => {
                     <CourseDescriptionForm
                         initialDescription={course?.description as string}
                         courseId={course?.id}
+                    />
+
+                    <CourseCategoryForm
+                        initialCategory={course.categoryLabel as string}
+                        courseId={course.id}
+                        categories={categories}
                     />
                 </div>
             </div>
