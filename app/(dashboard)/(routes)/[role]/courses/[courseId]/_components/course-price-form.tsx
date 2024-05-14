@@ -32,20 +32,24 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 
 import { Pencil } from "lucide-react"
+import { formatPrice } from "@/helpers/format"
 
 
 
 type Props = {
-    initialTitle: string
+    initialPrice: number
     courseId: string
 }
 
 
 const formSchema = z.object({
-    title: z.string().min(2)
+    price: z.coerce.number().min(10, {
+        message: 'Price of the course should be at least $10'
+    })
+
 })
 
-const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
+const CoursePriceForm = ({ initialPrice, courseId }: Props) => {
 
     const router = useRouter();
     const { toast } = useToast();
@@ -53,7 +57,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: initialTitle
+            price: initialPrice
         }
     })
 
@@ -63,7 +67,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
         try {
             await axios.patch(`/api/course/${courseId}`, values);
             toast({
-                title: 'Course title updated',
+                title: 'Course price updated',
             })
 
             router.refresh();
@@ -84,7 +88,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
         >
             <div className="flex items-center justify-between">
                 <h2 className="text-lg font-medium">
-                    Course Title
+                    Course Price
                 </h2>
 
                 <div className="flex items-center gap-x-2 text-sm">
@@ -92,24 +96,27 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
                     <AlertDialog>
                         <AlertDialogTrigger className="flex items-center gap-x-2">
                             <Pencil className="w-4 h-4" />
-                            Edit Title
+                            Edit Price
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Edit Course Title</AlertDialogTitle>
+                                <AlertDialogTitle>Edit Course Price</AlertDialogTitle>
                             </AlertDialogHeader>
 
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                     <FormField
                                         control={form.control}
-                                        name="title"
+                                        name="price"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Course title</FormLabel>
+                                                <FormLabel>Course price</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        placeholder={initialTitle}
+                                                        type="number"
+                                                        step={0.1}
+                                                        min={10}
+                                                        placeholder={`$10.00`}
                                                         {...field}
                                                     />
                                                 </FormControl>
@@ -136,10 +143,10 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
             </div>
 
             <p className="text-sm text-gray-600">
-                {initialTitle}
+                {formatPrice(initialPrice)}
             </p>
         </section>
     )
 }
 
-export default CourseTitleForm
+export default CoursePriceForm

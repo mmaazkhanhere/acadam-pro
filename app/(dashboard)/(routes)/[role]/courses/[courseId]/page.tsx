@@ -6,6 +6,8 @@ import CourseTitleForm from "./_components/course-title-form"
 import { redirect } from "next/navigation"
 import CourseDescriptionForm from "./_components/course-description-form"
 import CourseCategoryForm from "./_components/course-category-form"
+import CoursePriceForm from "./_components/course-price-form"
+import IsCourseFree from "./_components/course-is-free-form"
 
 type Props = {
     params: {
@@ -106,6 +108,19 @@ const CoursePage = async ({ params }: Props) => {
                         courseId={course.id}
                         categories={categories}
                     />
+
+                    {
+                        !course.isFree && <CoursePriceForm
+                            initialPrice={course.price as number}
+                            courseId={course.id}
+                        />
+                    }
+
+                    <IsCourseFree
+                        isCourseFree={course.isFree}
+                        courseId={course.id}
+                    />
+
                 </div>
             </div>
         </div>

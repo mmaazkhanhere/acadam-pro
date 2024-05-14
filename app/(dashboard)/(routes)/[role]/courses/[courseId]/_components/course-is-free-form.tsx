@@ -27,25 +27,25 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
-import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
 
 import { useToast } from "@/components/ui/use-toast"
 
 import { Pencil } from "lucide-react"
 
 
-
 type Props = {
-    initialTitle: string
+    isCourseFree: boolean
     courseId: string
 }
 
 
 const formSchema = z.object({
-    title: z.string().min(2)
+    isFree: z.coerce.boolean()
+
 })
 
-const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
+const IsCourseFree = ({ isCourseFree, courseId }: Props) => {
 
     const router = useRouter();
     const { toast } = useToast();
@@ -53,7 +53,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: initialTitle
+            isFree: isCourseFree
         }
     })
 
@@ -63,7 +63,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
         try {
             await axios.patch(`/api/course/${courseId}`, values);
             toast({
-                title: 'Course title updated',
+                title: 'Course availability updated',
             })
 
             router.refresh();
@@ -84,7 +84,7 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
         >
             <div className="flex items-center justify-between">
                 <h2 className="text-lg font-medium">
-                    Course Title
+                    Is Course Free
                 </h2>
 
                 <div className="flex items-center gap-x-2 text-sm">
@@ -92,25 +92,27 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
                     <AlertDialog>
                         <AlertDialogTrigger className="flex items-center gap-x-2">
                             <Pencil className="w-4 h-4" />
-                            Edit Title
+                            Edit Availability
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Edit Course Title</AlertDialogTitle>
+                                <AlertDialogTitle>Edit Course Availability</AlertDialogTitle>
                             </AlertDialogHeader>
 
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                     <FormField
                                         control={form.control}
-                                        name="title"
+                                        name="isFree"
                                         render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Course title</FormLabel>
+                                            <FormItem
+                                                className="flex items-center gap-x-2"
+                                            >
+                                                <FormLabel>Is course free?</FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        placeholder={initialTitle}
-                                                        {...field}
+                                                    <Switch
+                                                        checked={field.value}
+                                                        onCheckedChange={field.onChange}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -136,10 +138,12 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
             </div>
 
             <p className="text-sm text-gray-600">
-                {initialTitle}
+                {
+                    isCourseFree ? 'Free' : 'Paid'
+                }
             </p>
         </section>
     )
 }
 
-export default CourseTitleForm
+export default IsCourseFree
