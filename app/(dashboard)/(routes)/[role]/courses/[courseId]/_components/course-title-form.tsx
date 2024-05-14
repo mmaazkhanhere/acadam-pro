@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { isValid, z } from "zod"
 
 import {
     AlertDialog,
@@ -31,6 +31,8 @@ import {
 import { Input } from "@/components/ui/input"
 
 import { Pencil } from "lucide-react"
+import { useToast } from "@/components/ui/use-toast"
+import axios from "axios"
 
 type Props = {
     initialTitle: string
@@ -45,6 +47,7 @@ const formSchema = z.object({
 const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
 
     const router = useRouter();
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,8 +56,23 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
         }
     })
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+    const { isValid, isSubmitting } = form.formState;
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            await axios.patch(`/api/course/${courseId}`, values);
+            toast({
+                title: 'Course title updated',
+            })
+
+            router.refresh();
+
+        } catch (error) {
+            toast({
+                title: 'Something went wrong',
+                variant: 'destructive'
+            })
+        }
     }
 
     return (
@@ -100,7 +118,12 @@ const CourseTitleForm = ({ initialTitle, courseId }: Props) => {
                                     />
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction>Save</AlertDialogAction>
+                                        <AlertDialogAction
+                                            type="submit"
+                                            disabled={!isValid || isSubmitting}
+                                        >
+                                            Save
+                                        </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </form>
                             </Form>
