@@ -8,6 +8,7 @@ import CourseDescriptionForm from "./_components/course-description-form"
 import CourseCategoryForm from "./_components/course-category-form"
 import CoursePriceForm from "./_components/course-price-form"
 import IsCourseFree from "./_components/course-is-free-form"
+import CourseImageForm from "./_components/course-image-form"
 
 type Props = {
     params: {
@@ -103,23 +104,32 @@ const CoursePage = async ({ params }: Props) => {
                         courseId={course?.id}
                     />
 
+                    <CourseImageForm
+                        initialImage={course.imageUrl as string}
+                        courseId={course.id}
+                    />
+
                     <CourseCategoryForm
                         initialCategory={course.categoryLabel as string}
                         courseId={course.id}
                         categories={categories}
                     />
 
-                    {
-                        !course.isFree && <CoursePriceForm
-                            initialPrice={course.price as number}
-                            courseId={course.id}
-                        />
-                    }
+                </div>
+
+                <div className="space-y-6">
 
                     <IsCourseFree
                         isCourseFree={course.isFree}
                         courseId={course.id}
                     />
+
+                    {
+                        course.isFree && <CoursePriceForm
+                            initialPrice={course.price as number}
+                            courseId={course.id}
+                        />
+                    }
 
                 </div>
             </div>
