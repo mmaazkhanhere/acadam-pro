@@ -34,6 +34,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { Chapter, Course } from "@prisma/client"
 
 import { Pencil } from "lucide-react"
+import ChapterList from "./chapter-list"
 
 
 
@@ -76,6 +77,33 @@ const ChapterForm = ({ course, courseId }: Props) => {
                 variant: 'destructive'
             })
         }
+    }
+
+    const onReorder = async (updateData: { id: string, position: number }[]) => {
+
+        try {
+
+            await axios.put(`/api/course/${courseId}/chapters/reorder`, {
+                list: updateData
+            })
+
+            toast({
+                title: 'Course Reordered'
+            })
+
+            router.refresh();
+
+        } catch (error) {
+            toast({
+                title: 'Something went wrong',
+                variant: 'destructive'
+            })
+        }
+
+    };
+
+    const onEdit = (id: string) => {
+        router.push(`/teacher/courses/${courseId}/chapters/${id}`);
     }
 
     return (
@@ -144,7 +172,11 @@ const ChapterForm = ({ course, courseId }: Props) => {
                         No Chapters
                     </p>
                 ) : (
-                    <p>Chapters</p>
+                    <ChapterList
+                        items={course.chapters || []}
+                        onEdit={onEdit}
+                        onReorder={onReorder}
+                    />
                 )
             }
 
