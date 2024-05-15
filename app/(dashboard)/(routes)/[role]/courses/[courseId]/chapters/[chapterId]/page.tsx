@@ -9,6 +9,7 @@ import prismadb from '@/lib/prismadb'
 import ChapterTitleForm from "./_components/chapter-titlte-form"
 import { Banner } from "@/components/banner"
 import ChapterDescriptionForm from "./_components/chapter-description-form"
+import ChapterAccess from "./_components/chapter-access"
 
 
 
@@ -41,7 +42,6 @@ const ChapterPage = async ({ params }: Props) => {
     const requiredFields = [
         chapter?.title,
         chapter?.description,
-        chapter?.isFree,
         chapter?.videoUrl
     ]
 
@@ -97,6 +97,12 @@ const ChapterPage = async ({ params }: Props) => {
                         chapterId={params.chapterId}
                         courseId={params.courseId}
                         initialDescription={chapter?.description as string}
+                    />
+
+                    <ChapterAccess
+                        chapterId={params.chapterId}
+                        courseId={params.courseId}
+                        availability={chapter?.isFree}
                     />
                 </div>
             </div>
