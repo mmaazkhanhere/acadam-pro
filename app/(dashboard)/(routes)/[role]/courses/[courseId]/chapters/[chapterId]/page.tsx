@@ -8,6 +8,7 @@ import BackButton from "./_components/back-button"
 import prismadb from '@/lib/prismadb'
 import ChapterTitleForm from "./_components/chapter-titlte-form"
 import { Banner } from "@/components/banner"
+import ChapterDescriptionForm from "./_components/chapter-description-form"
 
 
 
@@ -32,6 +33,10 @@ const ChapterPage = async ({ params }: Props) => {
             courseId: params.courseId,
         }
     })
+
+    if (!chapter) {
+        redirect(`/teacher/courses/${params.courseId}`)
+    }
 
     const requiredFields = [
         chapter?.title,
@@ -86,6 +91,12 @@ const ChapterPage = async ({ params }: Props) => {
                         chapterId={params.chapterId}
                         courseId={params.courseId}
                         initialTitle={chapter?.title}
+                    />
+
+                    <ChapterDescriptionForm
+                        chapterId={params.chapterId}
+                        courseId={params.courseId}
+                        initialDescription={chapter?.description as string}
                     />
                 </div>
             </div>
