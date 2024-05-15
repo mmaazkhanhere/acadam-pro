@@ -98,7 +98,8 @@ const CoursePage = async ({ params }: Props) => {
             </div>
 
             <div
-                className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full p-5 ">
+                className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full p-5 "
+            >
                 <div className="w-full space-y-6">
                     <CourseTitleForm
                         initialTitle={course?.title}
