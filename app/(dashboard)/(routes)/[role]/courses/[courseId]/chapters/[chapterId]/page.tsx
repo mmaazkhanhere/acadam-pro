@@ -10,6 +10,7 @@ import ChapterTitleForm from "./_components/chapter-titlte-form"
 import { Banner } from "@/components/banner"
 import ChapterDescriptionForm from "./_components/chapter-description-form"
 import ChapterAccess from "./_components/chapter-access"
+import ChapterVideoForm from "./_components/chapter-video-form"
 
 
 
@@ -32,6 +33,9 @@ const ChapterPage = async ({ params }: Props) => {
         where: {
             id: params.chapterId,
             courseId: params.courseId,
+        },
+        include: {
+            muxData: true
         }
     })
 
@@ -103,6 +107,14 @@ const ChapterPage = async ({ params }: Props) => {
                         chapterId={params.chapterId}
                         courseId={params.courseId}
                         availability={chapter?.isFree}
+                    />
+                </div>
+
+                <div>
+                    <ChapterVideoForm
+                        initialData={chapter!}
+                        courseId={params.courseId}
+                        chapterId={params.chapterId}
                     />
                 </div>
             </div>
