@@ -11,6 +11,7 @@ import { Banner } from "@/components/banner"
 import ChapterDescriptionForm from "./_components/chapter-description-form"
 import ChapterAccess from "./_components/chapter-access"
 import ChapterVideoForm from "./_components/chapter-video-form"
+import ChapterActionButtons from "./_components/chapter-action-buttons"
 
 
 
@@ -82,9 +83,11 @@ const ChapterPage = async ({ params }: Props) => {
                     </p>
                 </div>
 
-                <ActionButtons
+                <ChapterActionButtons
                     isPublished={chapter?.isPublished}
                     isCompleted={isCompleted}
+                    courseId={params.courseId}
+                    chapterId={params.chapterId}
                 />
             </div>
 

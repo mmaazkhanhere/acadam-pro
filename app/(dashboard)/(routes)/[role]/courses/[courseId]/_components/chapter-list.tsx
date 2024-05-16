@@ -71,7 +71,7 @@ const ChapterList = ({ items, onReorder, onEdit }: Props) => {
                                             <div
                                                 className={cn(
                                                     'flex items-center gap-x-2 bg-gray-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm',
-                                                    chapter.isPublished && "bg-sky-100 border-sky-200 text-sky-700"
+                                                    chapter.isPublished && "bg-purple-500 border-purple-600 text-white"
                                                 )}
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
@@ -93,13 +93,16 @@ const ChapterList = ({ items, onReorder, onEdit }: Props) => {
                                                 >
                                                     {
                                                         chapter.isFree && (
-                                                            <Badge>Free</Badge>
+                                                            <Badge
+                                                                className="bg-white text-black hover:bg-gray-200">
+                                                                Free
+                                                            </Badge>
                                                         )
                                                     }
                                                     <Badge
                                                         className={cn(
                                                             "bg-slate-500",
-                                                            chapter.isPublished && "bg-sky-700"
+                                                            chapter.isPublished && "bg-purple-200 text-black hover:bg-purple-100"
                                                         )}
                                                     >
                                                         {chapter.isPublished ? "Published" : "Draft"}
