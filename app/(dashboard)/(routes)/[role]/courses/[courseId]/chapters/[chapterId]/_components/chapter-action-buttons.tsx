@@ -40,6 +40,20 @@ const ChapterActionButtons = ({ isPublished, isCompleted, courseId, chapterId }:
         }
     }
 
+    const onDelete = async () => {
+        try {
+            await axios.delete(`/api/course/${courseId}/chapters/${chapterId}`)
+            toast({
+                title: 'Chapter deleted'
+            })
+            router.refresh();
+        } catch (error) {
+            toast({
+                title: 'Something went wrong'
+            })
+        }
+    }
+
     return (
         <div className="flex items-center justify-center gap-x-2">
             <Button
@@ -48,7 +62,7 @@ const ChapterActionButtons = ({ isPublished, isCompleted, courseId, chapterId }:
                 disabled={!isCompleted}
                 onClick={onClick}
                 className={cn(
-                    isPublished && 'bg-white border border-black text-black'
+                    isPublished && 'bg-white border border-black text-black hover:bg-gray-200'
                 )}
             >
                 {
@@ -60,6 +74,7 @@ const ChapterActionButtons = ({ isPublished, isCompleted, courseId, chapterId }:
                 variant='destructive'
                 size='sm'
                 aria-label='Course delete button'
+                onClick={onDelete}
             >
                 <Trash className="w-4 h-4" />
             </Button>
