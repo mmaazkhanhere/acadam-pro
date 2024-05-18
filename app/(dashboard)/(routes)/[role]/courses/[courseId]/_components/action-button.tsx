@@ -44,6 +44,22 @@ const ActionButtons = ({ isPublished, isCompleted, courseId }: Props) => {
         }
     }
 
+    const onDelete = async () => {
+        try {
+            await axios.delete(`/api/course/${courseId}`)
+            toast({
+                title: 'Course deleted'
+            })
+
+            router.push(`/teacher/courses`)
+        } catch (error) {
+            toast({
+                title: 'Something went wrong',
+                variant: 'destructive'
+            })
+        }
+    }
+
 
     return (
         <div className="flex items-center justify-center gap-x-2">
@@ -62,6 +78,7 @@ const ActionButtons = ({ isPublished, isCompleted, courseId }: Props) => {
                 variant='destructive'
                 size='sm'
                 aria-label='Course delete button'
+                onClick={onDelete}
             >
                 <Trash className="w-4 h-4" />
             </Button>

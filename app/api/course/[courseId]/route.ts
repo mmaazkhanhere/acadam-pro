@@ -1,12 +1,66 @@
 import { NextResponse } from "next/server";
+import Mux from "@mux/mux-node";
 
 import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb"
 
 
+const { video } = new Mux({
+    tokenId: process.env['MUX_TOKEN_ID'],
+    tokenSecret: process.env['MUX_TOKEN_SECRET'],
+});
+
+export const DELETE = async (req: Request, { params }: { params: { courseId: string } }) => {
+    try {
+        const { userId } = auth();
+
+        if (!userId) {
+            return new NextResponse('Unauthorized', { status: 401 });
+        }
+
+        const course = await prismadb.course.findUnique({
+            where: {
+                id: params.courseId,
+                teacherId: userId
+            },
+            include: {
+                chapters: {
+                    select: {
+                        muxData: true
+                    }
+                }
+            }
+        });
+
+        if (!course) {
+            return new NextResponse('Cannot find the course', { status: 406 });
+        }
+
+        for (const chapter of course.chapters) {
+            if (chapter.muxData?.assetId) {
+                await video.assets.delete(chapter.muxData.assetId);
+            }
+        }
+
+        const deletedCourse = await prismadb.course.delete({
+            where: {
+                id: params.courseId
+            }
+        });
+
+        return NextResponse.json(deletedCourse);
+
+    } catch (error) {
+        console.error(`[COURSE_DELETE_API_ERROR]`, error);
+        return new NextResponse('Internal Server Error', { status: 500 });
+    }
+};
+
 export const PATCH = async (request: Request, { params }: { params: { courseId: string } }) => {
+
     const body = await request.json();
+
     try {
         const { userId } = auth();
 
