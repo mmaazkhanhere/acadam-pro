@@ -62,7 +62,7 @@ const ChapterPage = async ({ params }: Props) => {
         <section>
             {
                 !chapter?.isPublished && <Banner
-                    label='This course is unpublished. It will not be visible to the 
+                    label='This chapter is not published. It will not be visible to the 
                 students'
                 />
             }

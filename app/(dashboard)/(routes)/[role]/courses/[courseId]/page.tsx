@@ -93,6 +93,7 @@ const CoursePage = async ({ params }: Props) => {
                 <ActionButtons
                     isPublished={course?.isPublished}
                     isCompleted={isCompleted}
+                    courseId={params.courseId}
                 />
 
             </div>
