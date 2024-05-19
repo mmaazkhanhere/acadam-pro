@@ -12,10 +12,10 @@ const WelcomeBanner = ({ name }: Props) => {
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center'
             }}
-            className="p-4 w-full h-[80px] hidden lg:flex flex-col items-start justify-center
+            className="p-4 w-full h-[70px] md:h-[80px] flex flex-col items-start justify-center
             rounded-xl"
         >
-            <p className="text-xl text-white font-bold">
+            <p className="text-lg md:text-xl text-white font-bold">
                 Welcome Back, {name}
             </p>
 
