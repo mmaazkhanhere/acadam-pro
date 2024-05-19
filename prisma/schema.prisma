@@ -163,6 +163,8 @@ model Attachment{
 model Subscription{
   id String @id @default(uuid())
   
+  amount Float @default(20)
+
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -174,6 +176,8 @@ model Subscription{
 model Purchase{
   id String @id @default(uuid())
   
+  amount Float
+
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 

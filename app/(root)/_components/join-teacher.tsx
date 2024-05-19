@@ -16,7 +16,7 @@ const JoinTeacher = (props: Props) => {
     const onClick = () => {
 
         if (userId) {
-            redirect('/dashboard/teacher')
+            redirect('/teacher/dashboard')
         }
     }
 

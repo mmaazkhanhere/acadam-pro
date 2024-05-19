@@ -54,7 +54,7 @@ const SidebarRoutes = ({ teacher }: Props) => {
 
     const pathname = usePathname();
 
-    const page = teacher ? teacherRoutes : studentRoutes
+    const page = teacher && pathname.includes('/teacher') ? teacherRoutes : studentRoutes
 
     return (
         <div className='flex flex-col w-full mt-10'>

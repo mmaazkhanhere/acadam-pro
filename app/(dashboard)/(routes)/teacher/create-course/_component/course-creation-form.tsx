@@ -78,7 +78,7 @@ const CourseCreationForm = ({ categories }: Props) => {
                 toast({
                     title: "Course created"
                 })
-                router.push(`/teacher/dashboard/courses/${response.data.id}`)
+                router.push(`/teacher/courses/${response.data.id}`)
             }
         } catch (error) {
 
