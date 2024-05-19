@@ -16,36 +16,38 @@ const Dashboard = async (props: Props) => {
 
     const { userId } = auth();
 
-    const teacher = await isTeacher(userId);
+    const teacher = await isTeacher(userId!);
 
     const user = await prismadb.user.findUnique({
         where: {
-            id: userId
+            id: userId as string
         },
         include: {
             coursesTeaching: {
                 include: {
-                    studentsEnrolled: true
+                    studentsEnrolled: true,
+                    purchases: true // Include purchases related to the courses the user is teaching
                 }
             },
-            purchases: true,
-            subscriptions: true
+            purchases: true, // Purchases made by the user (for non-admin)
+            subscriptions: true // Subscriptions (for admin)
         }
-    })
+    });
 
 
-    if (!teacher && user?.userType === 'Student') {
+
+    if (!teacher && !user || user?.userType === 'Student') {
         redirect('/')
     }
 
     return (
         <div>
             <WelcomeBanner
-                name={user?.name}
+                name={user?.name as string}
             />
 
             <Metrics
-                user={user}
+                user={user!}
             />
         </div>
     )
