@@ -1,5 +1,9 @@
 "use client"
 
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import axios from "axios"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -24,23 +28,18 @@ import {
 } from "@/components/ui/select"
 
 import { Input } from "@/components/ui/input"
-
 import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
+
+import FileUpload from "@/components/file-upload"
 
 import { Category } from "@prisma/client"
-import { Textarea } from "@/components/ui/textarea"
-import FileUpload from "@/components/file-upload"
-import Image from "next/image"
-import { useToast } from "@/components/ui/use-toast"
-import { useRouter } from "next/navigation"
-import axios from "axios"
-
-
-
 
 
 type Props = {
-    categories: Category[]
+    categories: Category[];
+    admin: boolean
 }
 
 const formSchema = z.object({
@@ -52,10 +51,12 @@ const formSchema = z.object({
     isFree: z.boolean()
 })
 
-const CourseCreationForm = ({ categories }: Props) => {
+const CourseCreationForm = ({ categories, admin }: Props) => {
 
     const { toast } = useToast();
     const router = useRouter();
+
+    console.log(admin)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -193,8 +194,24 @@ const CourseCreationForm = ({ categories }: Props) => {
                         )}
                     />
 
+                    <FormField
+                        control={form.control}
+                        name="isFree"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center gap-x-4">
+                                <FormLabel>Is course free?</FormLabel>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
                     {
-                        !form.watch('isFree') && <FormField
+                        (!form.watch('isFree') && !admin) && <FormField
                             control={form.control}
                             name="price"
                             render={({ field }) => (
@@ -212,23 +229,6 @@ const CourseCreationForm = ({ categories }: Props) => {
                             )}
                         />
                     }
-
-
-                    <FormField
-                        control={form.control}
-                        name="isFree"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-4">
-                                <FormLabel>Is course free?</FormLabel>
-                                <FormControl>
-                                    <Switch
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
 
                 </div>
 

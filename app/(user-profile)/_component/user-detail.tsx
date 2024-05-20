@@ -8,7 +8,7 @@ import { UserAvatar } from '@/components/user-avatar'
 
 import UserNameForm from './forms/user-name-form'
 
-import { isTeacher } from '@/helpers/isAdmin'
+import { isTeacher } from '@/helpers/userCheck'
 import UserRole from './forms/user-role'
 
 

@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 
 import { useAuth } from '@clerk/nextjs'
 
-import { isTeacher } from '@/helpers/isAdmin'
+import { isTeacher } from '@/helpers/userCheck'
 
 import { BarChartBig, BookOpen, Compass, Files, LayoutDashboard } from 'lucide-react'
 import SidebarItems from './sidebar-items'

@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
-import { isTeacher } from "@/helpers/isAdmin";
+import { isTeacher } from "@/helpers/userCheck";
 
 
 

@@ -13,6 +13,8 @@ import CourseImageForm from "./_components/course-image-form"
 import ChapterForm from "./_components/chapter-form"
 
 import prismadb from "@/lib/prismadb"
+import { auth } from "@clerk/nextjs/server"
+import { isAdmin } from "@/helpers/userCheck"
 
 type Props = {
     params: {
@@ -21,6 +23,10 @@ type Props = {
 }
 
 const CoursePage = async ({ params }: Props) => {
+
+    const { userId } = auth();
+
+    const admin = await isAdmin(userId as string);
 
     const course = await prismadb.course.findUnique({
         where: {
@@ -60,7 +66,7 @@ const CoursePage = async ({ params }: Props) => {
 
     ]
 
-    if (!course?.isFree) {
+    if (!course?.isFree && !admin) {
         requiredFields.push(course?.price)
     }
 
@@ -136,7 +142,7 @@ const CoursePage = async ({ params }: Props) => {
                     />
 
                     {
-                        !course.isFree && <CoursePriceForm
+                        !course.isFree && !admin && <CoursePriceForm
                             initialPrice={course.price as number}
                             courseId={course.id}
                         />

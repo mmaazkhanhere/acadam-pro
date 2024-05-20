@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 import CourseCreationForm from './_component/course-creation-form'
 
-import { isTeacher } from '@/helpers/isAdmin'
+import { isAdmin, isTeacher } from '@/helpers/userCheck'
 
 import prismadb from '@/lib/prismadb'
 
@@ -18,6 +18,7 @@ const CourseCreation = async (props: Props) => {
     const { userId } = auth();
 
     const teacher = await isTeacher(userId!)
+    const admin = await isAdmin(userId!)
 
     const categories = await prismadb.category.findMany({
         orderBy: {
@@ -42,6 +43,7 @@ const CourseCreation = async (props: Props) => {
 
             <CourseCreationForm
                 categories={categories}
+                admin={admin}
             />
         </section>
     )

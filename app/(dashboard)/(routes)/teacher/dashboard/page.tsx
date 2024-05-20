@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server"
 
 import WelcomeBanner from "./_components/welcome-banner";
 
-import { isTeacher } from "@/helpers/isAdmin";
+import { isTeacher } from "@/helpers/userCheck";
 import prismadb from '@/lib/prismadb'
 import Metrics from "./_components/metrics";
 import { DataTable } from "./_components/data-table";
