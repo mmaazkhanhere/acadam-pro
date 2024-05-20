@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { ThemeButton } from "@/components/ui/theme-button"
 
 import MobileSidebar from "./mobile-sidebar"
+import SearchInput from "../(routes)/student/explore/_components/search-input"
 
 type Props = {
     teacher?: boolean;
@@ -24,8 +25,8 @@ const Navbar = ({ teacher }: Props) => {
             bg-white dark:bg-muted-foreground/10"
         >
 
-            <MobileSidebar
-            />
+            <MobileSidebar />
+
             <div className="hidden md:block" />
 
             <nav className="flex items-center gap-x-2">

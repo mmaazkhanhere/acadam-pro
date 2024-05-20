@@ -11,10 +11,11 @@ import { formatPrice } from '@/helpers/format'
 import { ArrowRight } from 'lucide-react'
 
 type Props = {
-    course: Course
+    course: Course;
+    admin: boolean;
 }
 
-const CourseCard = ({ course }: Props) => {
+const CourseCard = ({ course, admin }: Props) => {
 
     const router = useRouter();
     const onClick = () => {
@@ -57,7 +58,9 @@ const CourseCard = ({ course }: Props) => {
                         </h2>
                         <div className='flex items-center gap-x-1'>
                             {
-                                course.isFree ? <Badge>Free</Badge> : <Badge>Pro</Badge>
+                                course.isFree ? <Badge>Free</Badge> : (
+                                    admin ? <Badge>Pro</Badge> : <Badge>Paid</Badge>
+                                )
                             }
 
                             {

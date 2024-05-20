@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server"
 import prismadb from '@/lib/prismadb'
 import CourseCard from "./_components/course-card";
 import Image from "next/image";
+import { isAdmin, isTeacher } from "@/helpers/userCheck";
 
 type Props = {}
 
@@ -13,9 +14,14 @@ const CoursesHomepage = async (props: Props) => {
 
     const { userId } = auth();
 
-    if (!userId) {
+    const admin = await isAdmin(userId as string)
+    const teacher = await isTeacher(userId as string)
+
+    if (!userId || !admin || !teacher) {
         return redirect('/')
     }
+
+
 
     const courses = await prismadb.course.findMany({
         where: {
@@ -33,6 +39,7 @@ const CoursesHomepage = async (props: Props) => {
                     <CourseCard
                         key={course.id}
                         course={course}
+                        admin={admin}
                     />
                 ))
             }

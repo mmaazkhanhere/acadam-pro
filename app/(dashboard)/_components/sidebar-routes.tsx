@@ -22,12 +22,12 @@ const studentRoutes = [
     {
         icon: BookOpen,
         label: 'My Courses',
-        href: `/student/dashboard/courses`
+        href: `/student/courses`
     },
     {
         icon: Compass,
         label: 'Explore',
-        href: '/student/dashboard/explore'
+        href: '/student/explore'
     },
 ]
 
