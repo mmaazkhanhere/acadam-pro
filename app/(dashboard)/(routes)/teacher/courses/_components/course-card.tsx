@@ -36,7 +36,7 @@ const CourseCard = ({ course }: Props) => {
                     className='object-cover rounded-xl'
                 />
                 {
-                    course.isFree && (
+                    !course.isFree && (
                         <div className='absolute top-1 right-2 lg:right-4'>
                             <Badge>{formatPrice(course.price as number)}</Badge>
                         </div>
@@ -76,7 +76,7 @@ const CourseCard = ({ course }: Props) => {
                     className='flex items-center justify-between w-full self-end
                     mt-5 lg:mt-0'
                 >
-                    <p className='bg-purple-300/50 px-6 py-1 rounded-xl text-sm'>
+                    <p className='bg-white border border-gray-300 px-6 py-1 rounded-xl text-sm'>
                         {course.categoryLabel}
                     </p>
 

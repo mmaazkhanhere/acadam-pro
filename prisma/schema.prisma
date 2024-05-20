@@ -47,7 +47,7 @@ model Course{
   imageUrl String?
   price Float?
   isPublished Boolean @default(false)
-  isPro Boolean?
+  isPro Boolean? @default(false)
   isFree Boolean @default(false)
 
   teacherId String

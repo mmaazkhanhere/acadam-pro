@@ -62,8 +62,6 @@ const CoursePage = async ({ params }: Props) => {
         course?.imageUrl,
         course?.categoryLabel,
         course?.chapters.some(chapter => chapter.isPublished),
-        course?.isFree,
-
     ]
 
     if (!course?.isFree && !admin) {
