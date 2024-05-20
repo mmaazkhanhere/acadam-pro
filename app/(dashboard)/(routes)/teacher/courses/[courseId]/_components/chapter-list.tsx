@@ -71,7 +71,7 @@ const ChapterList = ({ items, onReorder, onEdit }: Props) => {
                                             <div
                                                 className={cn(
                                                     'flex items-center gap-x-2 bg-gray-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm',
-                                                    chapter.isPublished && "bg-purple-500 border-purple-600 text-white"
+                                                    chapter.isPublished && "bg-purple-500 border-purple-600 text-white hover:bg-purple-300"
                                                 )}
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
@@ -79,7 +79,7 @@ const ChapterList = ({ items, onReorder, onEdit }: Props) => {
                                                 <div
                                                     className={cn(
                                                         "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
-                                                        chapter.isPublished && "border-r-sky-200 hover:bg-sky-200"
+                                                        chapter.isPublished && "hover:bg-purple-300"
                                                     )}
                                                     {...provided.dragHandleProps}
                                                 >
@@ -121,7 +121,7 @@ const ChapterList = ({ items, onReorder, onEdit }: Props) => {
                         </div>
                     )}
             </Droppable>
-        </DragDropContext>
+        </DragDropContext >
     )
 }
 

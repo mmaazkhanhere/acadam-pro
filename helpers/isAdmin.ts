@@ -12,3 +12,7 @@ export const isTeacher = async (userId: string) => {
 
     return user?.userType === 'Teacher';
 }
+
+export const isAdmin = async (userId: string) => {
+    return process.env.NEXT_PUBLIC_ADMIN_ID === userId
+}

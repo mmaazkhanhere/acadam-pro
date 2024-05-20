@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 import { UserButton } from "@clerk/nextjs"
 
@@ -10,17 +10,13 @@ import { ThemeButton } from "@/components/ui/theme-button"
 
 import MobileSidebar from "./mobile-sidebar"
 
-
-
 type Props = {
     teacher?: boolean;
 }
 
 const Navbar = ({ teacher }: Props) => {
 
-    const router = useRouter();
     const pathname = usePathname();
-
 
     return (
         <header
@@ -34,7 +30,7 @@ const Navbar = ({ teacher }: Props) => {
 
             <nav className="flex items-center gap-x-2">
                 {
-                    !pathname.includes('/student') && teacher &&
+                    (!pathname.includes('/student') && teacher) &&
                     <Link
                         href='/teacher/create-course'
                     >

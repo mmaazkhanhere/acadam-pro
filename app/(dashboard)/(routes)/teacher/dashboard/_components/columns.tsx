@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button"
 import RatingOverview from "./rating-overview"
 import Link from "next/link"
 
+import { format } from "date-fns";
+
 export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
     {
         accessorKey: 'isPublished',
@@ -28,30 +30,34 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
             const isPublished = row.getValue('isPublished') || false;
 
             return (
-                <Badge
+                <div
                     className={cn(
-                        'text-red-500 p-1 border border-red-500',
+                        'text-red-500 p-1 border border-red-500 rounded-xl text-xs flex items-center justify-center',
                         isPublished && 'text-green-500 p-1 border border-green-500'
                     )}>
                     {
                         isPublished ? 'Published' : 'Unpublished'
                     }
-                </Badge>
+                </div>
             )
         }
     },
+
     {
-        accessorKey: 'title',
+        accessorKey: "title",
         header: ({ column }) => {
-            <Button
-                variant='ghost'
-                onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            >
-                Title
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-        }
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Title
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
     },
+
     {
         accessorKey: "price",
         header: ({ column }) => {
@@ -111,6 +117,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
     {
         accessorKey: 'createdAt',
         header: ({ column }) => {
+
             return (
                 <Button
                     variant='ghost'
@@ -120,6 +127,11 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
+        },
+        cell: ({ row }) => {
+            const timeCalculated = format(row.getValue('createdAt'), 'MM/dd/yyyy');
+
+            return <p>{timeCalculated}</p>
         }
     },
     {
@@ -130,12 +142,12 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 
             return (
                 <Link
-                    href={`/teacher/course/${id}`}
+                    href={`/teacher/courses/${id}`}
                 >
                     <Button
                         variant='ghost'
                     >
-                        Link
+                        Edit
                         <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                 </Link>

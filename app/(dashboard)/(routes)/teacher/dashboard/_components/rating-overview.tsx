@@ -18,23 +18,26 @@ const RatingOverview = ({ totalRatings, averageRatings }: Props) => {
     };
 
     if (totalRatings === 0) {
-        return <span className="text-gray-400">No rating</span>;
+        return <span className="text-gray-400">No ratings</span>;
     }
 
     return (
         <div className="flex items-center">
-            {[0, 1, 2, 3, 4].map((starIndex) => (
-                <div key={starIndex} className="relative">
-                    <Star className="text-gray-400 w-6 h-6" />
-                    <div
-                        className="absolute top-0 left-0 overflow-hidden"
-                        style={{ width: getStarFill(starIndex) }}
-                    >
-                        <Star className="text-yellow-400 w-6 h-6" />
+            {
+                [0, 1, 2, 3, 4].map((starIndex) => (
+                    <div key={starIndex} className="relative">
+                        <Star className="text-gray-400 fill-gray-300 w-4 h-4 outline-none" />
+                        <div
+                            className="absolute top-0 left-0 overflow-hidden"
+                            style={{ width: getStarFill(starIndex) }}
+                        >
+                            <Star className="text-yellow-500 fill-yellow-400 w-4 h-4" />
+                        </div>
                     </div>
-                </div>
-            ))}
-            <span className="ml-2 text-lg font-semibold">{averageRatings.toFixed(1)}</span>
+                ))}
+            <span className="ml-2 text-sm font-semibold">
+                {averageRatings.toFixed(1)}
+            </span>
         </div>
     );
 };

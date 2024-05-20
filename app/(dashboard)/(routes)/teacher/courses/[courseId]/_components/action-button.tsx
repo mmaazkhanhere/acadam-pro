@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 
 import { Trash } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 
 type Props = {
@@ -68,6 +69,9 @@ const ActionButtons = ({ isPublished, isCompleted, courseId }: Props) => {
                 aria-label="Publish button"
                 disabled={!isCompleted}
                 onClick={onClick}
+                className={cn(
+                    isPublished && 'border-black bg-white text-black border hover:bg-gray-200'
+                )}
             >
                 {
                     isPublished ? "Unpublished" : "Publish"

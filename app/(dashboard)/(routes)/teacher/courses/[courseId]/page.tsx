@@ -1,15 +1,18 @@
 
+import { redirect } from "next/navigation"
+
 import { Banner } from "@/components/banner"
-import prismadb from "@/lib/prismadb"
+
 import ActionButtons from "./_components/action-button"
 import CourseTitleForm from "./_components/course-title-form"
-import { redirect } from "next/navigation"
 import CourseDescriptionForm from "./_components/course-description-form"
 import CourseCategoryForm from "./_components/course-category-form"
 import CoursePriceForm from "./_components/course-price-form"
 import IsCourseFree from "./_components/course-is-free-form"
 import CourseImageForm from "./_components/course-image-form"
 import ChapterForm from "./_components/chapter-form"
+
+import prismadb from "@/lib/prismadb"
 
 type Props = {
     params: {
