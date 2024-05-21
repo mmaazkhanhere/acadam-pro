@@ -2,7 +2,7 @@ import { Chapter, Course, Review, User } from "@prisma/client"
 import CourseCard from "./course-card"
 
 type Props = {
-    courses: Course[] & { reviews: Review[]; teacher: User; chapters: Chapter[] }[]
+    courses: Course[] & { reviews: Review[]; teacher: User; chapters: Chapter[], studentsEnrolled: User[] }[]
 }
 
 const CourseList = ({ courses }: Props) => {

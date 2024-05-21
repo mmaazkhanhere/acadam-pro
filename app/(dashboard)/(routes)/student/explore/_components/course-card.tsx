@@ -1,26 +1,36 @@
 
 import Image from "next/image"
+import { auth } from "@clerk/nextjs/server"
 
 import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 
 import RatingOverview from "../../../teacher/dashboard/_components/rating-overview"
 
 import { Course, Review, User } from "@prisma/client"
+
 import { BookIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+
+
+
+
 
 
 type Props = {
-    course: Course & { reviews: Review[], teacher: User, chapters: [] }
+    course: Course & { reviews: Review[], teacher: User, chapters: [], studentsEnrolled: User[] }
 }
 
 const CourseCard = ({ course }: Props) => {
+
+    const { userId } = auth();
 
     const totalRatings = course.reviews.reduce((acc, review) => acc + review.rating, 0);
     const averageRating = course.reviews.length > 0 ? totalRatings / course.reviews.length : 0;
 
     return (
         <article
-            className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-2 w-full"
+            className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full"
         >
             <div
                 className="relative aspect-video rounded-xl w-full overflow-hidden"
@@ -66,12 +76,24 @@ const CourseCard = ({ course }: Props) => {
                 />
             </div>
 
-            <div className="flex items-center gap-x-2">
-                <BookIcon className="w-5 h-5 text-purple-500" />
-                <p className="text-sm">
-                    {course.chapters.length} Chapters
-                </p>
+            <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-x-2">
+                    <BookIcon className="w-5 h-5 text-purple-500" />
+                    <p className="text-sm">
+                        {course.chapters.length} Chapters
+                    </p>
+                </div>
 
+                {
+                    !course.studentsEnrolled.find(user => user.id === userId) && (
+                        <Button
+                            size='sm'
+                            className="text-xs h-6 w-16"
+                        >
+                            Enroll
+                        </Button>
+                    )
+                }
             </div>
 
         </article>

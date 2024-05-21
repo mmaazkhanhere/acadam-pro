@@ -7,9 +7,14 @@ import CourseList from './_components/course-list'
 import prismadb from '@/lib/prismadb'
 
 
-type Props = {}
+type Props = {
+    searchParams: {
+        title: string;
+        category: string
+    }
+}
 
-const Explore = async (props: Props) => {
+const Explore = async ({ searchParams }: Props) => {
 
     const categories = await prismadb.category.findMany({
         orderBy: {
@@ -24,7 +29,8 @@ const Explore = async (props: Props) => {
         include: {
             reviews: true,
             teacher: true,
-            chapters: true
+            chapters: true,
+            studentsEnrolled: true
         },
         orderBy: {
             createdAt: "asc"
