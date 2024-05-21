@@ -1,16 +1,20 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowRight, ArrowUpDown, MoreHorizontal } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
-import { Course, Review } from "@prisma/client"
-import { Button } from "@/components/ui/button"
-import RatingOverview from "./rating-overview"
 import Link from "next/link"
-
 import { format } from "date-fns";
+import { ColumnDef } from "@tanstack/react-table"
+
+import { Button } from "@/components/ui/button"
+
+import RatingOverview from "./rating-overview"
+
+import { cn } from "@/lib/utils"
+
+import { Course, Review } from "@prisma/client"
+
+import { ArrowRight, ArrowUpDown, } from "lucide-react"
+
+
 
 export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
     {

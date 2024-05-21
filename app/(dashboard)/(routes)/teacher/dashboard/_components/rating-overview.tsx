@@ -18,7 +18,7 @@ const RatingOverview = ({ totalRatings, averageRatings }: Props) => {
     };
 
     if (totalRatings === 0) {
-        return <span className="text-gray-400">No ratings</span>;
+        return <span className="text-gray-400 text-sm">No ratings</span>;
     }
 
     return (

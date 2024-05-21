@@ -2,8 +2,8 @@
 import { auth } from '@clerk/nextjs/server'
 
 import prismadb from '@/lib/prismadb'
-import { DataTable } from './_components/data-table';
-import { columns } from './_components/columns';
+import { DataTable } from './data-table';
+import { columns } from './columns';
 
 
 type Props = {

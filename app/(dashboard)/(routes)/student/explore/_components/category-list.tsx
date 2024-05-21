@@ -1,20 +1,29 @@
-import React from 'react'
+"use client"
 
-import prismadb from '@/lib/prismadb'
-
-import { Category } from '@prisma/client';
-import { Briefcase, HandHeart, HardHat, HeartPulse, Languages, LucideIcon, Monitor, Palette } from 'lucide-react';
 import CategoryItem from './category-item';
 
-type Props = {}
+import { Category } from '@prisma/client';
 
-const CategoryList = async (props: Props) => {
 
-    const categories = await prismadb.category.findMany({
-        orderBy: {
-            name: 'asc'
-        }
-    });
+import {
+    Briefcase,
+    HandHeart,
+    HardHat,
+    HeartPulse,
+    Languages,
+    LucideIcon,
+    Monitor,
+    Palette
+} from 'lucide-react';
+
+
+type Props = {
+    categories: Category[],
+}
+
+const CategoryList = ({ categories }: Props) => {
+
+
 
     const iconMap: Record<Category['name'], LucideIcon> = {
         "Arts": Palette,
@@ -27,7 +36,7 @@ const CategoryList = async (props: Props) => {
     }
 
     return (
-        <div className='flex items-center gap-4 flex-wrap pb-2'>
+        <div className='flex items-center gap-2 flex-wrap pb-2 mt-5'>
             {
                 categories.map((category) => (
                     <CategoryItem

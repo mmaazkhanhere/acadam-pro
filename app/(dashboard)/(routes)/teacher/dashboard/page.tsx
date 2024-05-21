@@ -10,7 +10,7 @@ import prismadb from '@/lib/prismadb'
 import Metrics from "./_components/metrics";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
-import CoursesList from "./courses-list";
+import CoursesList from "./_components/courses-list";
 
 
 type Props = {}
