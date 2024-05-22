@@ -24,13 +24,13 @@ const SearchInput = (props: Props) => {
     const pathname = usePathname();
     const router = useRouter();
 
-    const currentCategoryId = searchParams.get('categoryId');
+    const currentCategoryLabel = searchParams.get('categoryLabel');
 
     useEffect(() => {
         const url = qs.stringifyUrl({
             url: pathname,
             query: {
-                categoryId: currentCategoryId,
+                categoryLabel: currentCategoryLabel,
                 title: debouncedValue,
             }
         }, {
@@ -39,7 +39,7 @@ const SearchInput = (props: Props) => {
         })
 
         router.push(url);
-    }, [currentCategoryId, debouncedValue, pathname, router])
+    }, [currentCategoryLabel, debouncedValue, pathname, router])
 
     return (
         <div

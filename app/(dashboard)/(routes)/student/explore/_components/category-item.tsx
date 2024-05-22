@@ -18,20 +18,17 @@ const CategoryItem = ({ label, value, icon: Icon }: Props) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const currentCategory = searchParams.get('category');
+    const currentCategory = searchParams.get('categoryLabel');
     const currentTitle = searchParams.get('title');
 
     const isSelected = currentCategory === label;
-
-    console.log(isSelected);
-    console.log(currentTitle);
 
     const onClick = () => {
         const url = qs.stringifyUrl({
             url: pathname,
             query: {
                 title: currentTitle,
-                category: isSelected ? null : label,
+                categoryLabel: isSelected ? null : label,
             }
         }, {
             skipEmptyString: true,
