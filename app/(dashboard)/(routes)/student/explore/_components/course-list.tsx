@@ -1,8 +1,17 @@
-import { Chapter, Course, Review, User } from "@prisma/client"
+import { Category, Course, Review, User } from "@prisma/client"
 import CourseCard from "./course-card"
 
+type CourseWithProgressWithCategory = Course & {
+    category: Category;
+    chapters: { id: string }[];
+    reviews: Review[];
+    teacher: User
+    progress: number;
+    studentsEnrolled: User[]
+}
+
 type Props = {
-    courses: Course[] & { reviews: Review[]; teacher: User; chapters: Chapter[], studentsEnrolled: User[] }[]
+    courses: CourseWithProgressWithCategory[];
 }
 
 const CourseList = ({ courses }: Props) => {

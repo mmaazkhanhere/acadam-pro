@@ -10,17 +10,25 @@ import { Progress } from "@/components/ui/progress"
 
 import RatingOverview from "../../../teacher/dashboard/_components/rating-overview"
 
-import { Course, Review, User } from "@prisma/client"
+import { Course, Review, User, Category } from "@prisma/client"
 
 import { BookIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
 import { useUser } from "@clerk/nextjs"
+import CourseProgress from "@/components/course-progress"
 
 
 type Props = {
-    course: Course & { reviews: Review[], teacher: User, chapters: [], studentsEnrolled: User[] }
+    course: Course & {
+        category: Category;
+        chapters: { id: string }[];
+        reviews: Review[];
+        teacher: User
+        progress: number;
+        studentsEnrolled: User[]
+    },
 }
 
 const CourseCard = ({ course }: Props) => {
@@ -35,11 +43,28 @@ const CourseCard = ({ course }: Props) => {
 
     const onEnroll = async () => {
         try {
-            await axios.patch(`/api/course/${course.id}/enroll`)
-            toast({
-                title: 'Successfully enrolled'
-            })
-            router.refresh();
+            if (course.isFree) {
+                await axios.patch(`/api/course/${course.id}/enroll`)
+                toast({
+                    title: 'Successfully enrolled'
+                })
+                router.refresh();
+            }
+            else {
+                if (course.isPro) {
+                    toast({
+                        title: 'Subscribe to enroll',
+                        variant: 'destructive'
+                    })
+                }
+                else {
+                    toast({
+                        title: 'Buy the course',
+                        variant: 'destructive'
+                    })
+                }
+
+            }
         } catch (error) {
             toast({
                 title: 'Something went wrong',
@@ -104,6 +129,7 @@ const CourseCard = ({ course }: Props) => {
                     </p>
                 </div>
 
+
                 {
                     !course.studentsEnrolled.find(user => user.id === user.id) && (
                         <Button
@@ -116,6 +142,16 @@ const CourseCard = ({ course }: Props) => {
                     )
                 }
             </div>
+
+            {
+                (course.studentsEnrolled.find(user => user.id) && course.progress !== null) && (
+                    <CourseProgress
+                        value={course.progress}
+                        variant={course.progress === 100 ? "success" : "default"}
+                        size="sm"
+                    />
+                )
+            }
 
         </article>
     )

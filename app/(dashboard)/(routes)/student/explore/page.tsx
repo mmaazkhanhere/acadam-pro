@@ -36,8 +36,6 @@ const Explore = async ({ searchParams }: Props) => {
 
     const courses = await getAllCourses({ userId, ...searchParams })
 
-    console.log(courses);
-
     return (
         <div className='p-4'>
             <SearchInput />
