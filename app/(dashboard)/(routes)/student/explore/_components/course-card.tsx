@@ -1,6 +1,9 @@
+'use client'
+
 
 import Image from "next/image"
 import { auth } from "@clerk/nextjs/server"
+import axios from "axios"
 
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -11,10 +14,9 @@ import { Course, Review, User } from "@prisma/client"
 
 import { BookIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
-
-
-
+import { useRouter } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast"
+import { useUser } from "@clerk/nextjs"
 
 
 type Props = {
@@ -23,10 +25,28 @@ type Props = {
 
 const CourseCard = ({ course }: Props) => {
 
-    const { userId } = auth();
+    const user = useUser();
+
+    const router = useRouter();
+    const { toast } = useToast();
 
     const totalRatings = course.reviews.reduce((acc, review) => acc + review.rating, 0);
     const averageRating = course.reviews.length > 0 ? totalRatings / course.reviews.length : 0;
+
+    const onEnroll = async () => {
+        try {
+            await axios.patch(`/api/course/${course.id}/enroll`)
+            toast({
+                title: 'Successfully enrolled'
+            })
+            router.refresh();
+        } catch (error) {
+            toast({
+                title: 'Something went wrong',
+                variant: 'destructive'
+            })
+        }
+    }
 
     return (
         <article
@@ -85,10 +105,11 @@ const CourseCard = ({ course }: Props) => {
                 </div>
 
                 {
-                    !course.studentsEnrolled.find(user => user.id === userId) && (
+                    !course.studentsEnrolled.find(user => user.id === user.id) && (
                         <Button
                             size='sm'
                             className="text-xs h-6 w-16"
+                            onClick={onEnroll}
                         >
                             Enroll
                         </Button>
