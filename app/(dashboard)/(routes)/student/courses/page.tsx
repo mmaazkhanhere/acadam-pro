@@ -4,7 +4,7 @@ import { isAdmin, isTeacher } from '@/helpers/userCheck';
 import { auth } from '@clerk/nextjs/server'
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import EnrolledCourseList from './_components/enrolled-course-list';
+import EnrolledCourseCard from './_components/enrolled-course-card';
 
 type Props = {}
 
@@ -34,13 +34,24 @@ const MyCourses = async (props: Props) => {
         )
     }
 
-    console.log(courses)
-
     return (
-        <div>
-            <EnrolledCourseList
-                courses={courses}
-            />
+        <div className='flex flex-col items-start p-4'>
+
+            <h1 className='text-2xl font-bold'>
+                Courses Enrolled
+            </h1>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 w-full'>
+                {
+                    courses.map((course) => (
+                        <EnrolledCourseCard
+                            key={course.id}
+                            course={course}
+                        />
+                    ))
+                }
+            </div>
+
         </div>
     )
 }
