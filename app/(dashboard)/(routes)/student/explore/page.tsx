@@ -5,16 +5,28 @@ import SearchInput from './_components/search-input'
 import CourseList from './_components/course-list'
 
 import prismadb from '@/lib/prismadb'
+import { auth } from '@clerk/nextjs/server'
+import { getAllCourses } from '@/actions/getAllCourses'
+import { isAdmin, isTeacher } from '@/helpers/userCheck'
 
 
 type Props = {
     searchParams: {
         title: string;
-        category: string
+        categoryLabel: string
     }
 }
 
 const Explore = async ({ searchParams }: Props) => {
+
+    const { userId } = auth();
+
+    const teacher = await isTeacher(userId as string)
+    const admin = await isAdmin(userId as string)
+
+    if (!userId || teacher || admin) {
+        redirect('/')
+    }
 
     const categories = await prismadb.category.findMany({
         orderBy: {
@@ -22,24 +34,9 @@ const Explore = async ({ searchParams }: Props) => {
         }
     });
 
-    const courses = await prismadb.course.findMany({
-        where: {
-            isPublished: true
-        },
-        include: {
-            reviews: true,
-            teacher: true,
-            chapters: true,
-            studentsEnrolled: true
-        },
-        orderBy: {
-            createdAt: "asc"
-        }
-    });
+    const courses = await getAllCourses({ userId, ...searchParams })
 
-    if (!categories || !courses) {
-        redirect('/')
-    }
+    console.log(courses);
 
     return (
         <div className='p-4'>
