@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/table"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 
 
 interface DataTableProps<TData, TValue> {
@@ -59,17 +58,6 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-
-            <div className="flex items-center py-4 justify-between">
-                <Input
-                    placeholder="Filter courses..."
-                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("title")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
-            </div>
 
             <div className="rounded-md border">
                 <Table>

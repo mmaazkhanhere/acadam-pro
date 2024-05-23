@@ -19,8 +19,6 @@ const sizeByVariant = {
 
 const CourseProgress = ({ value, variant, size }: Props) => {
 
-    console.log(value)
-
     return (
         <div className="w-full">
             <Progress

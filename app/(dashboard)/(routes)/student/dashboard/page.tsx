@@ -4,6 +4,7 @@ import StudentWelcomeBoard from "./_components/student-welcome-board"
 
 import prismadb from '@/lib/prismadb'
 import StudentOverview from "./_components/student-overview"
+import EnrolledCourseTable from "./_components/enrolled-courses-table"
 
 
 type Props = {}
@@ -27,6 +28,8 @@ const StudentDashboard = async (props: Props) => {
                 name={user?.name as string}
             />
             <StudentOverview />
+
+            <EnrolledCourseTable />
         </div>
     )
 }
