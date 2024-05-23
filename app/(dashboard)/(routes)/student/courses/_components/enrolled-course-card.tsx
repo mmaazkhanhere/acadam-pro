@@ -26,6 +26,8 @@ const EnrolledCourseCard = ({ course }: Props) => {
     const totalRatings = course.reviews?.reduce((acc, review) => acc + review.rating, 0)
     const averageRating = course.reviews.length > 0 ? totalRatings / course.reviews.length : 0;
 
+    console.log(course.reviews.find(review => review.id === user?.id))
+
     return (
         <article
             className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full"
@@ -67,10 +69,10 @@ const EnrolledCourseCard = ({ course }: Props) => {
                     averageRatings={averageRating}
                     totalRatings={totalRatings}
                 />
-
                 {
-                    !course.reviews.find(review => review.id === user?.id) && <RatingButton />
-                }
+                    !course.reviews.find(review => review.authorId === user?.id) && (
+                        <RatingButton courseId={course.id} />
+                    )}
             </div>
 
             <div className="flex items-center gap-x-2">

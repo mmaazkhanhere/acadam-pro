@@ -1,9 +1,12 @@
 "use client"
 
 import React from "react"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import axios from "axios"
+
 
 import {
     AlertDialog,
@@ -27,10 +30,15 @@ import {
 } from "@/components/ui/form"
 
 import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
+
 import { cn } from "@/lib/utils"
 
 
-type Props = {}
+
+type Props = {
+    courseId: string
+}
 
 const formSchema = z.object({
     review: z.string().min(1, {
@@ -41,8 +49,10 @@ const formSchema = z.object({
     })
 })
 
-const RatingButton = (props: Props) => {
+const RatingButton = ({ courseId }: Props) => {
 
+    const router = useRouter();
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -55,7 +65,18 @@ const RatingButton = (props: Props) => {
     const { isValid, isSubmitting } = form.formState
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        try {
+            await axios.post(`/api/course/${courseId}/rating`, values);
+            toast({
+                title: 'Course rated'
+            })
+            router.refresh()
+        } catch (error) {
+            toast({
+                title: 'Something went wrong',
+                variant: 'destructive'
+            })
+        }
     }
 
     return (
@@ -135,7 +156,7 @@ const RatingButton = (props: Props) => {
                                     type="submit"
                                     disabled={!isValid || isSubmitting}
                                 >
-                                    Save
+                                    Rate
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </form>
