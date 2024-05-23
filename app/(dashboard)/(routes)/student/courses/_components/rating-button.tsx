@@ -20,7 +20,6 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/form"
 
 import { Textarea } from "@/components/ui/textarea"
+import { cn } from "@/lib/utils"
 
 
 type Props = {}
@@ -35,81 +35,116 @@ type Props = {}
 const formSchema = z.object({
     review: z.string().min(1, {
         message: 'Please provide a valid review'
+    }),
+    rating: z.number().min(1, {
+        message: 'Please provide a valid rating'
     })
 })
 
 const RatingButton = (props: Props) => {
 
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            review: ''
+            review: '',
+            rating: 0
         }
     })
+
+    const { isValid, isSubmitting } = form.formState
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values)
     }
 
     return (
-        <React.Fragment>
+        <div>
+
             <AlertDialog>
                 <AlertDialogTrigger
-                    className="text-xs bg-purple-500 py-1.5 px-4 text-white rounded-xl
-            hover:bg-purple-400 transition duration-300"
+                    className="bg-purple-500 text-white py-1.5 px-4 text-xs rounded-xl"
                 >
                     Rate Course
                 </AlertDialogTrigger>
                 <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Rate the course?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Tell us what do you like about the course and what you don&apos;t.
-                            How we can improve
+                    <AlertDialogHeader >
+                        <AlertDialogTitle>Review for the course</AlertDialogTitle>
+                        <AlertDialogDescription className="text-xs">
+                            Tell us what was good about the course and what was not good about it.
+                            How we can further improve ourselves. Your opinion matters
                         </AlertDialogDescription>
-                        <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                <FormField
-                                    control={form.control}
-                                    name="review"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Username</FormLabel>
-                                            <FormControl className="flex flex-col">
+                    </AlertDialogHeader>
+
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <FormField
+                                control={form.control}
+                                name="rating"
+                                render={({ field }) => (
+                                    <FormItem className="space-x-2">
+                                        <FormLabel>Rate the course</FormLabel>
+                                        <FormControl className="space-x-4">
+                                            <>
+                                                {
+                                                    [1, 2, 3, 4, 5].map((rating) => (
+                                                        <button
+                                                            key={rating}
+                                                            type="button"
+                                                            className={cn(
+                                                                'px-2 py-1 border rounded-lg text-xs',
+                                                                field.value == rating ? 'bg-purple-400 text-white' : 'bg-gray-200/60'
+                                                            )}
+                                                            onClick={() => field.onChange(rating)}
+                                                        >
+                                                            {rating}
+                                                        </button>
+                                                    ))
+                                                }
+                                            </>
+
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="review"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Review Body</FormLabel>
+                                        <FormControl className="flex flex-col">
+                                            <>
                                                 <Textarea
                                                     placeholder="Write your review here..."
-                                                    className="min-h-[150px]"
+                                                    className="min-h-[180px]"
                                                     maxLength={500}
                                                     {...field}
                                                 />
-                                                <p className="text-xs text-gray-400">
-                                                    {field.value}/500
-                                                </p>
-                                            </FormControl>
-                                            <FormDescription>
-                                                This is your public display name.
-                                            </FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction
-                                        type="submit"
-                                    >
-                                        Rate
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-
-                            </form>
-                        </Form>
-                    </AlertDialogHeader>
+                                                <p className="text-xs text-gray-500">{field.value.length}/500</p>
+                                            </>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                    type="submit"
+                                    disabled={!isValid || isSubmitting}
+                                >
+                                    Save
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </form>
+                    </Form>
 
                 </AlertDialogContent>
             </AlertDialog>
-        </React.Fragment>
+
+        </div>
 
 
     )
