@@ -22,7 +22,6 @@ type CourseWithProgress = Course & {
 
 export const columns: ColumnDef<CourseWithProgress>[] = [
 
-
     {
         accessorKey: "title",
         header: ({ column }) => {
@@ -36,6 +35,52 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
                 </Button>
             )
         },
+    },
+
+    {
+        accessorKey: 'categoryLabel',
+        header: ({ column }) => {
+
+            return (
+                <Button
+                    variant='ghost'
+                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                >
+                    Category
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }) => {
+            const categoryLabel = row.getValue('categoryLabel');
+
+            return <p className="px-4 py-1.5 rounded-2xl bg-purple-200 hover:bg-purple-300 text-center">
+                {categoryLabel as string}
+            </p>
+        }
+    },
+
+    {
+        accessorKey: 'teacher',
+        header: ({ column }) => {
+
+            return (
+                <Button
+                    variant='ghost'
+                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                >
+                    Creator
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }) => {
+            const creator = row.getValue('teacher') as User;
+
+            return <p>
+                {creator.name}
+            </p>
+        }
     },
 
     {
@@ -73,12 +118,12 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 
             return (
                 <Link
-                    href={`/teacher/courses/${id}`}
+                    href={`/course/${id}`}
                 >
                     <Button
                         variant='ghost'
                     >
-                        Edit
+                        Course
                         <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                 </Link>
