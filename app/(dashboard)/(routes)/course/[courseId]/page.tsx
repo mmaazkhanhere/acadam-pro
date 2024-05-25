@@ -1,11 +1,40 @@
-import React from 'react'
 
-type Props = {}
+import prismadb from '@/lib/prismadb'
+import { redirect } from 'next/navigation'
 
-const CoursePage = (props: Props) => {
-    return (
-        <div>CoursePage</div>
-    )
+type Props = {
+    params: {
+        courseId: string
+    }
 }
 
-export default CoursePage
+const CourseIdPage = async ({ params }: Props) => {
+
+    console.log(params.courseId)
+
+    const course = await prismadb.course.findUnique({
+        where: {
+            id: params.courseId,
+            isPublished: true
+        },
+        include: {
+            chapters: {
+                where: {
+                    isPublished: true
+                },
+                orderBy: {
+                    position: 'asc'
+                }
+            },
+        },
+
+    })
+
+    if (!course) {
+        redirect('/')
+    }
+
+    return redirect(`/course/${course.id}/chapter/${course.chapters[0].id}`)
+}
+
+export default CourseIdPage
