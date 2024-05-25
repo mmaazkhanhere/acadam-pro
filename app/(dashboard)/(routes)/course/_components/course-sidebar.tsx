@@ -25,6 +25,9 @@ const CourseSidebar = ({ course }: Props) => {
             <Logo />
 
             <div className="flex flex-col w-full mt-10">
+                <p className="text-lg text-center font-bold mb-4">
+                    {course.title}
+                </p>
                 {
                     course.chapters.map((chapter) => (
                         <CourseSidebarItem
