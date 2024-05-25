@@ -3,13 +3,13 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { UserButton } from "@clerk/nextjs"
-
 import { Button } from "@/components/ui/button"
 import { ThemeButton } from "@/components/ui/theme-button"
 
 import MobileSidebar from "./mobile-sidebar"
-import SearchInput from "../(routes)/student/explore/_components/search-input"
+
+import { UserButton } from "@clerk/nextjs"
+
 
 type Props = {
     teacher?: boolean;
@@ -21,8 +21,7 @@ const Navbar = ({ teacher }: Props) => {
 
     return (
         <header
-            className="p-4 h-full flex items-center justify-between shadow-sm 
-            bg-white dark:bg-muted-foreground/10"
+            className="p-4 h-full flex items-center justify-between shadow-sm bg-white dark:bg-muted-foreground/10"
         >
 
             <MobileSidebar />

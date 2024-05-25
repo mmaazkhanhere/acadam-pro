@@ -1,7 +1,9 @@
 
 import { auth } from "@clerk/nextjs/server"
+
 import Navbar from "./_components/navbar"
 import Sidebar from "./_components/sidebar"
+
 import { isTeacher } from "@/helpers/userCheck"
 
 type Props = {

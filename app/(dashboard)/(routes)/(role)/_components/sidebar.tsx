@@ -1,4 +1,5 @@
 import Logo from "@/components/logo"
+
 import SidebarRoutes from "./sidebar-routes"
 
 type Props = {
@@ -8,8 +9,7 @@ type Props = {
 const Sidebar = ({ teacher }: Props) => {
     return (
         <div
-            className="flex flex-col items-center p-4 md:shadow-sm h-full
-        overflow-y-auto"
+            className="flex flex-col items-center p-4 md:shadow-sm h-full overflow-y-auto"
         >
             <Logo />
 

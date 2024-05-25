@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import prismadb from '@/lib/prismadb'
 import CourseSidebar from '../_components/course-sidebar'
+import CourseNavbar from '../_components/course-navbar'
 
 type Props = {
     children: React.ReactNode
@@ -52,12 +53,17 @@ const CourseIdLayout = async ({ children, params }: Props) => {
     return (
 
         <div className='h-full'>
+            <div className='md:pl-60 w-full h-[80px] fixed z-50 inset-y-0'>
+                <CourseNavbar />
+            </div>
+
             <div className='w-60 fixed z-50 hidden md:flex flex-col inset-y-0 border-r'>
                 <CourseSidebar
                     course={course}
                 />
             </div>
-            <div className='pl-60'>
+
+            <div className='md:pl-60 mt-[80px]'>
                 {children}
             </div>
 

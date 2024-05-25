@@ -1,5 +1,9 @@
-import { Chapter, Course, UserProgress } from "@prisma/client"
+
+import Logo from "@/components/logo";
+
 import CourseSidebarItem from "./course-sidebar-item";
+
+import { Chapter, Course, UserProgress } from "@prisma/client"
 
 
 type Props = {
@@ -14,19 +18,27 @@ type Props = {
 
 const CourseSidebar = ({ course }: Props) => {
     return (
-        <div>
-            {
-                course.chapters.map((chapter) => (
-                    <CourseSidebarItem
-                        key={chapter.id}
-                        label={chapter.title}
-                        id={chapter.id}
-                        isLocked={!chapter.isFree}
-                        isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
-                        courseId={course.id}
-                    />
-                ))
-            }
+        <div
+            className="flex flex-col items-center p-4 md:shadow-sm h-full overflow-y-auto"
+        >
+
+            <Logo />
+
+            <div className="flex flex-col w-full mt-10">
+                {
+                    course.chapters.map((chapter) => (
+                        <CourseSidebarItem
+                            key={chapter.id}
+                            label={chapter.title}
+                            id={chapter.id}
+                            isLocked={!chapter.isFree}
+                            isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
+                            courseId={course.id}
+                        />
+                    ))
+                }
+            </div>
+
         </div>
     )
 }
