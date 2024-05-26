@@ -1,110 +1,90 @@
-/*this function retrieves information about a specific chapter within a course */
+import React from 'react'
+import prismadb from '@/lib/prismadb'
+import { Chapter } from '@prisma/client';
 
-import prismadb  from "@/lib/prismadb";
-import { Attachment, Chapter } from "@prisma/client";
-
-interface GetChapterProps {
+type ChapterProps={
     userId: string;
     courseId: string;
     chapterId: string;
 }
 
-export const getChapter = async ({ userId, courseId, chapterId }: GetChapterProps) => {
+export const getChapter = async({userId, courseId, chapterId}: ChapterProps) => {
+
     try {
-
-        //check if the current user has purchased the course
-        const purchase = await prismadb.purchase.findFirst({
-            where: {
-                userId,
-                courseId
-            }
-        });
-
-
-        //get the course price
+        /*Get the course having specified courseId and check if it is published or not */
         const course = await prismadb.course.findUnique({
-            where: {
-                isPublished: true,
+            where:{
                 id: courseId,
-            },
-            select: {
-                price: true
+                isPublished:true
             }
         });
 
-        console.log(course)
-
-        //get the chapter that is published
+        /*get the chapter of the course with specified chapterId and ensure it is published */
         const chapter = await prismadb.chapter.findUnique({
-            where: {
+            where:{
                 id: chapterId,
-                isPublished: true,
+                isPublished:true
             }
         });
 
-        //if no chapter or course found, throw new error
-        if (!chapter || !course) {
-            throw new Error("Chapter or Course not found")
+        /*If no course or chapter found, raise an error */
+        if(!course || !chapter){
+            throw new Error('Course or Chapter not found')
         }
 
-        let muxData = null;
-        let attachments: Attachment[] = [];
-        let nextChapter: Chapter | null = null;
+        let muxData = null; //variable to hold the mux video data
+        let nextChapter: Chapter | null = null; //variable to hold next chapter
 
-        //if user has purchased the course, course attachment is fetched
-        if (purchase) {
-            attachments = await prismadb.attachment.findMany({
-                where: {
-                    courseId: courseId
-                }
-            });
-        }
-
-        //if chapter is free and is purchased get the video data
-        if (chapter.isFree || purchase) {
+        /*If the course is free, get the mux video data and next chapter. We dont want paid 
+        chapters to be accessible so that's why the check is done */
+        if(course.isFree){
             muxData = await prismadb.muxData.findUnique({
-                where: {
-                    chapterId: chapterId,
+                where:{
+                    chapterId: chapterId
                 }
             });
 
-            //get the next chapter
+            /*get all the chapters that are greater in position than the current chapter and
+            arrange it in ascending order */
             nextChapter = await prismadb.chapter.findFirst({
-                where: {
-                    courseId: chapterId,
+                where:{
+                    courseId: courseId,
                     isPublished: true,
-                    position: {
-                        gt: chapter?.position,
+                    position:{
+                        gt:chapter.position
                     }
                 },
-                orderBy: {
-                    position: "asc"
+                orderBy:{
+                    position:'asc'
                 }
-            })
+            });
         }
 
-        //get the user progress for that chapter
+        /*get the current user progress for the current chapter */
         const userProgress = await prismadb.userProgress.findFirst({
-            where: {
-                userId,
-                chapterId
+            where:{
+                chapterId,
+                userId
             }
-        });
+        })
 
         return {
-            chapter, course, muxData, attachments, nextChapter, userProgress, purchase
+            course,
+            chapter,
+            muxData,
+            nextChapter,
+            userProgress
         }
 
     } catch (error) {
-        console.error("[GET_CHAPTER]", error);
-        return {
-            chapter: null,
+        console.log(`[GET_CHAPTER_ACTION_ERROR]`)
+        return{
             course: null,
+            chapter: null,
             muxData: null,
-            attachments: null,
             nextChapter: null,
-            userProgress: null,
-            purchase: null,
+            userProgress: null
         }
     }
+
 }

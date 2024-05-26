@@ -1,3 +1,4 @@
+
 import { getChapter } from '@/actions/getChapter'
 import { Banner } from '@/components/banner'
 import { isAdmin, isTeacher } from '@/helpers/userCheck'
@@ -25,24 +26,19 @@ const ChapterPage = async({params}: Props) => {
     if(!userId || admin ||teacher){
         redirect('/')
     }
-    
+
     const {
-        chapter,
         course,
-        muxData, 
-        attachments, 
-        nextChapter, 
+        chapter,
+        muxData,
+        nextChapter,
         userProgress
-    } = await getChapter({userId, chapterId: params.chapterId, courseId: params.courseId})
+    } = await getChapter({userId, chapterId: params.chapterId, courseId:params.courseId});
 
+    const isLocked = !course?.isFree; /*Chapter will be not accessible if the chapter is not free */
 
-    if(!chapter ||!course){
-        redirect('/')
-    }
-
-    const isLocked = !chapter.isFree;
-
-    const completeOnEnd = !userProgress?.isCompleted
+    const completeOnEnd = !userProgress?.isCompleted /*When the video ends, the isCompleted field
+    of the userProgress model will be true */
 
     return (
         <div className='p-4 flex flex-col items-start gap-y-5'>
@@ -69,16 +65,14 @@ const ChapterPage = async({params}: Props) => {
                 <VideoPlayer
                     chapterId={params.chapterId}
                     courseId={params.courseId}
-                    title={chapter.title}
-                    nextChapterId={nextChapter?.id as string}
+                    playbackId={muxData?.playbackId as string}
+                    title={course?.title as string}
                     isLocked={isLocked}
                     completeOnEnd={completeOnEnd}
-                    playbackId={muxData?.playbackId as string}
+                    nextChapterId={nextChapter?.id}
                 />
             </div>
-
-
-
+            
         </div>
     )
 }

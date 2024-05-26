@@ -1,67 +1,44 @@
 "use client"
 
-import { useToast } from '@/components/ui/use-toast';
-import { useConfettiStore } from '@/hooks/use-confetti-store';
 import MuxPlayer from '@mux/mux-player-react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 import React, { useState } from 'react'
 
 type Props = {
+    playbackId ?: string;
+    title: string;
     chapterId: string;
-    courseId:string;
-    playbackId: string;
-    nextChapterId: string;
-    isLocked: boolean;
-    completeOnEnd: boolean;
-    title: string
+    courseId: string;
+    isLocked ?: boolean;
+    completeOnEnd ?: boolean;
+    nextChapterId ?: string
 }
 
-const VideoPlayer = ({chapterId, courseId, playbackId, nextChapterId, isLocked, completeOnEnd, title}: Props) => {
+const VideoPlayer = ({title, playbackId, chapterId, courseId, isLocked, completeOnEnd, nextChapterId}: Props) => {
+    
+    const [isReady, setIsReady] = useState<boolean>(false)
 
-    const [isReady, setIsReady] = useState<boolean>(false);
-
-    const confetti = useConfettiStore();
-    const {toast} = useToast();
-    const router = useRouter();
-
-    const onEnd = async()=>{
-        try {
-            if(completeOnEnd){
-                await axios.post(`/api/course/${courseId}/chapters/${chapterId}/progress`,{
-                    isCompleted: true,
-                });
-            };
-
-            if(!nextChapterId){
-                confetti.onOpen();
-            };
-            toast({
-                title:'Progress updated'
-            });
-            router.refresh();
-        } catch (error) {
-            router.push(`/course/${courseId}/chapters/${nextChapterId}`);
-        }
-    }
-
+    console.log(isReady)
+    
     return (
-        <div
-        className='relative aspect-video w-full'
-        >
+        <div className='relative aspect-video'>
             {
-                !isLocked && (
-                    <MuxPlayer
-                        title={title}
-                        className=''
-                        onEnded={onEnd}
-                        autoPlay
-                        playbackId={playbackId}
+                !isReady  &&  <div
+                className='absolute inset-0 flex items-center justify-center bg-slate-800'>
+                    <Loader2
+                        className='w-8 h-8 animate-spin text-secondary'
                     />
-                )
+                </div>
             }
+            <MuxPlayer
+                title={title}
+                playbackId={playbackId}
+                className={`${!isReady && 'hidden'}`}
+                autoPlay
+                onCanPlay={()=>setIsReady(true)}
+            />
         </div>
     )
-    }
+}
 
 export default VideoPlayer
