@@ -1,149 +1,166 @@
-"use client"
+"use client";
 
-import axios from "axios"
-import { useRouter } from "next/navigation"
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-import { Switch } from "@/components/ui/switch"
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
 
-import { useToast } from "@/components/ui/use-toast"
+import { Switch } from "@/components/ui/switch";
 
-import { Pencil } from "lucide-react"
+import { useToast } from "@/components/ui/use-toast";
 
+import { Pencil } from "lucide-react";
 
 type Props = {
-    isCourseFree: boolean
-    courseId: string
-}
-
+	isCourseFree: boolean;
+	courseId: string;
+	isPublished?: boolean;
+};
 
 const formSchema = z.object({
-    isFree: z.coerce.boolean()
+	isFree: z.coerce.boolean(),
+});
 
-})
+const IsCourseFree = ({ isCourseFree, courseId, isPublished }: Props) => {
+	const router = useRouter();
+	const { toast } = useToast();
 
-const IsCourseFree = ({ isCourseFree, courseId }: Props) => {
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			isFree: isCourseFree,
+		},
+	});
 
-    const router = useRouter();
-    const { toast } = useToast();
+	const { isValid, isSubmitting } = form.formState;
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            isFree: isCourseFree
-        }
-    })
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		try {
+			await axios.patch(`/api/course/${courseId}`, values);
+			toast({
+				title: "Course availability updated",
+			});
 
-    const { isValid, isSubmitting } = form.formState;
+			router.refresh();
+		} catch (error) {
+			toast({
+				title: "Something went wrong",
+				variant: "destructive",
+			});
+		}
+	};
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            await axios.patch(`/api/course/${courseId}`, values);
-            toast({
-                title: 'Course availability updated',
-            })
+	const onClick = async () => {
+		try {
+			if (isPublished) {
+				await axios.patch(`/api/course/${courseId}/publish`, {
+					isPublished: false,
+				});
+			}
 
-            router.refresh();
+			router.refresh();
+		} catch (error) {
+			toast({
+				title: "Something went wrong",
+				variant: "destructive",
+			});
+		}
+	};
 
-        } catch (error) {
-            toast({
-                title: 'Something went wrong',
-                variant: 'destructive'
-            })
-        }
-    }
-
-    return (
-
-        <section
-            className="p-4 bg-purple-200/50 dark:bg-muted rounded-xl flex flex-col
+	return (
+		<section
+			className="p-4 bg-purple-200/50 dark:bg-muted rounded-xl flex flex-col
         space-y-4 w-full"
-        >
-            <div className="flex items-center justify-between">
-                <h2 className="text-lg font-medium">
-                    Is Course Free
-                </h2>
+		>
+			<div className="flex items-center justify-between">
+				<h2 className="text-lg font-medium">Is Course Free</h2>
 
-                <div className="flex items-center gap-x-2 text-sm">
+				<div className="flex items-center gap-x-2 text-sm">
+					<AlertDialog>
+						<AlertDialogTrigger
+							onClick={onClick}
+							className="flex items-center gap-x-2"
+						>
+							<Pencil className="w-4 h-4" />
+							Edit Availability
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>
+									Edit Course Availability
+								</AlertDialogTitle>
+							</AlertDialogHeader>
 
-                    <AlertDialog>
-                        <AlertDialogTrigger className="flex items-center gap-x-2">
-                            <Pencil className="w-4 h-4" />
-                            Edit Availability
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Edit Course Availability</AlertDialogTitle>
-                            </AlertDialogHeader>
+							<Form {...form}>
+								<form
+									onSubmit={form.handleSubmit(onSubmit)}
+									className="space-y-8"
+								>
+									<FormField
+										control={form.control}
+										name="isFree"
+										render={({ field }) => (
+											<FormItem className="flex items-center gap-x-2">
+												<FormLabel>
+													Is course free?
+												</FormLabel>
+												<FormControl>
+													<Switch
+														checked={field.value}
+														onCheckedChange={
+															field.onChange
+														}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<AlertDialogFooter>
+										<AlertDialogCancel>
+											Cancel
+										</AlertDialogCancel>
+										<AlertDialogAction
+											type="submit"
+											disabled={!isValid || isSubmitting}
+										>
+											Save
+										</AlertDialogAction>
+									</AlertDialogFooter>
+								</form>
+							</Form>
+						</AlertDialogContent>
+					</AlertDialog>
+				</div>
+			</div>
 
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                    <FormField
-                                        control={form.control}
-                                        name="isFree"
-                                        render={({ field }) => (
-                                            <FormItem
-                                                className="flex items-center gap-x-2"
-                                            >
-                                                <FormLabel>Is course free?</FormLabel>
-                                                <FormControl>
-                                                    <Switch
-                                                        checked={field.value}
-                                                        onCheckedChange={field.onChange}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction
-                                            type="submit"
-                                            disabled={!isValid || isSubmitting}
-                                        >
-                                            Save
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </form>
-                            </Form>
+			<p className="text-sm text-gray-600">
+				{isCourseFree ? "Free" : "Paid"}
+			</p>
+		</section>
+	);
+};
 
-                        </AlertDialogContent>
-                    </AlertDialog>
-
-                </div>
-            </div>
-
-            <p className="text-sm text-gray-600">
-                {
-                    isCourseFree ? 'Free' : 'Paid'
-                }
-            </p>
-        </section>
-    )
-}
-
-export default IsCourseFree
+export default IsCourseFree;

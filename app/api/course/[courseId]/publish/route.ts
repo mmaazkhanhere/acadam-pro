@@ -1,64 +1,63 @@
 import { NextResponse } from "next/server";
 
-import { auth } from "@clerk/nextjs/server"
+import { auth } from "@clerk/nextjs/server";
 
-import prismadb from '@/lib/prismadb'
+import prismadb from "@/lib/prismadb";
 
-export const PATCH = async (request: Request, { params }: { params: { courseId: string } }) => {
+export const PATCH = async (
+	request: Request,
+	{ params }: { params: { courseId: string } }
+) => {
+	const body = await request.json();
+	try {
+		const { userId } = auth();
 
-    const body = await request.json();
+		if (!userId) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
 
-    try {
-        const { userId } = auth();
+		const course = await prismadb.course.findUnique({
+			where: {
+				id: params.courseId,
+				teacherId: userId,
+			},
+		});
 
-        if (!userId) {
-            return new NextResponse('Unauthorized', { status: 401 });
-        }
+		if (!course) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
 
-        const course = await prismadb.course.findUnique({
-            where: {
-                id: params.courseId,
-                teacherId: userId
-            }
-        })
+		const courseChapters = await prismadb.course.findUnique({
+			where: {
+				id: params.courseId,
+				teacherId: userId,
+			},
+			select: {
+				chapters: true,
+			},
+		});
 
-        if (!course) {
-            return new NextResponse('Unauthorized', { status: 401 });
-        }
+		const publishedChapters = courseChapters?.chapters.every(
+			(chapter) => chapter.isPublished
+		);
 
-        const courseChapters = await prismadb.course.findUnique({
-            where: {
-                id: params.courseId,
-                teacherId: userId
-            },
-            select: {
-                chapters: true
-            }
-        })
+		if (!publishedChapters) {
+			return new NextResponse("Chapters unpublished", { status: 406 });
+		}
 
-        const publishedChapters = courseChapters?.chapters.every(chapter => chapter.isPublished);
+		const updatedCourse = await prismadb.course.update({
+			where: {
+				id: params.courseId,
+				teacherId: userId,
+			},
+			data: {
+				isPublished: body.isPublished,
+			},
+		});
 
-        console.log(publishedChapters);
-
-        if (!publishedChapters) {
-            return new NextResponse('Chapters unpublished', { status: 406 });
-        }
-
-        const updatedCourse = await prismadb.course.update({
-            where: {
-                id: params.courseId,
-                teacherId: userId
-            },
-            data: {
-                isPublished: !body.isPublished
-            }
-        })
-
-        return NextResponse.json(updatedCourse);
-
-    } catch (error) {
-        console.log('[COURSE_PUBLISH_ERROR]', error);
-        return new NextResponse('Internal Server Error', { status: 500 })
-    }
-
-}
+		return NextResponse.json(updatedCourse);
+	} catch (error) {
+		console.log("[COURSE_PUBLISH_ERROR]", error);
+		return new NextResponse("Internal Server Error", { status: 500 });
+	}
+};
