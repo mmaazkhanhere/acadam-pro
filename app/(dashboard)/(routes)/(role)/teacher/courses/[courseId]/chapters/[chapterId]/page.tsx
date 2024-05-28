@@ -1,128 +1,146 @@
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
 
-import { auth } from "@clerk/nextjs/server"
+import { auth } from "@clerk/nextjs/server";
 
-import ActionButtons from "../../_components/action-button"
-import BackButton from "./_components/back-button"
+import ActionButtons from "../../_components/action-button";
+import BackButton from "./_components/back-button";
 
-import prismadb from '@/lib/prismadb'
-import ChapterTitleForm from "./_components/chapter-titlte-form"
-import { Banner } from "@/components/banner"
-import ChapterDescriptionForm from "./_components/chapter-description-form"
-import ChapterAccess from "./_components/chapter-access"
-import ChapterVideoForm from "./_components/chapter-video-form"
-import ChapterActionButtons from "./_components/chapter-action-buttons"
-
-
+import prismadb from "@/lib/prismadb";
+import ChapterTitleForm from "./_components/chapter-titlte-form";
+import { Banner } from "@/components/banner";
+import ChapterDescriptionForm from "./_components/chapter-description-form";
+import ChapterAccess from "./_components/chapter-access";
+import ChapterVideoForm from "./_components/chapter-video-form";
+import ChapterActionButtons from "./_components/chapter-action-buttons";
 
 type Props = {
-    params: {
-        courseId: string
-        chapterId: string
-    }
-}
+	params: {
+		courseId: string;
+		chapterId: string;
+	};
+};
 
 const ChapterPage = async ({ params }: Props) => {
+	const { userId } = auth();
 
-    const { userId } = auth();
+	if (!userId) {
+		redirect("/");
+	}
 
-    if (!userId) {
-        redirect('/')
-    }
+	const course = await prismadb.course.findUnique({
+		where: {
+			id: params.courseId,
+			teacherId: userId,
+		},
+		select: {
+			isFree: true,
+			isPublished: true,
+		},
+	});
 
-    const chapter = await prismadb.chapter.findUnique({
-        where: {
-            id: params.chapterId,
-            courseId: params.courseId,
-        },
-        include: {
-            muxData: true
-        }
-    })
+	const chapter = await prismadb.chapter.findUnique({
+		where: {
+			id: params.chapterId,
+			courseId: params.courseId,
+		},
+		include: {
+			muxData: true,
+		},
+	});
 
-    if (!chapter) {
-        redirect(`/teacher/courses/${params.courseId}`)
-    }
+	if (!chapter) {
+		redirect(`/teacher/courses/${params.courseId}`);
+	}
 
-    const requiredFields = [
-        chapter?.title,
-        chapter?.description,
-        chapter?.videoUrl
-    ]
+	if (!course) {
+		redirect("/");
+	}
 
-    const totalFields = requiredFields.length;
+	const requiredFields = [
+		chapter?.title,
+		chapter?.description,
+		chapter?.videoUrl,
+	];
 
-    const completedFields = requiredFields.filter(field => Boolean(field)).length
+	const totalFields = requiredFields.length;
 
-    const completionText = `${completedFields}/${totalFields}`
+	const completedFields = requiredFields.filter((field) =>
+		Boolean(field)
+	).length;
 
-    const isCompleted = requiredFields.every(Boolean)
+	const completionText = `${completedFields}/${totalFields}`;
 
-    return (
-        <section>
-            {
-                !chapter?.isPublished && <Banner
-                    label='This chapter is not published. It will not be visible to the 
-                students'
-                />
-            }
-            <div className="p-5 mt-8">
-                <BackButton
-                    courseId={params.courseId}
-                />
-            </div>
+	const isCompleted = requiredFields.every(Boolean);
 
+	return (
+		<section>
+			{!chapter?.isPublished && (
+				<Banner
+					label="This chapter is not published. It will not be visible to the 
+                students"
+				/>
+			)}
+			<div className="p-5 mt-8">
+				<BackButton courseId={params.courseId} />
+			</div>
 
-            <div className="flex items-center justify-between w-full p-5">
-                <div className="flex flex-col gap-y-2">
-                    <h1 className="text-2xl">
-                        Create Chapter
-                    </h1>
-                    <p className="text-sm text-gray-500">
-                        Fields Completed ({completionText})
-                    </p>
-                </div>
+			<div className="flex items-center justify-between w-full p-5">
+				<div className="flex flex-col gap-y-2">
+					<h1 className="text-2xl">Create Chapter</h1>
+					<p className="text-sm text-gray-500">
+						Fields Completed ({completionText})
+					</p>
+				</div>
 
-                <ChapterActionButtons
-                    isPublished={chapter?.isPublished}
-                    isCompleted={isCompleted}
-                    courseId={params.courseId}
-                    chapterId={params.chapterId}
-                />
-            </div>
+				<ChapterActionButtons
+					isPublished={chapter?.isPublished}
+					isCompleted={isCompleted}
+					courseId={params.courseId}
+					chapterId={params.chapterId}
+				/>
+			</div>
 
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full p-5">
+				<div className="w-full space-y-6">
+					<ChapterTitleForm
+						chapterId={params.chapterId}
+						courseId={params.courseId}
+						initialTitle={chapter?.title}
+						coursePublished={course.isPublished}
+						chapterPublished={chapter?.isPublished}
+					/>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full p-5">
-                <div className="w-full space-y-6">
-                    <ChapterTitleForm
-                        chapterId={params.chapterId}
-                        courseId={params.courseId}
-                        initialTitle={chapter?.title}
-                    />
+					<ChapterDescriptionForm
+						chapterId={params.chapterId}
+						courseId={params.courseId}
+						initialDescription={chapter?.description as string}
+						coursePublished={course.isPublished}
+						chapterPublished={chapter?.isPublished}
+					/>
 
-                    <ChapterDescriptionForm
-                        chapterId={params.chapterId}
-                        courseId={params.courseId}
-                        initialDescription={chapter?.description as string}
-                    />
+					{!course.isFree && (
+						<ChapterAccess
+							chapterId={params.chapterId}
+							courseId={params.courseId}
+							availability={chapter?.isFree}
+							coursePublished={course.isPublished}
+							chapterPublished={chapter?.isPublished}
+						/>
+					)}
+				</div>
 
-                    <ChapterAccess
-                        chapterId={params.chapterId}
-                        courseId={params.courseId}
-                        availability={chapter?.isFree}
-                    />
-                </div>
+				<div>
+					<ChapterVideoForm
+						initialData={chapter!}
+						courseId={params.courseId}
+						chapterId={params.chapterId}
+						coursePublished={course.isPublished}
+						chapterPublished={chapter?.isPublished}
+					/>
+				</div>
+			</div>
+		</section>
+	);
+};
 
-                <div>
-                    <ChapterVideoForm
-                        initialData={chapter!}
-                        courseId={params.courseId}
-                        chapterId={params.chapterId}
-                    />
-                </div>
-            </div>
-        </section>
-    )
-}
-
-export default ChapterPage
+export default ChapterPage;

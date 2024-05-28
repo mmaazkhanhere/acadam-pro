@@ -42,7 +42,7 @@ export const PATCH = async (
 		);
 
 		if (!publishedChapters) {
-			return new NextResponse("Chapters unpublished", { status: 406 });
+			return new NextResponse("Chapters not published", { status: 406 });
 		}
 
 		const updatedCourse = await prismadb.course.update({
