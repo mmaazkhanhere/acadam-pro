@@ -8,6 +8,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import VideoPlayer from "./_components/video-player";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import NoteGrid from "./_components/note-grid";
 
 type Props = {
 	params: {
@@ -40,7 +43,7 @@ const ChapterPage = async ({ params }: Props) => {
     of the userProgress model will be true */
 
 	return (
-		<div className="p-4 flex flex-col items-start gap-y-5">
+		<div className="p-8 flex flex-col items-start gap-y-5">
 			{userProgress?.isCompleted && (
 				<Banner
 					variant="success"
@@ -53,7 +56,7 @@ const ChapterPage = async ({ params }: Props) => {
 				</button>
 			</Link>
 
-			<div className="p-4">
+			<div>
 				<VideoPlayer
 					chapterId={params.chapterId}
 					courseId={params.courseId}
@@ -63,6 +66,24 @@ const ChapterPage = async ({ params }: Props) => {
 					completeOnEnd={completeOnEnd}
 					nextChapterId={nextChapter?.id}
 				/>
+			</div>
+
+			<div className="flex flex-col gap-y-4 items-start mt-4 max-w-7xl w-full">
+				<div className="flex items-center justify-between w-full">
+					<h1 className="text-3xl font-bold">{chapter?.title}</h1>
+					<Button>New Note</Button>
+				</div>
+
+				<Separator />
+
+				<p>{course?.description}</p>
+
+				<Separator />
+			</div>
+
+			<div className="flex flex-col items-start gap-y-4 mt-4">
+				<h2 className="text-2xl font-medium">Notes</h2>
+				<NoteGrid chapterId={params.chapterId} />
 			</div>
 		</div>
 	);

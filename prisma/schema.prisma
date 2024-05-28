@@ -28,6 +28,7 @@ model User {
 
   purchases Purchase[]
   reviews   Review[]
+  notes Notes[]
 
   subscriptions Subscription[]
 
@@ -111,6 +112,9 @@ model MuxData {
 model Notes {
   id   String  @id @default(uuid())
   body String? @db.Text
+
+  authorId String
+  author User @relation(fields:[authorId], references: [id], onDelete: Cascade)
 
   chapterId String
   chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
