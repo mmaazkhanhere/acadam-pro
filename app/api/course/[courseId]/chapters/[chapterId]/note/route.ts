@@ -8,7 +8,7 @@ export const POST = async (
 	request: Request,
 	{ params }: { params: { courseId: string; chapterId: string } }
 ) => {
-	const { body } = await request.json();
+	const { body, color } = await request.json();
 
 	try {
 		const { userId } = auth();
@@ -23,6 +23,7 @@ export const POST = async (
 			data: {
 				authorId: userId,
 				body,
+				color,
 				chapterId: params.chapterId,
 			},
 		});

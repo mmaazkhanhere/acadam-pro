@@ -92,7 +92,6 @@ const VideoPlayer = ({
 				<MuxPlayer
 					title={title}
 					playbackId={playbackId}
-					autoPlay
 					className={cn(!isReady && "hidden")}
 					onCanPlay={() => setIsReady(true)}
 					onEnded={onEnd}

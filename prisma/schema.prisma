@@ -61,7 +61,6 @@ model Course {
 
   reviews     Review[]
   chapters    Chapter[]
-  attachments Attachment[]
   purchases   Purchase[]
 
   createdAt DateTime @default(now())
@@ -112,6 +111,7 @@ model MuxData {
 model Notes {
   id   String  @id @default(uuid())
   body String? @db.Text
+  color String?
 
   authorId String
   author User @relation(fields:[authorId], references: [id], onDelete: Cascade)
@@ -159,19 +159,6 @@ model Review {
   @@index([courseId])
 }
 
-model Attachment {
-  id   String @id @default(uuid())
-  name String
-  url  String @db.Text
-
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([courseId])
-}
 
 model Subscription {
   id String @id @default(uuid())

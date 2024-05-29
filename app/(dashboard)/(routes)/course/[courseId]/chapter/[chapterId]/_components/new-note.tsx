@@ -27,13 +27,12 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 
-import { Input } from "@/components/ui/input";
-
 import { useToast } from "@/components/ui/use-toast";
+import TextEditor from "@/components/text-editor";
+
+import { cn } from "@/lib/utils";
 
 import { PlusCircle } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
-import TextEditor from "@/components/text-editor";
 
 type Props = {
 	chapterId: string;
@@ -42,16 +41,26 @@ type Props = {
 
 const formSchema = z.object({
 	body: z.string().min(1),
+	color: z.string().min(1),
 });
+
+const colorList: string[] = [
+	"bg-yellow-200",
+	"bg-green-200",
+	"bg-purple-300",
+	"bg-gray-500",
+	"bg-blue-200",
+	"bg-pink-200",
+];
 
 const NewNote = ({ chapterId, courseId }: Props) => {
 	const router = useRouter();
 	const { toast } = useToast();
 
 	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
 		defaultValues: {
 			body: "",
+			color: "bg-yellow-200",
 		},
 	});
 
@@ -92,8 +101,37 @@ const NewNote = ({ chapterId, courseId }: Props) => {
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
-						className="space-y-8"
+						className="space-y-4"
 					>
+						<FormField
+							control={form.control}
+							name="color"
+							render={({ field }) => (
+								<FormItem className="flex  items-center space-x-2">
+									<FormLabel>Color</FormLabel>
+									<FormControl className="space-x-4">
+										<>
+											{colorList.map((color) => (
+												<button
+													key={color}
+													type="button"
+													value={field.value}
+													className={cn(
+														`w-5 h-5 ${color} rounded`,
+														field.value === color &&
+															"border border-black"
+													)}
+													onClick={() =>
+														field.onChange(color)
+													}
+												/>
+											))}
+										</>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<FormField
 							control={form.control}
 							name="body"
