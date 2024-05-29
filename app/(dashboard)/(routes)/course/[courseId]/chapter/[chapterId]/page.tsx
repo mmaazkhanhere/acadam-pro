@@ -87,7 +87,10 @@ const ChapterPage = async ({ params }: Props) => {
 
 			<div className="flex flex-col items-start gap-y-4 mt-4">
 				<h2 className="text-2xl font-medium">Notes</h2>
-				<NoteGrid chapterId={params.chapterId} />
+				<NoteGrid
+					courseId={params.courseId}
+					chapterId={params.chapterId}
+				/>
 			</div>
 		</div>
 	);

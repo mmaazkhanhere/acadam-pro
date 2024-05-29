@@ -1,16 +1,46 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import React from "react";
+import { formatRelative } from "date-fns";
+
 import EditorPreview from "@/components/editor-preview";
+import { useToast } from "@/components/ui/use-toast";
+
 import { cn } from "@/lib/utils";
 import { Notes } from "@prisma/client";
-import React from "react";
-import { formatRelative, subDays } from "date-fns";
+
 import { Trash2 } from "lucide-react";
 
 type Props = {
 	note: Notes;
+	courseId: string;
+	chapterId: string;
 };
 
-const NoteCard = ({ note }: Props) => {
+const NoteCard = ({ note, courseId, chapterId }: Props) => {
 	const dateFormatted = formatRelative(new Date(note.createdAt), new Date());
+	const { toast } = useToast();
+	const router = useRouter();
+
+	const onDelete = async () => {
+		try {
+			await axios.delete(
+				`/api/course/${courseId}/chapters/${chapterId}/note/${note.id}`
+			);
+
+			toast({
+				title: "Note deleted",
+			});
+			router.refresh();
+		} catch (error) {
+			toast({
+				title: "Something went wrong",
+				variant: "destructive",
+			});
+		}
+	};
 	return (
 		<article
 			className={cn(
@@ -19,7 +49,12 @@ const NoteCard = ({ note }: Props) => {
 			)}
 		>
 			<div className="flex flex-col items-start gap-y-2">
-				<button className="hover:opacity-85 transition duration-300">
+				<button
+					aria-label="Delete Button"
+					onClick={onDelete}
+					type="button"
+					className="hover:opacity-85 transition duration-300"
+				>
 					<Trash2
 						className={cn(
 							"w-4 h-4 text-black",

@@ -6,10 +6,11 @@ import prismadb from "@/lib/prismadb";
 import NoteCard from "./note-card";
 
 type Props = {
+	courseId: string;
 	chapterId: string;
 };
 
-const NoteGrid = async ({ chapterId }: Props) => {
+const NoteGrid = async ({ chapterId, courseId }: Props) => {
 	const { userId } = auth();
 
 	if (!userId) {
@@ -30,7 +31,12 @@ const NoteGrid = async ({ chapterId }: Props) => {
 	return (
 		<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
 			{notes.map((note) => (
-				<NoteCard key={note.id} note={note} />
+				<NoteCard
+					key={note.id}
+					note={note}
+					courseId={courseId}
+					chapterId={chapterId}
+				/>
 			))}
 		</div>
 	);
