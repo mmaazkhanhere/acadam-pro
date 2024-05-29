@@ -1,5 +1,8 @@
-import { auth } from "@clerk/nextjs/server";
+/**An api endpoint to create a note. It is accessible to student only */
+
 import { NextResponse } from "next/server";
+
+import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb";
 import { isAdmin, isTeacher } from "@/helpers/userCheck";

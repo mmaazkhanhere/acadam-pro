@@ -13,7 +13,7 @@ import ChapterForm from "./_components/chapter-form";
 
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
-import { isAdmin } from "@/helpers/userCheck";
+import { isAdmin, isTeacher } from "@/helpers/userCheck";
 
 type Props = {
 	params: {
@@ -25,6 +25,11 @@ const CoursePage = async ({ params }: Props) => {
 	const { userId } = auth();
 
 	const admin = await isAdmin(userId as string);
+	const teacher = await isTeacher(userId as string);
+
+	if (!userId || !teacher || !admin) {
+		redirect("/");
+	}
 
 	const course = await prismadb.course.findUnique({
 		where: {
@@ -34,11 +39,6 @@ const CoursePage = async ({ params }: Props) => {
 			chapters: {
 				orderBy: {
 					position: "asc",
-				},
-			},
-			attachments: {
-				orderBy: {
-					createdAt: "asc",
 				},
 			},
 		},

@@ -1,8 +1,13 @@
+/**An api endpoint for updating user progress. This route is accessible to
+ * students only
+ */
+
 import { NextResponse } from "next/server";
 
 import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb";
+import { isAdmin, isTeacher } from "@/helpers/userCheck";
 
 export const PUT = async (
 	request: Request,
@@ -12,8 +17,10 @@ export const PUT = async (
 
 	try {
 		const { userId } = auth();
+		const teacher = await isTeacher(userId as string);
+		const admin = await isAdmin(userId as string);
 
-		if (!userId) {
+		if (!userId || admin || teacher) {
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
 

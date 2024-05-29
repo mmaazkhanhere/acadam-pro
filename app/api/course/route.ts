@@ -1,39 +1,41 @@
-import { auth } from "@clerk/nextjs/server";
+/**An api route to create new course accessible to teacher and admin only */
+
 import { NextResponse } from "next/server";
+
+import { auth } from "@clerk/nextjs/server";
+
 import prismadb from "@/lib/prismadb";
-import { isAdmin } from "@/helpers/userCheck";
+import { isAdmin, isTeacher } from "@/helpers/userCheck";
 
 export const POST = async (request: Request) => {
-    const body = await request.json();
+	const body = await request.json();
+	const { isFree } = body;
+	try {
+		const { userId } = auth();
+		const admin = await isAdmin(userId as string);
+		const teacher = await isTeacher(userId as string);
 
-    try {
-        const { userId } = auth();
-        const { isFree } = body;
+		if (!userId || !admin || !teacher) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
 
-        if (!userId) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
+		let courseData = {
+			...body,
+			teacherId: userId,
+		};
 
-        const admin = await isAdmin(userId);
+		if (admin && !isFree) {
+			courseData.isPro = true;
+			courseData.price = 20;
+		}
 
-        let courseData = {
-            ...body,
-            teacherId: userId,
-        };
+		const course = await prismadb.course.create({
+			data: courseData,
+		});
 
-        if (admin && !isFree) {
-            courseData.isPro = true;
-            courseData.price = 20;
-        }
-
-        const course = await prismadb.course.create({
-            data: courseData,
-        });
-
-        return NextResponse.json(course);
-
-    } catch (error) {
-        console.log('[COURSE_CREATION_API]', error);
-        return new NextResponse("Internal Server Error", { status: 500 });
-    }
+		return NextResponse.json(course);
+	} catch (error) {
+		console.log("[COURSE_CREATION_API]", error);
+		return new NextResponse("Internal Server Error", { status: 500 });
+	}
 };

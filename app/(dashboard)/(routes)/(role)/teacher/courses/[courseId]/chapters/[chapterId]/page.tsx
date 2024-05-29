@@ -12,6 +12,7 @@ import ChapterDescriptionForm from "./_components/chapter-description-form";
 import ChapterAccess from "./_components/chapter-access";
 import ChapterVideoForm from "./_components/chapter-video-form";
 import ChapterActionButtons from "./_components/chapter-action-buttons";
+import { isAdmin, isTeacher } from "@/helpers/userCheck";
 
 type Props = {
 	params: {
@@ -23,7 +24,10 @@ type Props = {
 const ChapterPage = async ({ params }: Props) => {
 	const { userId } = auth();
 
-	if (!userId) {
+	const admin = await isAdmin(userId as string);
+	const teacher = await isTeacher(userId as string);
+
+	if (!userId || !admin || !teacher) {
 		redirect("/");
 	}
 

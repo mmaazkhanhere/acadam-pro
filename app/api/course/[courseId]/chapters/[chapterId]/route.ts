@@ -1,176 +1,178 @@
+/**An api endpoint to delete or update chapter of a course. This route is accessible
+ * to teacher and admin only
+ */
 
-import { NextResponse } from "next/server"
-import Mux from "@mux/mux-node"
+import { NextResponse } from "next/server";
+import Mux from "@mux/mux-node";
 
 import { auth } from "@clerk/nextjs/server";
 
-import prismadb from '@/lib/prismadb'
+import prismadb from "@/lib/prismadb";
+import { isAdmin, isTeacher } from "@/helpers/userCheck";
 
 const { video } = new Mux({
-    tokenId: process.env['MUX_TOKEN_ID'],
-    tokenSecret: process.env['MUX_TOKEN_SECRET']
-})
+	tokenId: process.env["MUX_TOKEN_ID"],
+	tokenSecret: process.env["MUX_TOKEN_SECRET"],
+});
 
-export const DELETE = async (request: Request, { params }: { params: { courseId: string, chapterId: string } }) => {
+export const DELETE = async (
+	request: Request,
+	{ params }: { params: { courseId: string; chapterId: string } }
+) => {
+	try {
+		const { userId } = auth();
+		const teacher = isTeacher(userId as string);
+		const admin = isAdmin(userId as string);
 
-    try {
+		if (!userId || !teacher || !admin) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
 
-        const { userId } = auth();
+		const course = await prismadb.course.findUnique({
+			where: {
+				id: params.courseId,
+				teacherId: userId,
+			},
+		});
 
-        if (!userId) {
-            return new NextResponse('Unauthorized', { status: 401 })
-        }
+		if (!course) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
 
-        const course = await prismadb.course.findUnique({
-            where: {
-                id: params.courseId,
-                teacherId: userId
-            }
-        })
+		const chapter = await prismadb.chapter.findUnique({
+			where: {
+				id: params.chapterId,
+				courseId: params.courseId,
+			},
+		});
 
-        if (!course) {
-            return new NextResponse('Unauthorized', { status: 401 })
-        }
+		if (!chapter) {
+			return new NextResponse("Not found", { status: 400 });
+		}
 
-        const chapter = await prismadb.chapter.findUnique({
-            where: {
-                id: params.chapterId,
-                courseId: params.courseId
-            }
-        })
+		if (chapter.videoUrl) {
+			const existingData = await prismadb.muxData.findFirst({
+				where: {
+					chapterId: params.chapterId,
+				},
+			});
 
-        if (!chapter) {
-            return new NextResponse('Not found', { status: 400 })
-        }
+			if (existingData) {
+				try {
+					await video.assets.delete(existingData.assetId);
+				} catch (error) {
+					console.error("Cannot delete Mux data", error);
+				}
+			}
 
-        if (chapter.videoUrl) {
-            const existingData = await prismadb.muxData.findFirst({
-                where: {
-                    chapterId: params.chapterId
-                }
-            })
+			await prismadb.muxData.delete({
+				where: {
+					id: existingData?.id,
+				},
+			});
+		}
 
-            if (existingData) {
-                try {
-                    await video.assets.delete(existingData.assetId);
-                } catch (error) {
-                    console.error('Cannot delete Mux data', error);
-                }
-            }
+		const deletedChapter = await prismadb.chapter.delete({
+			where: {
+				id: params.chapterId,
+			},
+		});
 
-            await prismadb.muxData.delete({
-                where: {
-                    id: existingData?.id
-                }
-            })
+		const publishedChapters = await prismadb.chapter.findMany({
+			where: {
+				courseId: params.courseId,
+				isPublished: true,
+			},
+		});
 
-        }
+		if (!publishedChapters.length) {
+			await prismadb.course.update({
+				where: {
+					id: params.courseId,
+				},
+				data: {
+					isPublished: false,
+				},
+			});
+		}
 
-        const deletedChapter = await prismadb.chapter.delete({
-            where: {
-                id: params.chapterId
-            }
-        });
+		return NextResponse.json(deletedChapter);
+	} catch (error) {
+		console.error("[CHAPTER_DELETE_API_ERROR]");
+		return new NextResponse("Internal Server Error", { status: 500 });
+	}
+};
 
-        const publishedChapters = await prismadb.chapter.findMany({
-            where: {
-                courseId: params.courseId,
-                isPublished: true
-            }
-        });
+export const PATCH = async (
+	request: Request,
+	{ params }: { params: { courseId: string; chapterId: string } }
+) => {
+	const body = await request.json();
 
-        if (!publishedChapters.length) {
-            await prismadb.course.update({
-                where: {
-                    id: params.courseId
-                },
-                data: {
-                    isPublished: false
-                }
-            })
-        }
+	try {
+		const { userId } = auth();
+		const teacher = isTeacher(userId as string);
+		const admin = isAdmin(userId as string);
 
-        return NextResponse.json(deletedChapter);
+		if (!userId || !teacher || !admin) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
 
-    } catch (error) {
-        console.error('[CHAPTER_DELETE_API_ERROR]')
-        return new NextResponse('Internal Server Error', { status: 500 })
-    }
+		const course = await prismadb.course.findUnique({
+			where: {
+				id: params.courseId,
+				teacherId: userId,
+			},
+		});
 
-}
+		if (!course) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
 
-export const PATCH = async (request: Request, { params }: { params: { courseId: string, chapterId: string } }) => {
+		const updatedChapter = await prismadb.chapter.update({
+			where: {
+				id: params.chapterId,
+				courseId: params.courseId,
+			},
+			data: {
+				...body,
+			},
+		});
 
-    const body = await request.json();
+		if (body.videoUrl) {
+			const existingMuxData = await prismadb.muxData.findFirst({
+				where: {
+					chapterId: params.chapterId,
+				},
+			});
 
-    try {
+			if (existingMuxData) {
+				await video.assets.delete(existingMuxData.assetId);
+				await prismadb.muxData.delete({
+					where: {
+						id: existingMuxData.id,
+					},
+				});
+			}
 
-        const { userId } = auth();
+			const asset = await video.assets.create({
+				input: body.videoUrl,
+				playback_policy: ["public"],
+				test: false,
+			});
 
-        if (!userId) {
-            return new NextResponse('Unauthorized', { status: 401 })
-        }
+			await prismadb.muxData.create({
+				data: {
+					chapterId: params.chapterId,
+					assetId: asset.id,
+					playbackId: asset.playback_ids?.[0]?.id,
+				},
+			});
+		}
 
-        const course = await prismadb.course.findUnique({
-            where: {
-                id: params.courseId,
-                teacherId: userId
-            }
-        })
-
-        if (!course) {
-            return new NextResponse('Unauthorized', { status: 401 })
-        }
-
-        const updatedChapter = await prismadb.chapter.update({
-            where: {
-                id: params.chapterId,
-                courseId: params.courseId
-            },
-            data: {
-                ...body
-            }
-        });
-
-        if (body.videoUrl) {
-            const existingMuxData = await prismadb.muxData.findFirst({
-                where: {
-                    chapterId: params.chapterId,
-                }
-            })
-
-            if (existingMuxData) {
-                await video.assets.delete(existingMuxData.assetId);
-                await prismadb.muxData.delete({
-                    where: {
-                        id: existingMuxData.id
-                    }
-                });
-            };
-
-            const asset = await video.assets.create({
-                input: body.videoUrl,
-                playback_policy: ['public'],
-                test: false
-            })
-
-            await prismadb.muxData.create({
-                data: {
-                    chapterId: params.chapterId,
-                    assetId: asset.id,
-                    playbackId: asset.playback_ids?.[0]?.id
-                }
-            })
-        };
-
-
-
-        return NextResponse.json(updatedChapter)
-
-
-    } catch (error) {
-        console.log('[CHAPTER_EDIT_API]', error);
-        return new NextResponse('Internal Server Error', { status: 500 })
-    }
-
-}
+		return NextResponse.json(updatedChapter);
+	} catch (error) {
+		console.log("[CHAPTER_EDIT_API]", error);
+		return new NextResponse("Internal Server Error", { status: 500 });
+	}
+};

@@ -1,8 +1,13 @@
+/**An api endpoint to publish or unplish a chapter. This endpoint is
+ * accessible to admin and teacher only
+ */
+
 import { NextResponse } from "next/server";
 
 import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb";
+import { isAdmin, isTeacher } from "@/helpers/userCheck";
 
 export const PATCH = async (
 	request: Request,
@@ -12,8 +17,10 @@ export const PATCH = async (
 
 	try {
 		const { userId } = auth();
+		const teacher = isTeacher(userId as string);
+		const admin = isAdmin(userId as string);
 
-		if (!userId) {
+		if (!userId || !teacher || !admin) {
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
 

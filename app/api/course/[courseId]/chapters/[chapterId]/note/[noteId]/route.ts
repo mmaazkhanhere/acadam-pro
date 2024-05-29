@@ -1,7 +1,11 @@
+/**An api endpoint to delete a note. This endpoint is accessible to student only */
+
+import { NextResponse } from "next/server";
+
+import { auth } from "@clerk/nextjs/server";
+
 import { isAdmin, isTeacher } from "@/helpers/userCheck";
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
 export const DELETE = async (
 	request: Request,
