@@ -8,7 +8,8 @@ export const POST = async (
 	request: Request,
 	{ params }: { params: { courseId: string; chapterId: string } }
 ) => {
-	const { body, color } = await request.json();
+	const req = await request.json();
+	const { body, color } = req;
 
 	try {
 		const { userId } = auth();
@@ -22,8 +23,8 @@ export const POST = async (
 		const newNote = await prismadb.notes.create({
 			data: {
 				authorId: userId,
-				body,
-				color,
+				body: body,
+				color: color,
 				chapterId: params.chapterId,
 			},
 		});

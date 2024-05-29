@@ -110,8 +110,8 @@ model MuxData {
 
 model Notes {
   id   String  @id @default(uuid())
-  body String? @db.Text
-  color String?
+  body String @db.Text
+  color String
 
   authorId String
   author User @relation(fields:[authorId], references: [id], onDelete: Cascade)

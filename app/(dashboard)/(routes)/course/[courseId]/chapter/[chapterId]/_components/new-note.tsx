@@ -70,7 +70,7 @@ const NewNote = ({ chapterId, courseId }: Props) => {
 		try {
 			await axios.post(
 				`/api/course/${courseId}/chapters/${chapterId}/note`,
-				{ values }
+				values
 			);
 			toast({
 				title: "Note created",
