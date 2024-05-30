@@ -33,6 +33,7 @@ const VideoPlayer = ({
 	nextChapterId,
 }: Props) => {
 	const [isReady, setIsReady] = useState(false);
+	console.log(isReady, isLocked);
 
 	const confetti = useConfettiStore();
 	const router = useRouter();
@@ -72,19 +73,16 @@ const VideoPlayer = ({
 	};
 
 	return (
-		<div className="relative aspect-video overflow-x-hidden">
-			{!isLocked && (
-				<div className="absolute inset-0 flex items-center justify-center">
-					<Lock className="h-8 w-8" />
+		<div className=" aspect-video max-w-7xl w-full">
+			{isLocked && (
+				<div className="flex items-center justify-center bg-slate-800 flex-col gap-y-2 text-secondary">
+					<Lock className="h-8 w-8 dark:text-white" />
 					<p className="text-sm">This chapter is locked</p>
 				</div>
 			)}
 			{!isReady && !isLocked && (
-				<div
-					className="absolute inset-0 flex items-center justify-center
-                    bg-slate-800"
-				>
-					<Loader2 className="w-8 h-8 animate-spin text-secondary" />
+				<div className="h-full flex items-center justify-center bg-slate-800">
+					<Loader2 className="w-8 h-8 animate-spin text-white" />
 				</div>
 			)}
 

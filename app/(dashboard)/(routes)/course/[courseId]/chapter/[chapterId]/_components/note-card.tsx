@@ -44,8 +44,9 @@ const NoteCard = ({ note, courseId, chapterId }: Props) => {
 	return (
 		<article
 			className={cn(
-				`${note.color} p-2 text-sm rounded-br-3xl flex flex-col justify-between h-full`,
-				note.color === "bg-gray-500" && "text-white"
+				`${note.color} p-2 text-sm rounded-br-3xl flex flex-col justify-between h-full dark:text-black`,
+				note.color === "bg-gray-500" &&
+					"text-white dark:text-muted-foreground"
 			)}
 		>
 			<div className="flex flex-col items-start gap-y-2">

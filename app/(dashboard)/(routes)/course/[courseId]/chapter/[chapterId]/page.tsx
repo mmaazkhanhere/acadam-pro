@@ -44,7 +44,7 @@ const ChapterPage = async ({ params }: Props) => {
     of the userProgress model will be true */
 
 	return (
-		<div className="p-8 flex flex-col items-start gap-y-5">
+		<div className="p-8 flex flex-col items-start gap-y-5 ">
 			{userProgress?.isCompleted && (
 				<Banner
 					variant="success"
@@ -52,12 +52,16 @@ const ChapterPage = async ({ params }: Props) => {
 				/>
 			)}
 			<Link href="/student/dashboard">
-				<button type="button" aria-label="Back button">
+				<button
+					type="button"
+					aria-label="Back button"
+					className="dark:bg-muted dark:p-2 rounded-lg"
+				>
 					<ArrowLeft className="w-6 h-6" />
 				</button>
 			</Link>
 
-			<div>
+			<div className="w-full">
 				<VideoPlayer
 					chapterId={params.chapterId}
 					courseId={params.courseId}
