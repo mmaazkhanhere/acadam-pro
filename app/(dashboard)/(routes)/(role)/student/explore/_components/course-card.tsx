@@ -89,7 +89,8 @@ const CourseCard = ({ course }: Props) => {
 	return (
 		<article
 			onClick={onClick}
-			className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full cursor-pointer"
+			className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full cursor-pointer
+			dark:bg-muted bg-purple-100/50"
 		>
 			<div className="relative aspect-video rounded-xl w-full overflow-hidden">
 				<Image

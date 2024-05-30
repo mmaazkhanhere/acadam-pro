@@ -32,7 +32,8 @@ const EnrolledCourseCard = ({ course }: Props) => {
 	return (
 		<Link
 			href={`/course/${course.id}/chapter/${course.chapters[0].id}`}
-			className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full"
+			className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full
+			bg-purple-100/50 dark:bg-muted"
 		>
 			<div className="relative aspect-video rounded-xl w-full overflow-hidden">
 				<Image
