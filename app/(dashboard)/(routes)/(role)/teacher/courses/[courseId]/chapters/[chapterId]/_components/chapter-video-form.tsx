@@ -66,8 +66,11 @@ const ChapterVideoForm = ({
 
 	const { isValid, isSubmitting } = form.formState;
 
+	console.log(form.watch("videoUrl"));
+
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
+			console.log(values);
 			await axios.patch(
 				`/api/course/${courseId}/chapters/${initialData.id}`,
 				values
@@ -77,7 +80,7 @@ const ChapterVideoForm = ({
 			});
 
 			form.resetField("videoUrl");
-
+			console.log(form.watch("videoUrl"));
 			router.refresh();
 		} catch (error) {
 			toast({
@@ -89,6 +92,8 @@ const ChapterVideoForm = ({
 
 	const onClick = async () => {
 		try {
+			form.setValue("videoUrl", "");
+			console.log(form.watch("videoUrl"));
 			if (chapterPublished) {
 				if (coursePublished) {
 					await axios.patch(`/api/course/${courseId}/publish`, {

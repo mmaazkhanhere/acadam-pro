@@ -18,8 +18,15 @@ const TextEditor = ({ value, onChange, className }: Props) => {
 	);
 
 	return (
-		<div className={`max-w-[350px] md:max-w-[450px] w-full ${className}`}>
-			<ReactQuill theme="snow" value={value} onChange={onChange} />
+		<div
+			className={`max-w-[350px] md:max-w-[450px] w-full ${className} dark:text-muted-foreground`}
+		>
+			<ReactQuill
+				className="dark:text-muted-foreground"
+				theme="snow"
+				value={value}
+				onChange={onChange}
+			/>
 		</div>
 	);
 };

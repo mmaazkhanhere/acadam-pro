@@ -1,32 +1,30 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
-import { ArrowLeft } from "lucide-react"
-
+import { ArrowLeft } from "lucide-react";
 
 type Props = {
-    courseId: string
-}
+	courseId: string;
+};
 
 const BackButton = ({ courseId }: Props) => {
+	const router = useRouter();
 
-    const router = useRouter();
+	const onClick = () => router.push(`/teacher/courses/${courseId}`);
 
-    const onClick = () => router.push(`/teacher/courses/${courseId}`)
+	return (
+		<Button
+			variant="outline"
+			onClick={onClick}
+			className="flex items-center gap-x-2 dark:bg-muted "
+		>
+			<ArrowLeft className="w-6 h-6" />
+			Course Setup
+		</Button>
+	);
+};
 
-    return (
-        <Button
-            variant='outline'
-            onClick={onClick}
-            className="flex items-center gap-x-2 "
-        >
-            <ArrowLeft className="w-6 h-6" />
-            Course Setup
-        </Button>
-    )
-}
-
-export default BackButton
+export default BackButton;

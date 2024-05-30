@@ -123,7 +123,7 @@ const ChapterDescriptionForm = ({
 							<Pencil className="w-4 h-4" />
 							Edit Description
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Edit Chapter Description
@@ -168,7 +168,7 @@ const ChapterDescriptionForm = ({
 				</div>
 			</div>
 
-			<div className="text-sm text-gray-600">
+			<div className="text-sm text-gray-600 dark:text-muted-foreground">
 				{!initialDescription ? (
 					"No description"
 				) : (

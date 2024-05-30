@@ -122,7 +122,7 @@ const ChapterAccess = ({
 							<Pencil className="w-4 h-4" />
 							Edit Availability
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Edit Chapter Availability
@@ -172,7 +172,7 @@ const ChapterAccess = ({
 				</div>
 			</div>
 
-			<p className="text-sm text-gray-600">
+			<p className="text-sm text-gray-600 dark:text-muted-foreground">
 				{availability
 					? "The chapter is free for preview"
 					: "User have to be a pro member or buy the course to view the chapter"}

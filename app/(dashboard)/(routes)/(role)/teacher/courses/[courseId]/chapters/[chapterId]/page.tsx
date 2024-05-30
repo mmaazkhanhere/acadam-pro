@@ -91,7 +91,7 @@ const ChapterPage = async ({ params }: Props) => {
 			<div className="flex items-center justify-between w-full p-5">
 				<div className="flex flex-col gap-y-2">
 					<h1 className="text-2xl">Create Chapter</h1>
-					<p className="text-sm text-gray-500">
+					<p className="text-sm text-gray-500 dark:text-muted-foreground">
 						Fields Completed ({completionText})
 					</p>
 				</div>

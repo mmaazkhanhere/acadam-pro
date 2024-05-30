@@ -122,7 +122,7 @@ const ChapterTitleForm = ({
 							<Pencil className="w-4 h-4" />
 							Edit Title
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Edit Chapter Title
@@ -172,7 +172,9 @@ const ChapterTitleForm = ({
 				</div>
 			</div>
 
-			<p className="text-sm text-gray-600">{initialTitle}</p>
+			<p className="text-sm text-gray-600 dark:text-muted-foreground">
+				{initialTitle}
+			</p>
 		</section>
 	);
 };
