@@ -45,7 +45,11 @@ const EnrollButton = ({ course }: Props) => {
 		}
 	};
 
-	return <Button onClick={onEnroll}>Enroll</Button>;
+	return (
+		<Button size="sm" onClick={onEnroll}>
+			Enroll
+		</Button>
+	);
 };
 
 export default EnrollButton;

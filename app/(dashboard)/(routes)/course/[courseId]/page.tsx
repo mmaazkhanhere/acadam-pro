@@ -11,6 +11,8 @@ import prismadb from "@/lib/prismadb";
 
 import { ArrowLeft } from "lucide-react";
 import EnrollButton from "./_components/enroll-button";
+import ReviewCard from "./_components/review-card";
+import { Review, User } from "@prisma/client";
 
 type Props = {
 	params: {
@@ -25,7 +27,11 @@ const CoursePage = async ({ params }: Props) => {
 		},
 		include: {
 			chapters: true,
-			reviews: true,
+			reviews: {
+				include: {
+					author: true,
+				},
+			},
 		},
 	});
 
@@ -34,7 +40,7 @@ const CoursePage = async ({ params }: Props) => {
 	}
 
 	return (
-		<section className="p-4">
+		<section className="p-4 w-full">
 			<Button variant="outline" size="sm">
 				<Link
 					href={`/student/explore`}
@@ -45,24 +51,28 @@ const CoursePage = async ({ params }: Props) => {
 				</Link>
 			</Button>
 
-			<div className="flex flex-col items-start mt-5 gap-y-2">
-				<div className="flex items-center justify-between max-w-7xl w-full">
+			<div className="flex flex-col items-start mt-5 gap-y-2 max-w-7xl w-full">
+				<div className="flex items-center justify-between w-full">
 					<h2 className="text-2xl font-bold">{course.title}</h2>
 					<EnrollButton course={course} />
 				</div>
 
 				<Separator />
 
-				<p className="my-2">{course.description}</p>
+				<p className="my-2 text-sm md:text-base">
+					{course.description}
+				</p>
 
 				<Separator />
 
-				<div className="flex flex-col items-start gap-y-2 mt-10">
-					<h2 className="text-2xl font-bold">Reviews</h2>
+				<div className="flex flex-col items-start gap-y-2 mt-5 md:mt-10 w-full">
+					<h2 className="text-xl md:text-2xl font-bold">Reviews</h2>
 					{course.reviews.length == 0 ? (
 						<p className="text-sm text-gray-500">No reviews yet</p>
 					) : (
-						<p>Reviews</p>
+						course.reviews.map((review) => (
+							<ReviewCard key={review.id} review={review} />
+						))
 					)}
 				</div>
 			</div>
