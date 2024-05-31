@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import axios from "axios";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,11 +28,11 @@ type Props = {
 };
 
 const CourseCard = ({ course }: Props) => {
-	const { user } = useUser();
+	const { userId } = useAuth();
 	const router = useRouter();
 	const { toast } = useToast();
 
-	if (!user?.id) {
+	if (!userId) {
 		router.push("/");
 	}
 
@@ -74,7 +74,7 @@ const CourseCard = ({ course }: Props) => {
 
 	const onClick = () => {
 		const isEnrolled = course.studentsEnrolled.some(
-			(enrolledUser) => enrolledUser.id === user.id
+			(enrolledUser) => enrolledUser.id === userId
 		);
 
 		if (isEnrolled) {

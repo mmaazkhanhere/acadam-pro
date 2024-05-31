@@ -15,7 +15,7 @@ type Props = {
 
 const CourseNavbar = ({ course }: Props) => {
 	return (
-		<div className="p-4 h-full flex items-center justify-between shadow-sm bg-white dark:bg-black border-b-2">
+		<div className="p-4 h-full flex items-center justify-between shadow-sm bg-white dark:bg-black dark:border-b-2">
 			<div className="flex items-center gap-x-4">
 				<div className="md:hidden">
 					<CourseMobileSidebar course={course} />

@@ -87,8 +87,8 @@ const NewNote = ({ chapterId, courseId }: Props) => {
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger
-				className="flex items-center gap-x-2 bg-purple-500 hover:bg-purple-400 px-6 py-2 
-            text-white rounded-xl text-sm transition-all duration-300"
+				className="flex items-center gap-x-2 bg-purple-500 hover:bg-purple-400 px-4 md:px-6 
+				py-2 text-white rounded-xl text-xs md:text-sm transition-all duration-300"
 			>
 				<PlusCircle className="w-4 h-4 hidden md:block " />
 				New Note

@@ -22,11 +22,14 @@ const NoteGrid = async ({ chapterId, courseId }: Props) => {
 			authorId: userId,
 			chapterId,
 		},
+		orderBy: {
+			createdAt: "desc",
+		},
 	});
 
 	if (notes.length === 0) {
 		return (
-			<div className="text-gray-500 dark:text-muted-foreground text-sm">
+			<div className=" text-gray-500 dark:text-muted-foreground text-xs md:text-sm">
 				No notes created
 			</div>
 		);

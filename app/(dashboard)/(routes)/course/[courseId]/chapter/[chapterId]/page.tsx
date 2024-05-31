@@ -57,7 +57,7 @@ const ChapterPage = async ({ params }: Props) => {
 					aria-label="Back button"
 					className="dark:bg-muted dark:p-2 rounded-lg"
 				>
-					<ArrowLeft className="w-6 h-6" />
+					<ArrowLeft className="w-5 md:w-6 h-5 md:h-6" />
 				</button>
 			</Link>
 
@@ -75,7 +75,9 @@ const ChapterPage = async ({ params }: Props) => {
 
 			<div className="flex flex-col gap-y-4 items-start mt-4 max-w-7xl w-full">
 				<div className="flex items-center justify-between w-full">
-					<h1 className="text-3xl font-bold">{chapter?.title}</h1>
+					<h1 className="text-2xl md:text-3xl font-bold">
+						{chapter?.title}
+					</h1>
 
 					{!isLocked && (
 						<NewNote
@@ -87,13 +89,13 @@ const ChapterPage = async ({ params }: Props) => {
 
 				<Separator />
 
-				<p>{course?.description}</p>
+				<p className="text-sm md:text-base">{course?.description}</p>
 
 				<Separator />
 			</div>
 
-			<div className="flex flex-col items-start gap-y-4 mt-4">
-				<h2 className="text-2xl font-medium">Notes</h2>
+			<div className="flex flex-col items-start gap-y-2 md:gap-y-4 mt-2 md:mt-4">
+				<h2 className="text-xl md:text-2xl font-medium">Notes</h2>
 				<NoteGrid
 					courseId={params.courseId}
 					chapterId={params.chapterId}

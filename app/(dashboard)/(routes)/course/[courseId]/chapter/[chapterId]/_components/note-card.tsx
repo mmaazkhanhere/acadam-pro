@@ -49,7 +49,7 @@ const NoteCard = ({ note, courseId, chapterId }: Props) => {
 					"text-white dark:text-muted-foreground"
 			)}
 		>
-			<div className="flex flex-col items-start gap-y-2">
+			<div className="flex flex-col items-start gap-y-2 dark:text-muted-foreground">
 				<button
 					aria-label="Delete Button"
 					onClick={onDelete}

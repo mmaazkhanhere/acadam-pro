@@ -46,7 +46,9 @@ const EnrolledCourseCard = ({ course }: Props) => {
 
 			<div className="flex items-center justify-between w-full mt-2">
 				<div className="flex items-center gap-x-2">
-					<h2 className="text-xl font-bold">{course.title}</h2>
+					<h2 className="text-lg md:text-xl font-bold">
+						{course.title}
+					</h2>
 					{course.isFree ? (
 						<Badge className="bg-green-500 hover:bg-green-400">
 							Free
@@ -58,7 +60,9 @@ const EnrolledCourseCard = ({ course }: Props) => {
 					)}
 				</div>
 
-				<p className="text-sm text-purple-300">{course.teacher.name}</p>
+				<p className="text-xs md:text-sm text-purple-300">
+					{course.teacher.name}
+				</p>
 			</div>
 
 			<p className="text-sm">{course.description}</p>

@@ -40,7 +40,7 @@ const CoursePage = async ({ params }: Props) => {
 	}
 
 	return (
-		<section className="p-4 w-full">
+		<section className="p-4 md:p-8 w-full">
 			<Button
 				variant="outline"
 				className="dark:bg-muted dark:hover:bg-muted/70"
@@ -57,7 +57,9 @@ const CoursePage = async ({ params }: Props) => {
 
 			<div className="flex flex-col items-start mt-5 gap-y-2 max-w-7xl w-full">
 				<div className="flex items-center justify-between w-full">
-					<h2 className="text-2xl font-bold">{course.title}</h2>
+					<h2 className="text-xl md:text-2xl font-bold">
+						{course.title}
+					</h2>
 					<EnrollButton course={course} />
 				</div>
 
