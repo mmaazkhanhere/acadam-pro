@@ -1,22 +1,42 @@
+import Logo from "@/components/logo";
 
-import Logo from '@/components/logo'
-import NavbarButtons from './navbar-buttons'
-import MobileMenu from './mobile-menu'
-import NavbarMenu from './navbar-menu'
+import NavbarButtons from "./navbar-buttons";
+import MobileMenu from "./mobile-menu";
+import NavbarMenu from "./navbar-menu";
 
-type Props = {}
+import prismadb from "@/lib/prismadb";
+import { auth } from "@clerk/nextjs/server";
 
-const Navbar = (props: Props) => {
-    return (
-        <header className='flex items-center justify-between'>
-            <nav className='lg:hidden'>
-                <MobileMenu />
-            </nav>
-            <Logo className='hidden lg:block' />
-            <NavbarMenu />
-            <NavbarButtons />
-        </header>
-    )
-}
+type Props = {};
 
-export default Navbar
+const Navbar = async (props: Props) => {
+	const { userId } = auth();
+
+	const user = await prismadb.user.findUnique({
+		where: {
+			id: userId as string,
+		},
+		select: {
+			userType: true,
+		},
+	});
+
+	return (
+		<header className="flex items-center justify-between">
+			<nav className="lg:hidden">
+				<MobileMenu
+					userId={userId as string}
+					userType={user?.userType}
+				/>
+			</nav>
+			<Logo className="hidden lg:block" />
+			<NavbarMenu />
+			<NavbarButtons
+				userId={userId as string}
+				userType={user?.userType}
+			/>
+		</header>
+	);
+};
+
+export default Navbar;

@@ -41,6 +41,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 			return (
 				<Button
 					variant="ghost"
+					className="hidden lg:block"
 					onClick={() =>
 						column.toggleSorting(column.getIsSorted() === "asc")
 					}
@@ -56,7 +57,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 			return (
 				<p
 					className="px-4 py-1.5 rounded-2xl bg-purple-200 hover:bg-purple-300 text-center
-                dark:bg-purple-500"
+                dark:bg-purple-500 hidden lg:block"
 				>
 					{categoryLabel as string}
 				</p>
@@ -70,6 +71,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 			return (
 				<Button
 					variant="ghost"
+					className="hidden md:block"
 					onClick={() =>
 						column.toggleSorting(column.getIsSorted() === "asc")
 					}
@@ -82,7 +84,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 		cell: ({ row }) => {
 			const creator = row.getValue("teacher") as User;
 
-			return <p>{creator.name}</p>;
+			return <p className="hidden md:block">{creator.name}</p>;
 		},
 	},
 
@@ -92,6 +94,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 			return (
 				<Button
 					variant="ghost"
+					className="hidden lg:block"
 					onClick={() =>
 						column.toggleSorting(column.getIsSorted() === "asc")
 					}
@@ -105,7 +108,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 			const progress = parseFloat(row.getValue("progress") || "0");
 
 			return (
-				<div>
+				<div className="hidden lg:block">
 					<CourseProgress value={progress} size="sm" />
 				</div>
 			);
@@ -118,7 +121,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 
 			return (
 				<Link href={`/course/${id}`}>
-					<Button variant="ghost" className="dark:bg-muted">
+					<Button variant="ghost" className="dark:bg-muted" size="sm">
 						Course
 						<ArrowRight className="ml-2 h-4 w-4" />
 					</Button>
