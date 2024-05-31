@@ -29,7 +29,7 @@ const CourseCreation = async (props: Props) => {
 	return (
 		<section className="flex flex-col items-start p-4">
 			<h1 className="text-2xl font-bold">Create your course</h1>
-			<p className="text-gray-500 italic text-sm">
+			<p className="text-gray-500 dark:text-muted-foreground italic text-sm">
 				Please fill the following fields to create a course. The values
 				can be changed later on
 			</p>

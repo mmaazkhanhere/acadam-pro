@@ -108,7 +108,7 @@ const CourseImageForm = ({ initialImage, courseId, isPublished }: Props) => {
 							<Pencil className="w-4 h-4" />
 							Edit Image
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Edit Course Image
@@ -155,7 +155,7 @@ const CourseImageForm = ({ initialImage, courseId, isPublished }: Props) => {
 										)}
 									/>
 									<AlertDialogFooter>
-										<AlertDialogCancel>
+										<AlertDialogCancel className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/60">
 											Cancel
 										</AlertDialogCancel>
 										<AlertDialogAction

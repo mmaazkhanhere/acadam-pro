@@ -75,7 +75,7 @@ const VideoPlayer = ({
 	return (
 		<div className=" aspect-video max-w-7xl w-full">
 			{isLocked && (
-				<div className="flex items-center justify-center bg-slate-800 flex-col gap-y-2 text-secondary">
+				<div className="flex items-center justify-center h-full bg-slate-800 flex-col gap-y-2 text-white">
 					<Lock className="h-8 w-8 dark:text-white" />
 					<p className="text-sm">This chapter is locked</p>
 				</div>

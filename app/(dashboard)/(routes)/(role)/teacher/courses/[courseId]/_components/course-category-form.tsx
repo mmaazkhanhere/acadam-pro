@@ -119,7 +119,7 @@ const CourseCategoryForm = ({
 							<Pencil className="w-4 h-4" />
 							Change Category
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Edit Course Category
@@ -173,7 +173,7 @@ const CourseCategoryForm = ({
 										)}
 									/>
 									<AlertDialogFooter>
-										<AlertDialogCancel>
+										<AlertDialogCancel className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/60">
 											Cancel
 										</AlertDialogCancel>
 										<AlertDialogAction
@@ -190,7 +190,9 @@ const CourseCategoryForm = ({
 				</div>
 			</div>
 
-			<p className="text-sm text-gray-600">{initialCategory}</p>
+			<p className="text-sm text-gray-600 dark:text-muted-foreground">
+				{initialCategory}
+			</p>
 		</section>
 	);
 };

@@ -133,7 +133,7 @@ const ChapterForm = ({ course, courseId, isPublished }: Props) => {
 							<Pencil className="w-4 h-4" />
 							Add Chapter
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Create Chapter
@@ -164,7 +164,7 @@ const ChapterForm = ({ course, courseId, isPublished }: Props) => {
 										)}
 									/>
 									<AlertDialogFooter>
-										<AlertDialogCancel>
+										<AlertDialogCancel className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/60">
 											Cancel
 										</AlertDialogCancel>
 										<AlertDialogAction

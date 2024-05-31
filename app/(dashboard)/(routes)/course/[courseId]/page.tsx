@@ -41,7 +41,11 @@ const CoursePage = async ({ params }: Props) => {
 
 	return (
 		<section className="p-4 w-full">
-			<Button variant="outline" size="sm">
+			<Button
+				variant="outline"
+				className="dark:bg-muted dark:hover:bg-muted/70"
+				size="sm"
+			>
 				<Link
 					href={`/student/explore`}
 					className="flex items-center gap-x-2"
@@ -68,7 +72,9 @@ const CoursePage = async ({ params }: Props) => {
 				<div className="flex flex-col items-start gap-y-2 mt-5 md:mt-10 w-full">
 					<h2 className="text-xl md:text-2xl font-bold">Reviews</h2>
 					{course.reviews.length == 0 ? (
-						<p className="text-sm text-gray-500">No reviews yet</p>
+						<p className="text-sm text-gray-500 dark:text-muted-foreground">
+							No reviews yet
+						</p>
 					) : (
 						course.reviews.map((review) => (
 							<ReviewCard key={review.id} review={review} />

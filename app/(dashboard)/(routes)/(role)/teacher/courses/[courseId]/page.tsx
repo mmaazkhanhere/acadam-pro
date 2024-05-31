@@ -89,7 +89,7 @@ const CoursePage = async ({ params }: Props) => {
 				<div className="flex flex-col ">
 					<h1 className="text-2xl">Course Details</h1>
 
-					<span className="text-sm text-gray-500">
+					<span className="text-sm text-gray-500 dark:text-muted-foreground">
 						Fields completed {completionText}
 					</span>
 				</div>

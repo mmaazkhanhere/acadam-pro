@@ -25,7 +25,11 @@ const NoteGrid = async ({ chapterId, courseId }: Props) => {
 	});
 
 	if (notes.length === 0) {
-		return <div className="text-gray-500 text-sm">No notes created</div>;
+		return (
+			<div className="text-gray-500 dark:text-muted-foreground text-sm">
+				No notes created
+			</div>
+		);
 	}
 
 	return (

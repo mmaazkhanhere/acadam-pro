@@ -29,7 +29,9 @@ const CourseSidebarItem = ({
 	const isActive = pathname.includes(id);
 
 	const onClick = () => {
+		// if (!isLocked) {
 		router.push(`/course/${courseId}/chapter/${id}`);
+		// }
 	};
 
 	return (
@@ -37,7 +39,7 @@ const CourseSidebarItem = ({
 			type="button"
 			onClick={onClick}
 			className={cn(
-				"flex items-center gap-x-2 pl-6 transition-all duration-300 py-4 text-sm font-medium mt-2 rounded-xl ",
+				"flex items-center gap-x-2 pl-6 transition-all duration-300 py-4 text-sm font-medium mt-2 rounded-xl dark:bg-muted dark:hover:bg-muted/70",
 				isActive &&
 					"bg-purple-500 text-white hover:bg-purple-400 hover:text-white/80",
 				isCompleted &&
@@ -45,7 +47,7 @@ const CourseSidebarItem = ({
 				isCompleted && isActive && "bg-green-700 hover:bg-green-500"
 			)}
 		>
-			<Icon />
+			<Icon className="w-5 h-5" />
 			{label}
 		</button>
 	);

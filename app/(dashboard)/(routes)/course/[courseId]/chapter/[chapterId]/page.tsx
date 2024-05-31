@@ -76,10 +76,13 @@ const ChapterPage = async ({ params }: Props) => {
 			<div className="flex flex-col gap-y-4 items-start mt-4 max-w-7xl w-full">
 				<div className="flex items-center justify-between w-full">
 					<h1 className="text-3xl font-bold">{chapter?.title}</h1>
-					<NewNote
-						chapterId={params.chapterId}
-						courseId={params.courseId}
-					/>
+
+					{!isLocked && (
+						<NewNote
+							chapterId={params.chapterId}
+							courseId={params.courseId}
+						/>
+					)}
 				</div>
 
 				<Separator />

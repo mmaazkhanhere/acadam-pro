@@ -110,7 +110,7 @@ const CourseDescriptionForm = ({
 							<Pencil className="w-4 h-4" />
 							Edit Description
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Edit Course Description
@@ -144,7 +144,7 @@ const CourseDescriptionForm = ({
 										)}
 									/>
 									<AlertDialogFooter>
-										<AlertDialogCancel>
+										<AlertDialogCancel className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/60">
 											Cancel
 										</AlertDialogCancel>
 										<AlertDialogAction
@@ -161,7 +161,9 @@ const CourseDescriptionForm = ({
 				</div>
 			</div>
 
-			<p className="text-sm text-gray-600">{initialDescription}</p>
+			<p className="text-sm text-gray-600 dark:text-muted-foreground">
+				{initialDescription}
+			</p>
 		</section>
 	);
 };

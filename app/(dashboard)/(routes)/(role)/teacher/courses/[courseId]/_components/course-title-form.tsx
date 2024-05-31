@@ -106,7 +106,7 @@ const CourseTitleForm = ({ initialTitle, courseId, isPublished }: Props) => {
 							<Pencil className="w-4 h-4" />
 							Edit Title
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Edit Course Title
@@ -139,7 +139,7 @@ const CourseTitleForm = ({ initialTitle, courseId, isPublished }: Props) => {
 										)}
 									/>
 									<AlertDialogFooter>
-										<AlertDialogCancel>
+										<AlertDialogCancel className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/60">
 											Cancel
 										</AlertDialogCancel>
 										<AlertDialogAction
@@ -156,7 +156,9 @@ const CourseTitleForm = ({ initialTitle, courseId, isPublished }: Props) => {
 				</div>
 			</div>
 
-			<p className="text-sm text-gray-600">{initialTitle}</p>
+			<p className="text-sm text-gray-600 dark:text-muted-foreground">
+				{initialTitle}
+			</p>
 		</section>
 	);
 };

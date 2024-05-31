@@ -109,7 +109,7 @@ const CoursePriceForm = ({ initialPrice, courseId, isPublished }: Props) => {
 							<Pencil className="w-4 h-4" />
 							Edit Price
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
 								<AlertDialogTitle>
 									Edit Course Price
@@ -143,7 +143,7 @@ const CoursePriceForm = ({ initialPrice, courseId, isPublished }: Props) => {
 										)}
 									/>
 									<AlertDialogFooter>
-										<AlertDialogCancel>
+										<AlertDialogCancel className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/60">
 											Cancel
 										</AlertDialogCancel>
 										<AlertDialogAction
@@ -160,7 +160,9 @@ const CoursePriceForm = ({ initialPrice, courseId, isPublished }: Props) => {
 				</div>
 			</div>
 
-			<p className="text-sm text-gray-600">{formatPrice(initialPrice)}</p>
+			<p className="text-sm text-gray-600 dark:text-muted-foreground">
+				{formatPrice(initialPrice)}
+			</p>
 		</section>
 	);
 };
