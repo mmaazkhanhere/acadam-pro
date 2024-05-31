@@ -29,9 +29,9 @@ const CourseSidebarItem = ({
 	const isActive = pathname.includes(id);
 
 	const onClick = () => {
-		// if (!isLocked) {
-		router.push(`/course/${courseId}/chapter/${id}`);
-		// }
+		if (!isLocked) {
+			router.push(`/course/${courseId}/chapter/${id}`);
+		}
 	};
 
 	return (

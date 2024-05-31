@@ -1,120 +1,98 @@
+import Link from "next/link";
 
-import Link from 'next/link'
+import { auth } from "@clerk/nextjs/server";
+import { SignInButton, SignOutButton } from "@clerk/nextjs";
 
-import { auth } from '@clerk/nextjs/server'
-import { SignInButton, SignOutButton } from '@clerk/nextjs'
+import { ThemeButton } from "@/components/ui/theme-button";
+import { Button } from "@/components/ui/button";
+import { UserAvatar } from "@/components/user-avatar";
 
-import { ThemeButton } from '@/components/ui/theme-button'
-import { Button } from '@/components/ui/button'
-import { UserAvatar } from '@/components/user-avatar'
+import prismadb from "@/lib/prismadb";
 
-import prismadb from '@/lib/prismadb'
+import { LogOut } from "lucide-react";
+import { redirect } from "next/navigation";
 
-import { LogOut } from 'lucide-react'
-import { redirect } from 'next/navigation'
-
-
-type Props = {}
+type Props = {};
 
 const NavbarButtons = async (props: Props) => {
+	const { userId } = auth();
 
-    const { userId } = auth();
-    
-    if(!userId){
-        return(
-            <nav className='flex items-center gap-x-2 md:gap-x-4'>
+	if (!userId) {
+		return (
+			<nav className="flex items-center gap-x-2 md:gap-x-4">
+				<ThemeButton />
 
-            <ThemeButton />
+				{userId ? (
+					<UserAvatar />
+				) : (
+					<SignInButton>
+						<Button
+							variant="outline"
+							className="hover:bg-purple-500 hover:text-white dark:bg-muted-foreground dark:hover:bg-muted-foreground/70"
+						>
+							Join Us
+						</Button>
+					</SignInButton>
+				)}
 
-            {
-                userId ? (
-                    <UserAvatar />
-                ) : (
+				{userId && (
+					<SignOutButton>
+						<Button variant="ghost" className="hidden lg:block">
+							<LogOut />
+						</Button>
+					</SignOutButton>
+				)}
+			</nav>
+		);
+	}
 
-                    <SignInButton>
-                        <Button
-                            variant='outline'
-                            className='hover:bg-purple-500 hover:text-white'
-                        >
-                            Join Us
-                        </Button>
-                    </SignInButton>
-                )
-            }
+	const user = await prismadb.user.findUnique({
+		where: {
+			id: userId as string,
+		},
+		select: {
+			userType: true,
+		},
+	});
 
-            {
-                userId && <SignOutButton>
-                    <Button variant='ghost'
-                        className='hidden lg:block'
-                    >
-                        <LogOut />
-                    </Button>
+	return (
+		<nav className="flex items-center gap-x-2 md:gap-x-4">
+			{userId && (
+				<Link href={`/${user?.userType.toLowerCase()}/dashboard`}>
+					<Button
+						size="sm"
+						className="hidden md:block"
+						aria-label="dashboard button"
+					>
+						Dashboard
+					</Button>
+				</Link>
+			)}
 
-                </SignOutButton>
-            }
+			<ThemeButton />
 
-        </nav>
-        )
-    }
+			{userId ? (
+				<UserAvatar />
+			) : (
+				<SignInButton>
+					<Button
+						variant="outline"
+						className="hover:bg-purple-500 hover:text-white"
+					>
+						Join Us
+					</Button>
+				</SignInButton>
+			)}
 
-    const user = await prismadb.user.findUnique({
-        where: {
-            id: userId as string,
-        },
-        select: {
-            userType: true
-        }
-    })
+			{userId && (
+				<SignOutButton>
+					<Button variant="ghost" className="hidden lg:block">
+						<LogOut />
+					</Button>
+				</SignOutButton>
+			)}
+		</nav>
+	);
+};
 
-    return (
-        <nav className='flex items-center gap-x-2 md:gap-x-4'>
-
-            {
-                userId && <Link
-                    href={`/${user?.userType.toLowerCase()}/dashboard`}
-                >
-                    <Button
-                        size='sm'
-                        className='hidden md:block'
-                        aria-label='dashboard button'
-                    >
-                        Dashboard
-                    </Button>
-                </Link>
-
-            }
-
-            <ThemeButton />
-
-            {
-                userId ? (
-                    <UserAvatar />
-                ) : (
-
-                    <SignInButton>
-                        <Button
-                            variant='outline'
-                            className='hover:bg-purple-500 hover:text-white'
-                        >
-                            Join Us
-                        </Button>
-                    </SignInButton>
-                )
-            }
-
-            {
-                userId && <SignOutButton>
-                    <Button variant='ghost'
-                        className='hidden lg:block'
-                    >
-                        <LogOut />
-                    </Button>
-
-                </SignOutButton>
-            }
-
-        </nav>
-    )
-}
-
-export default NavbarButtons
+export default NavbarButtons;
