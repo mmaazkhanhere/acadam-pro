@@ -18,12 +18,12 @@ import { BookIcon } from "lucide-react";
 
 type Props = {
 	course: Course & {
-		category: Category;
+		category: Category | null;
 		chapters: { id: string }[];
-		reviews: Review[];
+		reviews: Review[] | null;
 		teacher: User;
-		progress: number;
-		studentsEnrolled: User[];
+		progress: number | null;
+		studentEnrolled: User[];
 	};
 };
 
@@ -36,12 +36,12 @@ const CourseCard = ({ course }: Props) => {
 		router.push("/");
 	}
 
-	const totalRatings = course.reviews.reduce(
+	const totalRatings = course.reviews!.reduce(
 		(acc, review) => acc + review.rating,
 		0
 	);
 	const averageRating =
-		course.reviews.length > 0 ? totalRatings / course.reviews.length : 0;
+		course.reviews!.length > 0 ? totalRatings / course.reviews!.length : 0;
 
 	const onEnroll = async () => {
 		try {
@@ -73,7 +73,7 @@ const CourseCard = ({ course }: Props) => {
 	};
 
 	const onClick = () => {
-		const isEnrolled = course.studentsEnrolled.some(
+		const isEnrolled = course.studentEnrolled.some(
 			(enrolledUser) => enrolledUser.id === userId
 		);
 
@@ -145,7 +145,7 @@ const CourseCard = ({ course }: Props) => {
 					<p className="text-sm">{course.chapters.length} Chapters</p>
 				</div>
 
-				{!course.studentsEnrolled.find(
+				{!course.studentEnrolled.find(
 					(user) => user.id === user.id
 				) && (
 					<Button
@@ -158,7 +158,7 @@ const CourseCard = ({ course }: Props) => {
 				)}
 			</div>
 
-			{course.studentsEnrolled.find((user) => user.id) &&
+			{course.studentEnrolled.find((user) => user.id) &&
 				course.progress !== null && (
 					<CourseProgress
 						value={course.progress}

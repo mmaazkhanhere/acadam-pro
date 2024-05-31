@@ -1,33 +1,44 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Course, Review, User } from "@prisma/client";
 import Image from "next/image";
-import RatingOverview from "../../../teacher/dashboard/_components/rating-overview";
-import { useUser } from "@clerk/nextjs";
-import { BookIcon } from "lucide-react";
-import CourseProgress from "@/components/course-progress";
-import RatingButton from "./rating-button";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
+
+import CourseProgress from "@/components/course-progress";
+import RatingOverview from "../../../teacher/dashboard/_components/rating-overview";
+import { Badge } from "@/components/ui/badge";
+
+import RatingButton from "./rating-button";
+
+import { Course, Review, User } from "@prisma/client";
+
+import { BookIcon } from "lucide-react";
+import { redirect } from "next/navigation";
+
 type Props = {
 	course: Course & {
 		chapters: { id: string }[];
-		reviews: Review[];
+		reviews: Review[] | null;
 		teacher: User;
-		progress: number;
+		progress: number | null;
 	};
 };
 
 const EnrolledCourseCard = ({ course }: Props) => {
 	const { user } = useUser();
 
+	if (!course) {
+		redirect("/");
+	}
+
 	const totalRatings = course.reviews?.reduce(
 		(acc, review) => acc + review.rating,
 		0
 	);
 	const averageRating =
-		course.reviews.length > 0 ? totalRatings / course.reviews.length : 0;
+		course.reviews!.length > 0
+			? (totalRatings as number) / course.reviews!.length
+			: 0;
 
 	return (
 		<Link
@@ -70,9 +81,9 @@ const EnrolledCourseCard = ({ course }: Props) => {
 			<div className="flex items-center justify-between w-full mt-2">
 				<RatingOverview
 					averageRatings={averageRating}
-					totalRatings={totalRatings}
+					totalRatings={totalRatings as number}
 				/>
-				{!course.reviews.find(
+				{!course.reviews!.find(
 					(review) => review.authorId === user?.id
 				) && <RatingButton courseId={course.id} />}
 			</div>
@@ -83,7 +94,7 @@ const EnrolledCourseCard = ({ course }: Props) => {
 			</div>
 
 			<div className="w-full mt-2">
-				<CourseProgress value={course.progress} />
+				<CourseProgress value={course.progress as number} />
 			</div>
 		</Link>
 	);
