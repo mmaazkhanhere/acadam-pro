@@ -7,9 +7,10 @@ import "react-quill/dist/quill.snow.css";
 
 type Props = {
 	value: string;
+	editorClassName?: string;
 };
 
-const EditorPreview = ({ value }: Props) => {
+const EditorPreview = ({ value, editorClassName }: Props) => {
 	const ReactQuill = useMemo(
 		() => dynamic(() => import("react-quill"), { ssr: false }),
 		[]
@@ -21,7 +22,7 @@ const EditorPreview = ({ value }: Props) => {
 				theme="bubble"
 				value={value}
 				readOnly
-				className="dark:text-black"
+				className={`dark:text-white ${editorClassName}`}
 			/>
 		</div>
 	);

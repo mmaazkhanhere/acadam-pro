@@ -107,7 +107,7 @@ const CoursePriceForm = ({ initialPrice, courseId, isPublished }: Props) => {
 							className="flex items-center gap-x-2"
 						>
 							<Pencil className="w-4 h-4" />
-							Edit Price
+							<p className="hidden md:block">Edit Price</p>
 						</AlertDialogTrigger>
 						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>

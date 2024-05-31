@@ -96,10 +96,10 @@ const CourseDescriptionForm = ({
 	return (
 		<section
 			className="p-4 bg-purple-200/50 dark:bg-muted rounded-xl flex flex-col
-        space-y-4 w-full"
+        space-y-2 md:space-y-4 w-full"
 		>
 			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-medium">Course Description</h2>
+				<h2 className="md:text-lg font-medium">Course Description</h2>
 
 				<div className="flex items-center gap-x-2 text-sm">
 					<AlertDialog>
@@ -108,7 +108,7 @@ const CourseDescriptionForm = ({
 							className="flex items-center gap-x-2"
 						>
 							<Pencil className="w-4 h-4" />
-							Edit Description
+							<p className="hidden md:block">Edit Description</p>
 						</AlertDialogTrigger>
 						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
@@ -161,7 +161,7 @@ const CourseDescriptionForm = ({
 				</div>
 			</div>
 
-			<p className="text-sm text-gray-600 dark:text-muted-foreground">
+			<p className="text-xs md:text-sm text-gray-600 dark:text-muted-foreground">
 				{initialDescription}
 			</p>
 		</section>

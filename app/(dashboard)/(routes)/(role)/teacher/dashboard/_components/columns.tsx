@@ -21,6 +21,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 			return (
 				<Button
 					variant="ghost"
+					className="md:block hidden"
 					onClick={() =>
 						column.toggleSorting(column.getIsSorted() === "asc")
 					}
@@ -36,7 +37,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 			return (
 				<div
 					className={cn(
-						"text-red-500 p-1 border border-red-500 rounded-xl text-xs flex items-center justify-center",
+						"text-red-500 p-1 border border-red-500 rounded-xl text-xs md:flex items-center justify-center hidden ",
 						isPublished &&
 							"text-green-500 p-1 border border-green-500"
 					)}
@@ -70,6 +71,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 			return (
 				<Button
 					variant="ghost"
+					className="hidden lg:block"
 					onClick={() =>
 						column.toggleSorting(column.getIsSorted() === "asc")
 					}
@@ -86,7 +88,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 				currency: "USD",
 			}).format(price);
 
-			return <div>{formatted}</div>;
+			return <div className="hidden lg:block">{formatted}</div>;
 		},
 	},
 	{
@@ -95,6 +97,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 			return (
 				<Button
 					variant="ghost"
+					className="hidden lg:block"
 					onClick={() =>
 						column.toggleSorting(column.getIsSorted() === "asc")
 					}
@@ -115,7 +118,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 				reviews.length > 0 ? totalRatings / reviews.length : 0;
 
 			return (
-				<div>
+				<div className="lg:block hidden">
 					<RatingOverview
 						totalRatings={totalRatings}
 						averageRatings={averageRating}
@@ -130,6 +133,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 			return (
 				<Button
 					variant="ghost"
+					className="hidden lg:block"
 					onClick={() =>
 						column.toggleSorting(column.getIsSorted() === "asc")
 					}
@@ -145,7 +149,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 				"MM/dd/yyyy"
 			);
 
-			return <p>{timeCalculated}</p>;
+			return <p className="hidden lg:block">{timeCalculated}</p>;
 		},
 	},
 	{

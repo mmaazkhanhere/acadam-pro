@@ -120,7 +120,7 @@ const ChapterVideoForm = ({
         space-y-4 w-full"
 		>
 			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-medium">Chapter Video</h2>
+				<h2 className="md:text-lg font-medium">Chapter Video</h2>
 
 				<div className="flex items-center gap-x-2 text-sm">
 					<AlertDialog>
@@ -129,7 +129,7 @@ const ChapterVideoForm = ({
 							className="flex items-center gap-x-2"
 						>
 							<Pencil className="w-4 h-4" />
-							Edit Video
+							<p className="hidden md:block">Edit Video</p>
 						</AlertDialogTrigger>
 						<AlertDialogContent>
 							<AlertDialogHeader>

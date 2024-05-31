@@ -26,14 +26,12 @@ const Navbar = ({ teacher }: Props) => {
 			<nav className="flex items-center gap-x-2">
 				{!pathname.includes("/student") && teacher && (
 					<Link href="/teacher/create-course">
-						<Button className="hidden md:block">
-							Create Course
-						</Button>
+						<Button>Create Course</Button>
 					</Link>
 				)}
 
 				<ThemeButton />
-				<UserButton />
+				<UserButton afterSignOutUrl="/" />
 			</nav>
 		</header>
 	);

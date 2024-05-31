@@ -33,7 +33,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { Chapter, Course } from "@prisma/client";
 
-import { Pencil } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import ChapterList from "./chapter-list";
 
 type Props = {
@@ -122,7 +122,7 @@ const ChapterForm = ({ course, courseId, isPublished }: Props) => {
             space-y-4 w-full"
 		>
 			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-medium">Course Chapters</h2>
+				<h2 className="md:text-lg font-medium">Course Chapters</h2>
 
 				<div className="flex items-center gap-x-2 text-sm">
 					<AlertDialog>
@@ -130,8 +130,8 @@ const ChapterForm = ({ course, courseId, isPublished }: Props) => {
 							onClick={onClick}
 							className="flex items-center gap-x-2"
 						>
-							<Pencil className="w-4 h-4" />
-							Add Chapter
+							<PlusCircle className="w-5 h-5" />
+							<p className="hidden md:block">Add Chapter</p>
 						</AlertDialogTrigger>
 						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>

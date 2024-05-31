@@ -6,7 +6,7 @@ import ActionButtons from "../../_components/action-button";
 import BackButton from "./_components/back-button";
 
 import prismadb from "@/lib/prismadb";
-import ChapterTitleForm from "./_components/chapter-titlte-form";
+import ChapterTitleForm from "./_components/chapter-title-form";
 import { Banner } from "@/components/banner";
 import ChapterDescriptionForm from "./_components/chapter-description-form";
 import ChapterAccess from "./_components/chapter-access";
@@ -89,7 +89,7 @@ const ChapterPage = async ({ params }: Props) => {
 			</div>
 
 			<div className="flex items-center justify-between w-full p-5">
-				<div className="flex flex-col gap-y-2">
+				<div className="flex flex-col gap-y-1 md:gap-y-2">
 					<h1 className="text-2xl">Create Chapter</h1>
 					<p className="text-sm text-gray-500 dark:text-muted-foreground">
 						Fields Completed ({completionText})

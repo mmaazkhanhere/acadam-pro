@@ -19,9 +19,9 @@ const BackButton = ({ courseId }: Props) => {
 		<Button
 			variant="outline"
 			onClick={onClick}
-			className="flex items-center gap-x-2 dark:bg-muted "
+			className="flex items-center gap-x-2 dark:bg-muted text-xs md:text-sm"
 		>
-			<ArrowLeft className="w-6 h-6" />
+			<ArrowLeft className="w-5 md:w-6 h-5 md:h-6" />
 			Course Setup
 		</Button>
 	);

@@ -12,14 +12,17 @@ type Props = {};
 const Navbar = async (props: Props) => {
 	const { userId } = auth();
 
-	const user = await prismadb.user.findUnique({
-		where: {
-			id: userId as string,
-		},
-		select: {
-			userType: true,
-		},
-	});
+	let user;
+	if (userId) {
+		user = await prismadb.user.findUnique({
+			where: {
+				id: userId as string,
+			},
+			select: {
+				userType: true,
+			},
+		});
+	}
 
 	return (
 		<header className="flex items-center justify-between">

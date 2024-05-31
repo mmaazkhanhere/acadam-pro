@@ -92,10 +92,10 @@ const IsCourseFree = ({ isCourseFree, courseId, isPublished }: Props) => {
 	return (
 		<section
 			className="p-4 bg-purple-200/50 dark:bg-muted rounded-xl flex flex-col
-        space-y-4 w-full"
+        space-y-2 md:space-y-4 w-full"
 		>
 			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-medium">Is Course Free</h2>
+				<h2 className="md:text-lg font-medium">Is Course Free</h2>
 
 				<div className="flex items-center gap-x-2 text-sm">
 					<AlertDialog>
@@ -104,7 +104,7 @@ const IsCourseFree = ({ isCourseFree, courseId, isPublished }: Props) => {
 							className="flex items-center gap-x-2"
 						>
 							<Pencil className="w-4 h-4" />
-							Edit Availability
+							<p className="hidden md:block">Edit Availability</p>
 						</AlertDialogTrigger>
 						<AlertDialogContent className="dark:bg-muted">
 							<AlertDialogHeader>
