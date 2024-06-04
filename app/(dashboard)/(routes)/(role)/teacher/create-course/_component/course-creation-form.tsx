@@ -224,6 +224,7 @@ const CourseCreationForm = ({ categories, admin }: Props) => {
 				</div>
 
 				<Button
+					aria-label="Create course button"
 					type="submit"
 					className="w-20 mt-5"
 					disabled={!isValid || isSubmitting}

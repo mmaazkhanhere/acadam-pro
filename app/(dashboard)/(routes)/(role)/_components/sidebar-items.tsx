@@ -22,6 +22,7 @@ const SidebarItems = ({ label, href, icon: Icon }: Props) => {
 
 	return (
 		<button
+			aria-label={`${label} button`}
 			onClick={onClick}
 			className={cn(
 				"flex items-center gap-x-2 text-sm font-medium transition-all duration-300 py-4 pl-4 hover:bg-muted-foreground/20 hover:text-muted-foreground/90 rounded-2xl w-full mt-2 dark:bg-muted",

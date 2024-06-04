@@ -77,6 +77,7 @@ const MobileMenu = ({ userId, userType }: Props) => {
 				{userId && (
 					<SignOutButton>
 						<Button
+							aria-label="Logout button"
 							variant="ghost"
 							className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/70"
 							size="sm"

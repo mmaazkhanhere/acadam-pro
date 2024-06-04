@@ -17,6 +17,7 @@ const BackButton = ({ courseId }: Props) => {
 
 	return (
 		<Button
+			aria-label="Back button"
 			variant="outline"
 			onClick={onClick}
 			className="flex items-center gap-x-2 dark:bg-muted text-xs md:text-sm"

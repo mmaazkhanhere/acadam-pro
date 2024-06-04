@@ -116,6 +116,7 @@ const ChapterTitleForm = ({
 				<div className="flex items-center gap-x-2 text-sm">
 					<AlertDialog>
 						<AlertDialogTrigger
+							aria-label="Edit button"
 							onClick={onClick}
 							className="flex items-center gap-x-2"
 						>
@@ -155,10 +156,11 @@ const ChapterTitleForm = ({
 										)}
 									/>
 									<AlertDialogFooter>
-										<AlertDialogCancel>
+										<AlertDialogCancel aria-label="Cancel button">
 											Cancel
 										</AlertDialogCancel>
 										<AlertDialogAction
+											aria-label="Save button"
 											type="submit"
 											disabled={!isValid || isSubmitting}
 										>

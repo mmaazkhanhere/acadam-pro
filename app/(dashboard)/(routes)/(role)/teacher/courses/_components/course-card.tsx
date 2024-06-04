@@ -75,6 +75,7 @@ const CourseCard = ({ course, admin }: Props) => {
 					</p>
 
 					<button
+						aria-label="Course link button"
 						onClick={onClick}
 						className="px-2 py-0.5 bg-purple-500 text-white rounded-lg
                         hover:bg-purple-500/80 transition duration-500"

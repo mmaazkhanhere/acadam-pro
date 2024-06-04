@@ -149,6 +149,7 @@ const CourseCard = ({ course }: Props) => {
 					(user) => user.id === user.id
 				) && (
 					<Button
+						aria-label="Course enroll button"
 						size="sm"
 						className="text-xs h-6 w-16"
 						onClick={onEnroll}

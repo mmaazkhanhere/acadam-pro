@@ -87,6 +87,7 @@ const NewNote = ({ chapterId, courseId }: Props) => {
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger
+				aria-label="New note button"
 				className="flex items-center gap-x-2 bg-purple-500 hover:bg-purple-400 px-4 md:px-6 
 				py-2 text-white rounded-xl text-xs md:text-sm transition-all duration-300"
 			>
@@ -146,8 +147,11 @@ const NewNote = ({ chapterId, courseId }: Props) => {
 							)}
 						/>
 						<AlertDialogFooter>
-							<AlertDialogCancel>Cancel</AlertDialogCancel>
+							<AlertDialogCancel aria-label="Cancel button">
+								Cancel
+							</AlertDialogCancel>
 							<AlertDialogAction
+								aria-label="Create button"
 								type="submit"
 								disabled={!isValid || isSubmitting}
 							>

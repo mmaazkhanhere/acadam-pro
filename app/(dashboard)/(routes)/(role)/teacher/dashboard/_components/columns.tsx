@@ -20,6 +20,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 		header: ({ column }) => {
 			return (
 				<Button
+					aria-label="Course status column button"
 					variant="ghost"
 					className="md:block hidden"
 					onClick={() =>
@@ -53,6 +54,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 		header: ({ column }) => {
 			return (
 				<Button
+					aria-label="Course title column button"
 					variant="ghost"
 					onClick={() =>
 						column.toggleSorting(column.getIsSorted() === "asc")
@@ -70,6 +72,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 		header: ({ column }) => {
 			return (
 				<Button
+					aria-label="Course price column button"
 					variant="ghost"
 					className="hidden lg:block"
 					onClick={() =>
@@ -96,6 +99,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 		header: ({ column }) => {
 			return (
 				<Button
+					aria-label="Course rating column button"
 					variant="ghost"
 					className="hidden lg:block"
 					onClick={() =>
@@ -132,6 +136,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 		header: ({ column }) => {
 			return (
 				<Button
+					aria-label="Course created at column button"
 					variant="ghost"
 					className="hidden lg:block"
 					onClick={() =>
@@ -160,6 +165,7 @@ export const columns: ColumnDef<Course & { reviews: Review[] }>[] = [
 			return (
 				<Link href={`/teacher/courses/${id}`}>
 					<Button
+						aria-label="Course edit button"
 						variant="ghost"
 						className="dark:bg-muted dark:py-1 dark:px-3"
 					>

@@ -22,6 +22,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 		accessorKey: "title",
 		header: ({ column }) => (
 			<Button
+				aria-label="Title column button"
 				variant="ghost"
 				onClick={() =>
 					column.toggleSorting(column.getIsSorted() === "asc")
@@ -37,6 +38,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 		accessorKey: "categoryLabel",
 		header: ({ column }) => (
 			<Button
+				aria-label="Category column button"
 				variant="ghost"
 				className="hidden lg:block"
 				onClick={() =>
@@ -64,6 +66,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 		accessorKey: "teacher",
 		header: ({ column }) => (
 			<Button
+				aria-label="Creator column button"
 				variant="ghost"
 				className="hidden md:block"
 				onClick={() =>
@@ -84,6 +87,7 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 		accessorKey: "progress",
 		header: ({ column }) => (
 			<Button
+				aria-label="course progress column button"
 				variant="ghost"
 				className="hidden lg:block"
 				onClick={() =>
@@ -109,7 +113,12 @@ export const columns: ColumnDef<CourseWithProgress>[] = [
 			const { id } = row.original;
 			return (
 				<Link href={`/course/${id}`}>
-					<Button variant="ghost" className="dark:bg-muted" size="sm">
+					<Button
+						aria-label="Course link button"
+						variant="ghost"
+						className="dark:bg-muted"
+						size="sm"
+					>
 						Course
 						<ArrowRight className="ml-2 h-4 w-4" />
 					</Button>

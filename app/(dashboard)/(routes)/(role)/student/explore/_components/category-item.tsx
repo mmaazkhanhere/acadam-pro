@@ -41,6 +41,7 @@ const CategoryItem = ({ label, value, icon: Icon }: Props) => {
 
 	return (
 		<button
+			aria-label={`${label} category button`}
 			onClick={onClick}
 			type="button"
 			className={cn(

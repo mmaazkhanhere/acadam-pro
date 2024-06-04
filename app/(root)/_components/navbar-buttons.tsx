@@ -24,6 +24,7 @@ const NavbarButtons = async ({ userType, userId }: Props) => {
 				) : (
 					<SignInButton>
 						<Button
+							aria-label="login button"
 							variant="outline"
 							className="hover:bg-purple-500 hover:text-white dark:bg-muted-foreground dark:hover:bg-muted-foreground/70"
 						>
@@ -35,6 +36,8 @@ const NavbarButtons = async ({ userType, userId }: Props) => {
 				{userId && (
 					<SignOutButton>
 						<Button
+							title="logout"
+							aria-label="Logout button"
 							variant="ghost"
 							className="hidden lg:block dark:bg-muted-foreground dark:hover:bg-muted-foreground/70"
 						>
@@ -67,6 +70,7 @@ const NavbarButtons = async ({ userType, userId }: Props) => {
 			) : (
 				<SignInButton>
 					<Button
+						aria-label="login button"
 						variant="outline"
 						className="hover:bg-purple-500 hover:text-white"
 					>
@@ -77,7 +81,12 @@ const NavbarButtons = async ({ userType, userId }: Props) => {
 
 			{userId && (
 				<SignOutButton>
-					<Button variant="ghost" className="hidden lg:block">
+					<Button
+						title="logout"
+						aria-label="Logout button"
+						variant="ghost"
+						className="hidden lg:block"
+					>
 						<LogOut />
 					</Button>
 				</SignOutButton>

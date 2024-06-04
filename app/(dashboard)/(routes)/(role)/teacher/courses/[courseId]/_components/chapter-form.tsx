@@ -127,6 +127,7 @@ const ChapterForm = ({ course, courseId, isPublished }: Props) => {
 				<div className="flex items-center gap-x-2 text-sm">
 					<AlertDialog>
 						<AlertDialogTrigger
+							aria-label="Edit button"
 							onClick={onClick}
 							className="flex items-center gap-x-2"
 						>
@@ -164,10 +165,14 @@ const ChapterForm = ({ course, courseId, isPublished }: Props) => {
 										)}
 									/>
 									<AlertDialogFooter>
-										<AlertDialogCancel className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/60">
+										<AlertDialogCancel
+											aria-label="Cancel button"
+											className="dark:bg-muted-foreground dark:hover:bg-muted-foreground/60"
+										>
 											Cancel
 										</AlertDialogCancel>
 										<AlertDialogAction
+											aria-label="Create button"
 											type="submit"
 											disabled={!isValid || isSubmitting}
 										>

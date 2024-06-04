@@ -46,7 +46,7 @@ const EnrollButton = ({ course }: Props) => {
 	};
 
 	return (
-		<Button size="sm" onClick={onEnroll}>
+		<Button aria-label="Enroll button" size="sm" onClick={onEnroll}>
 			Enroll
 		</Button>
 	);

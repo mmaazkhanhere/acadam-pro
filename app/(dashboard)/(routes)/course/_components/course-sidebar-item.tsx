@@ -36,6 +36,7 @@ const CourseSidebarItem = ({
 
 	return (
 		<button
+			aria-label={`${label} sidebar button`}
 			type="button"
 			onClick={onClick}
 			className={cn(

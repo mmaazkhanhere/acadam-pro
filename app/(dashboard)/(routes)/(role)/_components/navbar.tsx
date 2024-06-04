@@ -26,7 +26,9 @@ const Navbar = ({ teacher }: Props) => {
 			<nav className="flex items-center gap-x-2">
 				{!pathname.includes("/student") && teacher && (
 					<Link href="/teacher/create-course">
-						<Button>Create Course</Button>
+						<Button aria-label="Create course button">
+							Create Course
+						</Button>
 					</Link>
 				)}
 
