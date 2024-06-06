@@ -13,6 +13,8 @@ type Props = {
 
 const EnrollButton = ({ course }: Props) => {
 	const { toast } = useToast();
+	const courseId = course.id;
+	const price = course.price;
 
 	const onEnroll = async () => {
 		try {
@@ -26,10 +28,16 @@ const EnrollButton = ({ course }: Props) => {
 				);
 			} else {
 				if (course.isPro) {
-					toast({
-						title: "Subscribe to enroll",
-						variant: "destructive",
-					});
+					const response = await axios.post(
+						"/api/stripe-subscription",
+						{
+							courseId,
+						}
+					);
+
+					const data = await response.data();
+					console.log(data.url);
+					redirect(data.url);
 				} else {
 					toast({
 						title: "Buy the course",
@@ -38,6 +46,7 @@ const EnrollButton = ({ course }: Props) => {
 				}
 			}
 		} catch (error) {
+			console.error("Stripe subscription error");
 			toast({
 				title: "Something went wrong",
 				variant: "destructive",

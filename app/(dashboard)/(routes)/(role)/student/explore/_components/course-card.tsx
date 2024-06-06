@@ -6,7 +6,7 @@ import { useAuth, useUser } from "@clerk/nextjs";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import CourseProgress from "@/components/course-progress";
 
@@ -44,19 +44,28 @@ const CourseCard = ({ course }: Props) => {
 		course.reviews!.length > 0 ? totalRatings / course.reviews!.length : 0;
 
 	const onEnroll = async () => {
+		const courseId = course.id;
+		const price = course.price;
 		try {
 			if (course.isFree) {
 				await axios.patch(`/api/course/${course.id}/enroll`);
 				toast({
-					title: "Successfully enrolled",
+					title: "Successful Enrolled",
 				});
-				router.refresh();
+				redirect(
+					`/course/${course.id}/chapter/${course.chapters[0].id}`
+				);
 			} else {
 				if (course.isPro) {
-					toast({
-						title: "Subscribe to enroll",
-						variant: "destructive",
-					});
+					const response = await axios.post(
+						"/api/stripe-subscription",
+						{
+							courseId,
+						}
+					);
+
+					const data = await response.data();
+					redirect(data.url);
 				} else {
 					toast({
 						title: "Buy the course",

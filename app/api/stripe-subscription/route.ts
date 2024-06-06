@@ -4,22 +4,31 @@ import { absoluteUrl } from "@/lib/utils";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const settingsUrl = absoluteUrl("/settings");
+export async function POST(request: Request) {
+	console.log("called");
 
-export async function GET() {
 	try {
 		const { userId } = auth();
+		const body = await request.json();
 		const user = await currentUser();
+		const { courseId } = body;
+
+		console.log(courseId);
+
+		const settingsUrl = absoluteUrl(`/user/${userId}`);
 
 		if (!userId || !user) {
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
+
+		console.log("checked");
 
 		const userSubscription = await prismadb.subscription.findUnique({
 			where: {
 				userId,
 			},
 		});
+		console.log(userSubscription);
 
 		if (userSubscription && userSubscription.stripeCustomerId) {
 			const stripeSession = await stripe.billingPortal.sessions.create({
@@ -29,6 +38,7 @@ export async function GET() {
 
 			return new NextResponse(JSON.stringify({ url: stripeSession.url }));
 		}
+		console.log("checked");
 
 		const stripeSession = await stripe.checkout.sessions.create({
 			success_url: settingsUrl,
@@ -56,8 +66,11 @@ export async function GET() {
 			],
 			metadata: {
 				userId,
+				courseId,
 			},
 		});
+
+		console.log(stripeSession);
 
 		return new NextResponse(JSON.stringify({ url: stripeSession.url }));
 	} catch (error) {
