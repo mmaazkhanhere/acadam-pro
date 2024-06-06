@@ -18,51 +18,101 @@ export async function POST(req: Request) {
 			process.env.STRIPE_WEBHOOK_SECRET!
 		);
 	} catch (error: any) {
-		return new NextResponse(`Webhook ErrorL ${error.message}`, {
+		return new NextResponse(`Webhook Error: ${error.message}`, {
 			status: 400,
 		});
 	}
 
 	const session = event.data.object as Stripe.Checkout.Session;
+	const userId = session?.metadata?.userId;
+	const courseId = session?.metadata?.courseId;
 
-	if (event.type === "checkout.session.completed") {
-		const subscription = await stripe.subscriptions.retrieve(
-			session.subscription as string
-		);
-		if (!session?.metadata?.userId) {
-			return new NextResponse("User id is required", { status: 400 });
-		}
-
-		await prismadb.subscription.create({
-			data: {
-				userId: session?.metadata?.userId,
-				stripeSubscriptionId: subscription.id,
-				stripeCustomerId: subscription.customer as string,
-				stripePriceId: subscription.items.data[0].price.id,
-				stripeCurrentPeriodEnd: new Date(
-					subscription.current_period_end * 1000
-				),
-			},
-		});
+	if (!userId) {
+		return new NextResponse("User id is required", { status: 400 });
 	}
 
-	if (event.type === "invoice.payment_succeeded") {
-		const subscription = await stripe.subscriptions.retrieve(
-			session.subscription as string
-		);
+	switch (event.type) {
+		case "checkout.session.completed":
+			if (session.mode === "subscription") {
+				const subscription = await stripe.subscriptions.retrieve(
+					session.subscription as string
+				);
 
-		await prismadb.subscription.update({
-			where: {
-				stripeSubscriptionId: subscription.id,
-			},
-			data: {
-				stripePriceId: subscription.items.data[0].price.id,
-				stripeCurrentPeriodEnd: new Date(
-					subscription.current_period_end * 1000
-				),
-			},
-		});
+				await handleSubscriptionCreation(userId, subscription);
+			} else if (session.mode === "payment") {
+				await handleSinglePurchase(
+					userId,
+					courseId as string,
+					session.amount_total as number
+				);
+			}
+			break;
+
+		case "invoice.payment_succeeded":
+			const subscription = await stripe.subscriptions.retrieve(
+				session.subscription as string
+			);
+
+			await handleSubscriptionRenewal(userId, subscription);
+			break;
+
+		default:
+			console.log(`Unhandled event type ${event.type}`);
 	}
 
 	return new NextResponse(null, { status: 200 });
+}
+
+async function handleSubscriptionCreation(
+	userId: string,
+	subscription: Stripe.Subscription
+) {
+	await prismadb.subscription.create({
+		data: {
+			userId,
+			stripeSubscriptionId: subscription.id,
+			stripeCustomerId: subscription.customer as string,
+			stripePriceId: subscription.items.data[0].price.id,
+			stripeCurrentPeriodEnd: new Date(
+				subscription.current_period_end * 1000
+			),
+		},
+	});
+}
+
+async function handleSubscriptionRenewal(
+	userId: string,
+	subscription: Stripe.Subscription
+) {
+	await prismadb.subscription.update({
+		where: {
+			stripeSubscriptionId: subscription.id,
+		},
+		data: {
+			stripePriceId: subscription.items.data[0].price.id,
+			stripeCurrentPeriodEnd: new Date(
+				subscription.current_period_end * 1000
+			),
+		},
+	});
+}
+
+async function handleSinglePurchase(
+	userId: string,
+	courseId: string,
+	amount: number
+) {
+	if (!courseId) {
+		return new NextResponse("Course id is required for single purchase", {
+			status: 400,
+		});
+	}
+
+	await prismadb.purchase.create({
+		data: {
+			userId,
+			courseId,
+			amount,
+		},
+	});
 }
