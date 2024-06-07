@@ -38,7 +38,11 @@ export async function POST(req: Request) {
 					session.subscription as string
 				);
 
-				await handleSubscriptionCreation(userId, subscription);
+				await handleSubscriptionCreation(
+					userId,
+					subscription,
+					courseId as string
+				);
 			} else if (session.mode === "payment") {
 				await handleSinglePurchase(
 					userId,
@@ -65,17 +69,38 @@ export async function POST(req: Request) {
 
 async function handleSubscriptionCreation(
 	userId: string,
-	subscription: Stripe.Subscription
+	subscription: Stripe.Subscription,
+	courseId: string
 ) {
+	const price = await stripe.prices.retrieve(
+		subscription.items.data[0].price.id
+	);
+	const amount = price.unit_amount ? price.unit_amount / 100 : 0;
+
 	await prismadb.subscription.create({
 		data: {
 			userId,
+			amount,
+
+			stripePriceId: subscription.items.data[0].price.id,
 			stripeSubscriptionId: subscription.id,
 			stripeCustomerId: subscription.customer as string,
-			stripePriceId: subscription.items.data[0].price.id,
 			stripeCurrentPeriodEnd: new Date(
 				subscription.current_period_end * 1000
 			),
+		},
+	});
+
+	await prismadb.course.update({
+		where: {
+			id: courseId,
+		},
+		data: {
+			studentsEnrolled: {
+				connect: {
+					id: userId,
+				},
+			},
 		},
 	});
 }

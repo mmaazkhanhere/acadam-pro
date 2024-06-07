@@ -1,4 +1,4 @@
-import { Category, Course, Review, User } from "@prisma/client";
+import { Category, Course, Review, Subscription, User } from "@prisma/client";
 import CourseCard from "./course-card";
 
 type CourseWithProgressWithCategory = Course & {
@@ -12,13 +12,18 @@ type CourseWithProgressWithCategory = Course & {
 
 type Props = {
 	courses: CourseWithProgressWithCategory[];
+	subscription: Subscription;
 };
 
-const CourseList = ({ courses }: Props) => {
+const CourseList = ({ courses, subscription }: Props) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 			{courses.map((course) => (
-				<CourseCard key={course.id} course={course} />
+				<CourseCard
+					key={course.id}
+					course={course}
+					subscription={subscription}
+				/>
 			))}
 		</div>
 	);

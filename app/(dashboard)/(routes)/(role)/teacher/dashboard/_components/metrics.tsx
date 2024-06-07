@@ -18,7 +18,7 @@ const Metrics = ({ user }: Props) => {
 	if (user.username === "acadampro") {
 		// Sum the total amount from all subscriptions
 		totalAmountEarned = user.subscriptions.reduce(
-			(acc, subscription) => acc + subscription.amount,
+			(acc, subscription) => acc + (subscription.amount || 0),
 			0
 		);
 	} else {

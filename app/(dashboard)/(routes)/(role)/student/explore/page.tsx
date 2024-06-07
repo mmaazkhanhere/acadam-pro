@@ -31,6 +31,12 @@ const Explore = async ({ searchParams }: Props) => {
 		},
 	});
 
+	const subscription = await prismadb.subscription.findUnique({
+		where: {
+			userId,
+		},
+	});
+
 	const courses = await getAllCourses({ userId, ...searchParams });
 
 	return (
@@ -40,7 +46,7 @@ const Explore = async ({ searchParams }: Props) => {
 			<div className="space-y-5">
 				<CategoryList categories={categories} />
 
-				<CourseList courses={courses} />
+				<CourseList courses={courses} subscription={subscription!} />
 			</div>
 		</div>
 	);

@@ -12,7 +12,7 @@ import CourseProgress from "@/components/course-progress";
 
 import RatingOverview from "../../../teacher/dashboard/_components/rating-overview";
 
-import { Course, Review, User, Category } from "@prisma/client";
+import { Course, Review, User, Category, Subscription } from "@prisma/client";
 
 import { BookIcon } from "lucide-react";
 
@@ -25,12 +25,15 @@ type Props = {
 		progress: number | null;
 		studentEnrolled: User[];
 	};
+	subscription: Subscription;
 };
 
-const CourseCard = ({ course }: Props) => {
+const CourseCard = ({ course, subscription }: Props) => {
 	const { userId } = useAuth();
 	const router = useRouter();
 	const { toast } = useToast();
+
+	const userSubscriptionStatus = subscription?.userId === userId;
 
 	if (!userId) {
 		router.push("/");
@@ -42,44 +45,6 @@ const CourseCard = ({ course }: Props) => {
 	);
 	const averageRating =
 		course.reviews!.length > 0 ? totalRatings / course.reviews!.length : 0;
-
-	const onEnroll = async () => {
-		const courseId = course.id;
-		const price = course.price;
-		try {
-			if (course.isFree) {
-				await axios.patch(`/api/course/${course.id}/enroll`);
-				toast({
-					title: "Successful Enrolled",
-				});
-				redirect(
-					`/course/${course.id}/chapter/${course.chapters[0].id}`
-				);
-			} else {
-				if (course.isPro) {
-					const response = await axios.post(
-						"/api/stripe-subscription",
-						{
-							courseId,
-						}
-					);
-
-					const data = await response.data();
-					redirect(data.url);
-				} else {
-					toast({
-						title: "Buy the course",
-						variant: "destructive",
-					});
-				}
-			}
-		} catch (error) {
-			toast({
-				title: "Something went wrong",
-				variant: "destructive",
-			});
-		}
-	};
 
 	const onClick = () => {
 		const isEnrolled = course.studentEnrolled.some(
@@ -97,7 +62,6 @@ const CourseCard = ({ course }: Props) => {
 
 	return (
 		<article
-			onClick={onClick}
 			className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full cursor-pointer
 			dark:bg-muted bg-purple-100/50"
 		>
@@ -158,12 +122,13 @@ const CourseCard = ({ course }: Props) => {
 					(user) => user.id === user.id
 				) && (
 					<Button
-						aria-label="Course enroll button"
+						variant="outline"
+						onClick={onClick}
+						aria-label="Course detail button"
 						size="sm"
-						className="text-xs h-6 w-16"
-						onClick={onEnroll}
+						className="text-xs h-6 w-16 border-black hover:bg-gray-200"
 					>
-						Enroll
+						Details
 					</Button>
 				)}
 			</div>
