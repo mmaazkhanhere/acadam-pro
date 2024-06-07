@@ -28,16 +28,22 @@ const EnrollButton = ({ course }: Props) => {
 				);
 			} else {
 				if (course.isPro) {
-					const response = await axios.post(
-						"/api/stripe-subscription",
-						{
+					const response = await fetch("/api/stripe-subscription", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
 							courseId,
-						}
-					);
+						}),
+					});
 
-					const data = await response.data();
-					console.log(data.url);
-					redirect(data.url);
+					const data = await response.json();
+					window.location.href = data.url;
+
+					toast({
+						title: "Successful Subscription",
+					});
 				} else {
 					toast({
 						title: "Buy the course",
