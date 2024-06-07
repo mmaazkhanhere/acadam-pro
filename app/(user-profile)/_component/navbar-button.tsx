@@ -10,26 +10,22 @@ import { ThemeButton } from "@/components/ui/theme-button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 
-type Props = {};
+type Props = {
+	userType: string;
+};
 
-const NavbarButton = (props: Props) => {
+const NavbarButton = ({ userType }: Props) => {
 	const { userId } = useAuth();
 
 	if (!userId) {
 		return redirect("/");
 	}
 
-	const onClick = () => {
-		redirect("/dashboard");
-	};
-
 	return (
 		<nav className="hidden md:flex items-center justify-center gap-x-4">
 			{userId && (
-				<Link href="/dashboard">
-					<Button aria-label="Dashboard button" onClick={onClick}>
-						Dashboard
-					</Button>
+				<Link href={`/${userType.toLowerCase()}/dashboard`}>
+					<Button aria-label="Dashboard button">Dashboard</Button>
 				</Link>
 			)}
 
