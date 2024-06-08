@@ -213,7 +213,7 @@ const CourseCreationForm = ({ categories, admin }: Props) => {
 										<Input
 											type="number"
 											step="0.1"
-											min={0}
+											min={20}
 											{...field}
 										/>
 									</FormControl>

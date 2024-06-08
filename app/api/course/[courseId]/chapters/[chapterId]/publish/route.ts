@@ -20,7 +20,7 @@ export const PATCH = async (
 		const teacher = isTeacher(userId as string);
 		const admin = isAdmin(userId as string);
 
-		if (!userId || !teacher || !admin) {
+		if (!userId || (!admin && !teacher)) {
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
 

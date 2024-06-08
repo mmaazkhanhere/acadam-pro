@@ -83,7 +83,6 @@ model Chapter {
   position    Int
   isPublished Boolean @default(false)
   isFree      Boolean @default(true)
-
   muxData MuxData?
 
   courseId String

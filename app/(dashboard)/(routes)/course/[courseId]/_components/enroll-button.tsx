@@ -16,6 +16,8 @@ const EnrollButton = ({ course, userSubscriptionStatus }: Props) => {
 	const { toast } = useToast();
 	const router = useRouter();
 	const courseId = course.id;
+	const price = course.price;
+	console.log(price);
 
 	const onEnroll = async () => {
 		try {
@@ -33,34 +35,39 @@ const EnrollButton = ({ course, userSubscriptionStatus }: Props) => {
 				} else {
 					throw new Error("Failed to enroll");
 				}
-			} else {
-				if (course.isPro) {
-					if (userSubscriptionStatus) {
-						await axios.patch(`/api/course/${course.id}/enroll`);
-						router.push(
-							`/course/${course.id}/chapter/${course.chapters[0].id}`
-						);
-						toast({
-							title: "Successfully Enrolled",
-						});
-					} else {
-						const response = await fetch(
-							"/api/stripe-subscription",
-							{
-								method: "POST",
-								headers: {
-									"Content-Type": "application/json",
-								},
-								body: JSON.stringify({ courseId }),
-							}
-						);
-						const data = await response.json();
-						window.location.href = data.url;
-						toast({
-							title: "Successfully Subscribed",
-						});
-					}
+			} else if (course.isPro) {
+				if (userSubscriptionStatus) {
+					await axios.patch(`/api/course/${course.id}/enroll`);
+					router.push(
+						`/course/${course.id}/chapter/${course.chapters[0].id}`
+					);
+					toast({
+						title: "Successfully Enrolled",
+					});
+				} else {
+					const response = await fetch("/api/stripe-subscription", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ courseId }),
+					});
+					const data = await response.json();
+					window.location.href = data.url;
+					toast({
+						title: "Successfully Subscribed",
+					});
 				}
+			} else {
+				const response = await fetch("/api/stripe-purchase", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ courseId, price }),
+				});
+				const data = await response.json();
+				window.location.href = data.url;
 			}
 		} catch (error) {
 			console.error("Enrollment error", error);

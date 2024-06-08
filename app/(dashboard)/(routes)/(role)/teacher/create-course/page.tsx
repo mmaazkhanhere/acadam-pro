@@ -22,7 +22,7 @@ const CourseCreation = async (props: Props) => {
 		},
 	});
 
-	if (!userId || !admin || !teacher) {
+	if (!userId || (!admin && !teacher)) {
 		redirect("/");
 	}
 

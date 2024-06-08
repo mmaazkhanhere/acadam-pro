@@ -20,6 +20,8 @@ export const POST = async (request: Request) => {
 		const body = await request.json();
 
 		const { courseId, price } = body;
+		console.log(courseId);
+		console.log(price);
 
 		const course = await prismadb.course.findUnique({
 			where: {
@@ -43,7 +45,7 @@ export const POST = async (request: Request) => {
 						currency: "usd",
 						product_data: {
 							name: `${course.title}`,
-							description: "Course Subscription",
+							description: "Course Purchase",
 						},
 						unit_amount: price * 100,
 					},
@@ -55,8 +57,12 @@ export const POST = async (request: Request) => {
 				price,
 				userId,
 			},
-			success_url: `${process.env.NEXT_APP_URL}/${user.userType}/dashboard`,
-			cancel_url: `${process.env.NEXT_APP_URL}/${user.userType}/dashboard`,
+			success_url: `${
+				process.env.NEXT_APP_URL
+			}/${user.userType.toLowerCase()}/dashboard`,
+			cancel_url: `${
+				process.env.NEXT_APP_URL
+			}/${user.userType.toLowerCase()}/dashboard`,
 		});
 
 		return new NextResponse(JSON.stringify({ url: session.url }));

@@ -27,7 +27,7 @@ const CoursePage = async ({ params }: Props) => {
 	const admin = await isAdmin(userId as string);
 	const teacher = await isTeacher(userId as string);
 
-	if (!userId || !teacher || !admin) {
+	if (!userId || (!admin && !teacher)) {
 		redirect("/");
 	}
 

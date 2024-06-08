@@ -15,7 +15,7 @@ const CoursesHomepage = async (props: Props) => {
 	const admin = await isAdmin(userId as string);
 	const teacher = await isTeacher(userId as string);
 
-	if (!userId || !admin || !teacher) {
+	if (!userId || (!admin && !teacher)) {
 		return redirect("/");
 	}
 

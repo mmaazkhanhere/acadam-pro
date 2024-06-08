@@ -19,7 +19,7 @@ export const POST = async (
 		const teacher = await isTeacher(userId as string);
 		const admin = await isAdmin(userId as string);
 
-		if (!userId || admin || teacher) {
+		if (!userId || (!admin && !teacher)) {
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
 

@@ -26,6 +26,9 @@ export async function POST(req: Request) {
 	const session = event.data.object as Stripe.Checkout.Session;
 	const userId = session?.metadata?.userId;
 	const courseId = session?.metadata?.courseId;
+	const price = Number(session?.metadata?.price!);
+
+	console.log(price);
 
 	if (!userId) {
 		return new NextResponse("User id is required", { status: 400 });
@@ -44,11 +47,7 @@ export async function POST(req: Request) {
 					courseId as string
 				);
 			} else if (session.mode === "payment") {
-				await handleSinglePurchase(
-					userId,
-					courseId as string,
-					session.amount_total as number
-				);
+				await handleSinglePurchase(userId, courseId as string, price);
 			}
 			break;
 
@@ -125,7 +124,7 @@ async function handleSubscriptionRenewal(
 async function handleSinglePurchase(
 	userId: string,
 	courseId: string,
-	amount: number
+	price: number
 ) {
 	if (!courseId) {
 		return new NextResponse("Course id is required for single purchase", {
@@ -137,7 +136,20 @@ async function handleSinglePurchase(
 		data: {
 			userId,
 			courseId,
-			amount,
+			amount: price,
+		},
+	});
+
+	await prismadb.course.update({
+		where: {
+			id: courseId,
+		},
+		data: {
+			studentsEnrolled: {
+				connect: {
+					id: userId,
+				},
+			},
 		},
 	});
 }
