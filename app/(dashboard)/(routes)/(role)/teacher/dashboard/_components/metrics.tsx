@@ -34,7 +34,13 @@ const Metrics = ({ user, subscriptions }: Props) => {
 		}, 0);
 	}
 
-	console.log(totalAmountEarned);
+	const uniqueStudentIds = new Set<string>();
+	user.coursesTeaching.forEach((course) => {
+		course.studentsEnrolled.forEach((student) => {
+			uniqueStudentIds.add(student.id);
+		});
+	});
+	const totalUniqueStudents = uniqueStudentIds.size;
 
 	return (
 		<section className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 mt-5 p-4 ">
@@ -62,10 +68,7 @@ const Metrics = ({ user, subscriptions }: Props) => {
 				</div>
 
 				<p className="text-2xl md:text-3xl pt-2">
-					{user.coursesTeaching.reduce(
-						(acc, course) => acc + course.studentsEnrolled.length,
-						0
-					)}
+					{totalUniqueStudents}
 					<span className="text-lg lg:text-xl ml-1">Students</span>
 				</p>
 			</div>
