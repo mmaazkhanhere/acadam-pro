@@ -2,57 +2,68 @@
 import React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Chapter, Course } from "@prisma/client";
+import { Chapter, Course, Subscription } from "@prisma/client";
 import axios from "axios";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation"; // Updated
 import { useToast } from "@/components/ui/use-toast";
 
 type Props = {
 	course: Course & { chapters: Chapter[] };
+	userSubscriptionStatus?: boolean;
 };
 
-const EnrollButton = ({ course }: Props) => {
+const EnrollButton = ({ course, userSubscriptionStatus }: Props) => {
 	const { toast } = useToast();
+	const router = useRouter();
 	const courseId = course.id;
-	const price = course.price;
 
 	const onEnroll = async () => {
 		try {
 			if (course.isFree) {
-				await axios.patch(`/api/course/${course.id}/enroll`);
-				toast({
-					title: "Successful Enrolled",
-				});
-				redirect(
-					`/course/${course.id}/chapter/${course.chapters[0].id}`
+				const response = await axios.patch(
+					`/api/course/${course.id}/enroll`
 				);
+				if (response.status === 200) {
+					toast({
+						title: "Successfully Enrolled",
+					});
+					router.push(
+						`/course/${course.id}/chapter/${course.chapters[0].id}`
+					);
+				} else {
+					throw new Error("Failed to enroll");
+				}
 			} else {
 				if (course.isPro) {
-					const response = await fetch("/api/stripe-subscription", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							courseId,
-						}),
-					});
-
-					const data = await response.json();
-					window.location.href = data.url;
-
-					toast({
-						title: "Successful Subscription",
-					});
-				} else {
-					toast({
-						title: "Buy the course",
-						variant: "destructive",
-					});
+					if (userSubscriptionStatus) {
+						await axios.patch(`/api/course/${course.id}/enroll`);
+						router.push(
+							`/course/${course.id}/chapter/${course.chapters[0].id}`
+						);
+						toast({
+							title: "Successfully Enrolled",
+						});
+					} else {
+						const response = await fetch(
+							"/api/stripe-subscription",
+							{
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+								},
+								body: JSON.stringify({ courseId }),
+							}
+						);
+						const data = await response.json();
+						window.location.href = data.url;
+						toast({
+							title: "Successfully Subscribed",
+						});
+					}
 				}
 			}
 		} catch (error) {
-			console.error("Stripe subscription error");
+			console.error("Enrollment error", error);
 			toast({
 				title: "Something went wrong",
 				variant: "destructive",

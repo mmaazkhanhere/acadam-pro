@@ -76,6 +76,8 @@ const ChapterPage = async ({ params }: Props) => {
 
 	const isCompleted = requiredFields.every(Boolean);
 
+	console.log(course.isFree);
+
 	return (
 		<section>
 			{!chapter?.isPublished && (

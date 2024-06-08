@@ -5,14 +5,13 @@ import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
 
 import prismadb from "@/lib/prismadb";
 
 import { ArrowLeft } from "lucide-react";
 import EnrollButton from "./_components/enroll-button";
 import ReviewCard from "./_components/review-card";
-import { Review, User } from "@prisma/client";
+import { auth } from "@clerk/nextjs/server";
 
 type Props = {
 	params: {
@@ -21,6 +20,12 @@ type Props = {
 };
 
 const CoursePage = async ({ params }: Props) => {
+	const { userId } = auth();
+
+	if (!userId) {
+		redirect("/");
+	}
+
 	const course = await prismadb.course.findUnique({
 		where: {
 			id: params.courseId,
@@ -32,12 +37,23 @@ const CoursePage = async ({ params }: Props) => {
 					author: true,
 				},
 			},
+			studentsEnrolled: true,
 		},
 	});
 
 	if (!course) {
 		redirect("/");
 	}
+
+	const subscriptions = await prismadb.subscription.findMany();
+
+	const enrollmentStatus = course.studentsEnrolled.some(
+		(field) => field.id === userId
+	);
+
+	const userSubscriptionStatus = subscriptions?.some(
+		(field) => field.userId === userId
+	);
 
 	return (
 		<section className="p-4 md:p-8 w-full">
@@ -60,7 +76,12 @@ const CoursePage = async ({ params }: Props) => {
 					<h2 className="text-xl md:text-2xl font-bold">
 						{course.title}
 					</h2>
-					<EnrollButton course={course} />
+					{(!userSubscriptionStatus || !enrollmentStatus) && (
+						<EnrollButton
+							course={course}
+							userSubscriptionStatus={userSubscriptionStatus}
+						/>
+					)}
 				</div>
 
 				<Separator />

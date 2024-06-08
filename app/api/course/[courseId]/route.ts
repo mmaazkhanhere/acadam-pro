@@ -73,8 +73,8 @@ export const PATCH = async (
 
 	try {
 		const { userId } = auth();
-		const admin = isAdmin(userId as string);
-		const teacher = isTeacher(userId as string);
+		const admin = await isAdmin(userId as string);
+		const teacher = await isTeacher(userId as string);
 
 		if (!userId || !admin || !teacher) {
 			return new NextResponse("Unauthorized", { status: 401 });
@@ -91,7 +91,39 @@ export const PATCH = async (
 			return new NextResponse("Cannot find the course", { status: 406 });
 		}
 
-		const updatedCourse = await prismadb.course.update({
+		let updatedCourse;
+
+		if (Object.keys(body).includes("isFree")) {
+			if (!body.isFree && admin) {
+				updatedCourse = await prismadb.course.update({
+					where: {
+						id: params.courseId,
+						teacherId: userId,
+					},
+					data: {
+						isFree: false,
+						price: 19.99,
+						isPro: true,
+					},
+				});
+			} else {
+				updatedCourse = await prismadb.course.update({
+					where: {
+						id: params.courseId,
+						teacherId: userId,
+					},
+					data: {
+						isFree: true,
+						price: 0,
+						isPro: false,
+					},
+				});
+			}
+
+			return NextResponse.json(updatedCourse);
+		}
+
+		updatedCourse = await prismadb.course.update({
 			where: {
 				id: params.courseId,
 				teacherId: userId,

@@ -15,6 +15,7 @@ import RatingOverview from "../../../teacher/dashboard/_components/rating-overvi
 import { Course, Review, User, Category, Subscription } from "@prisma/client";
 
 import { BookIcon } from "lucide-react";
+import Link from "next/link";
 
 type Props = {
 	course: Course & {
@@ -65,18 +66,26 @@ const CourseCard = ({ course, subscription }: Props) => {
 			className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full cursor-pointer
 			dark:bg-muted bg-purple-100/50"
 		>
-			<div className="relative aspect-video rounded-xl w-full overflow-hidden">
+			<Link
+				href={`/course/${course.id}`}
+				className="relative aspect-video rounded-xl w-full overflow-hidden"
+			>
 				<Image
 					fill
 					className="object-cover"
 					src={course.imageUrl as string}
 					alt={`${course.title} Image`}
 				/>
-			</div>
+			</Link>
 
 			<div className="flex flex-col items-start w-full">
 				<div className="flex items-center justify-between w-full">
-					<p className="text-lg font-bold">{course.title}</p>
+					<Link
+						href={`/course/${course.id}`}
+						className="text-lg font-bold"
+					>
+						{course.title}
+					</Link>
 
 					<div className="flex items-center gap-x-2">
 						<p

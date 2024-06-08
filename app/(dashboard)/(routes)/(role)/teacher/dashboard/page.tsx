@@ -1,23 +1,23 @@
 import { redirect } from "next/navigation";
-
 import { auth } from "@clerk/nextjs/server";
-
 import WelcomeBanner from "./_components/welcome-banner";
-
 import { isAdmin, isTeacher } from "@/helpers/userCheck";
 import prismadb from "@/lib/prismadb";
 import Metrics from "./_components/metrics";
-import { DataTable } from "./_components/data-table";
-import { columns } from "./_components/columns";
 import CoursesList from "./_components/courses-list";
 
-type Props = {};
-
-const Dashboard = async (props: Props) => {
+const Dashboard = async () => {
 	const { userId } = auth();
-	const admin = isAdmin(userId as string);
+
+	if (!userId) {
+		redirect("/");
+		return;
+	}
+
+	const admin = await isAdmin(userId as string); // Ensure this returns a promise if it's async
 	const teacher = await isTeacher(userId!);
 
+	// Fetch user data
 	const user = await prismadb.user.findUnique({
 		where: {
 			id: userId as string,
@@ -29,21 +29,23 @@ const Dashboard = async (props: Props) => {
 					purchases: true, // Include purchases related to the courses the user is teaching
 				},
 			},
-			purchases: true, // Purchases made by the user (for non-admin)
-			subscriptions: true, // Subscriptions (for admin)
 		},
 	});
 
-	if (!admin || (!teacher && !user) || user?.userType === "Student") {
+	const subscriptions = await prismadb.subscription.findMany();
+
+	// Redirect if the user is not an admin or teacher, or if the user is a student
+	if ((!admin && !teacher) || user?.userType === "Student") {
 		redirect("/");
+		return;
 	}
+
+	console.log(subscriptions);
 
 	return (
 		<div>
 			<WelcomeBanner name={user?.name as string} />
-
-			<Metrics user={user!} />
-
+			<Metrics user={user!} subscriptions={subscriptions} />
 			<CoursesList />
 		</div>
 	);

@@ -31,8 +31,15 @@ const NavbarButton = ({ userType }: Props) => {
 
 			<ThemeButton />
 
-			<SignOutButton>
-				<LogOut />
+			<SignOutButton signOutOptions={{ redirectUrl: "/" }}>
+				<Button
+					title="logout"
+					aria-label="Logout button"
+					variant="ghost"
+					className="hidden lg:block cursor-pointer"
+				>
+					<LogOut />
+				</Button>
 			</SignOutButton>
 		</nav>
 	);

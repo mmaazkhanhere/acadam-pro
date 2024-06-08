@@ -34,12 +34,12 @@ const NavbarButtons = async ({ userType, userId }: Props) => {
 				)}
 
 				{userId && (
-					<SignOutButton>
+					<SignOutButton signOutOptions={{ redirectUrl: "/" }}>
 						<Button
 							title="logout"
 							aria-label="Logout button"
 							variant="ghost"
-							className="hidden lg:block dark:bg-muted-foreground dark:hover:bg-muted-foreground/70"
+							className="hidden lg:block dark:bg-muted-foreground dark:hover:bg-muted-foreground/70 cursor-pointer"
 						>
 							<LogOut />
 						</Button>
@@ -80,12 +80,12 @@ const NavbarButtons = async ({ userType, userId }: Props) => {
 			)}
 
 			{userId && (
-				<SignOutButton>
+				<SignOutButton signOutOptions={{ redirectUrl: "/" }}>
 					<Button
 						title="logout"
 						aria-label="Logout button"
 						variant="ghost"
-						className="hidden lg:block"
+						className="hidden lg:block cursor-pointer"
 					>
 						<LogOut />
 					</Button>

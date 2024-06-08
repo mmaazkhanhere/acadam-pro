@@ -41,25 +41,32 @@ const EnrolledCourseCard = ({ course }: Props) => {
 			: 0;
 
 	return (
-		<Link
-			href={`/course/${course.id}/chapter/${course.chapters[0].id}`}
+		<article
 			className="p-4 shadow-md rounded-2xl flex flex-col items-start h-full gap-3 w-full
 			bg-purple-100/50 dark:bg-muted"
 		>
-			<div className="relative aspect-video rounded-xl w-full overflow-hidden">
+			<Link
+				href={`/course/${course.id}/chapter/${course.chapters[0].id}`}
+				className="relative aspect-video rounded-xl w-full overflow-hidden"
+			>
 				<Image
 					fill
 					className="object-cover"
 					src={course.imageUrl as string}
 					alt={`${course.title} Image`}
 				/>
-			</div>
+			</Link>
 
 			<div className="flex items-center justify-between w-full mt-2">
 				<div className="flex items-center gap-x-2">
-					<h2 className="text-lg md:text-xl font-bold">
-						{course.title}
-					</h2>
+					<Link
+						href={`/course/${course.id}/chapter/${course.chapters[0].id}`}
+					>
+						<h2 className="text-lg md:text-xl font-bold">
+							{course.title}
+						</h2>
+					</Link>
+
 					{course.isFree ? (
 						<Badge className="bg-green-500 hover:bg-green-400">
 							Free
@@ -96,7 +103,7 @@ const EnrolledCourseCard = ({ course }: Props) => {
 			<div className="w-full mt-2">
 				<CourseProgress value={course.progress as number} />
 			</div>
-		</Link>
+		</article>
 	);
 };
 

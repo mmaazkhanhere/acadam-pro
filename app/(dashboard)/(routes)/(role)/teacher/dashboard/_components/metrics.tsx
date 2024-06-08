@@ -4,35 +4,37 @@ import { CircleDollarSign, LibraryBig, Users } from "lucide-react";
 
 type Props = {
 	user: User & {
-		subscriptions: Subscription[];
-		purchases: Purchase[];
 		coursesTeaching: (Course & {
 			studentsEnrolled: User[];
 			purchases: Purchase[];
 		})[];
 	};
+	subscriptions: Subscription[];
 };
 
-const Metrics = ({ user }: Props) => {
+const Metrics = ({ user, subscriptions }: Props) => {
 	let totalAmountEarned = 0;
+
 	if (user.username === "acadampro") {
-		// Sum the total amount from all subscriptions
-		totalAmountEarned = user.subscriptions.reduce(
-			(acc, subscription) => acc + (subscription.amount || 0),
+		totalAmountEarned = subscriptions.reduce(
+			(acc, sub) => acc + sub.amount,
 			0
 		);
 	} else {
-		// Sum the total amount from all purchases of the user's courses
+		console.log("payment model");
 		totalAmountEarned = user.coursesTeaching.reduce((acc, course) => {
 			return (
 				acc +
 				course.purchases.reduce(
-					(purchaseAcc, purchase) => purchaseAcc + purchase.amount,
+					(purchaseAcc, purchase) =>
+						purchaseAcc + (purchase.amount || 0),
 					0
 				)
 			);
 		}, 0);
 	}
+
+	console.log(totalAmountEarned);
 
 	return (
 		<section className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 mt-5 p-4 ">
