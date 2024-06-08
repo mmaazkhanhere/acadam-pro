@@ -28,8 +28,6 @@ export async function POST(req: Request) {
 	const courseId = session?.metadata?.courseId;
 	const price = Number(session?.metadata?.price!);
 
-	console.log(price);
-
 	if (!userId) {
 		return new NextResponse("User id is required", { status: 400 });
 	}
