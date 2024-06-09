@@ -40,8 +40,6 @@ const Dashboard = async () => {
 		return;
 	}
 
-	console.log(subscriptions);
-
 	return (
 		<div>
 			<WelcomeBanner name={user?.name as string} />

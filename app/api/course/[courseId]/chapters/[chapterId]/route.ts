@@ -108,7 +108,6 @@ export const PATCH = async (
 	{ params }: { params: { courseId: string; chapterId: string } }
 ) => {
 	const body = await request.json();
-	console.log("checked");
 	try {
 		const { userId } = auth();
 		const teacher = isTeacher(userId as string);
@@ -118,8 +117,6 @@ export const PATCH = async (
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
 
-		console.log("checked");
-
 		const course = await prismadb.course.findUnique({
 			where: {
 				id: params.courseId,
@@ -127,13 +124,9 @@ export const PATCH = async (
 			},
 		});
 
-		console.log(course);
-
 		if (!course) {
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
-
-		console.log("checked");
 
 		const updatedChapter = await prismadb.chapter.update({
 			where: {
@@ -145,16 +138,12 @@ export const PATCH = async (
 			},
 		});
 
-		console.log(updatedChapter);
-
 		if (body.videoUrl) {
 			const existingMuxData = await prismadb.muxData.findFirst({
 				where: {
 					chapterId: params.chapterId,
 				},
 			});
-
-			console.log(existingMuxData);
 
 			if (existingMuxData) {
 				await video.assets.delete(existingMuxData.assetId);
@@ -164,8 +153,6 @@ export const PATCH = async (
 					},
 				});
 			}
-
-			console.log("checked");
 
 			const asset = await video.assets.create({
 				input: body.videoUrl,
@@ -180,9 +167,7 @@ export const PATCH = async (
 					playbackId: asset.playback_ids?.[0]?.id,
 				},
 			});
-			console.log("checked");
 		}
-		console.log("checked");
 
 		return NextResponse.json(updatedChapter);
 	} catch (error) {

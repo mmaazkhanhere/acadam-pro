@@ -20,8 +20,6 @@ export const POST = async (request: Request) => {
 		const body = await request.json();
 
 		const { courseId, price } = body;
-		console.log(courseId);
-		console.log(price);
 
 		const course = await prismadb.course.findUnique({
 			where: {

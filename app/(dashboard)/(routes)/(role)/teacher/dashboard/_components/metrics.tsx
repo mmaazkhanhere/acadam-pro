@@ -21,7 +21,6 @@ const Metrics = ({ user, subscriptions }: Props) => {
 			0
 		);
 	} else {
-		console.log("payment model");
 		totalAmountEarned = user.coursesTeaching.reduce((acc, course) => {
 			return (
 				acc +

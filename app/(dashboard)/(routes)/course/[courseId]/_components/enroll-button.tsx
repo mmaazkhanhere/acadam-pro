@@ -17,7 +17,6 @@ const EnrollButton = ({ course, userSubscriptionStatus }: Props) => {
 	const router = useRouter();
 	const courseId = course.id;
 	const price = course.price;
-	console.log(price);
 
 	const onEnroll = async () => {
 		try {
