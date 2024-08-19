@@ -1,49 +1,46 @@
-
 import Logo from "@/components/logo";
 
 import CourseSidebarItem from "./course-sidebar-item";
 
-import { Chapter, Course, UserProgress } from "@prisma/client"
-
+import { Chapter, Course, UserProgress } from "@prisma/client";
 
 type Props = {
-    course: Course & {
-        chapters: (
-            Chapter & {
-                userProgress: UserProgress[] | null
-            }
-        )[]
-    };
-}
+	course: Course & {
+		chapters: (Chapter & {
+			userProgress: UserProgress[] | null;
+		})[];
+	};
+	enrolled: boolean;
+};
 
-const CourseSidebar = ({ course }: Props) => {
-    return (
-        <div
-            className="flex flex-col items-center p-4 md:shadow-sm h-full overflow-y-auto"
-        >
+const CourseSidebar = ({ course, enrolled }: Props) => {
+	return (
+		<div className="flex flex-col items-center p-4 md:shadow-sm h-full overflow-y-auto">
+			<Logo />
 
-            <Logo />
+			<div className="flex flex-col w-full mt-10">
+				<p className="text-lg text-center font-bold mb-4">
+					{course.title}
+				</p>
+				{course.chapters.map((chapter) => {
+					const isLocked = !chapter.isFree && !enrolled;
 
-            <div className="flex flex-col w-full mt-10">
-                <p className="text-lg text-center font-bold mb-4">
-                    {course.title}
-                </p>
-                {
-                    course.chapters.map((chapter) => (
-                        <CourseSidebarItem
-                            key={chapter.id}
-                            label={chapter.title}
-                            id={chapter.id}
-                            isLocked={!chapter.isFree}
-                            isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
-                            courseId={course.id}
-                        />
-                    ))
-                }
-            </div>
+					return (
+						<CourseSidebarItem
+							key={chapter.id}
+							label={chapter.title}
+							id={chapter.id}
+							isLocked={isLocked}
+							isCompleted={
+								!!chapter.userProgress?.[0]?.isCompleted
+							}
+							courseId={course.id}
+						/>
+					);
+				})}
+			</div>
+		</div>
+	);
+};
 
-        </div>
-    )
-}
-
-export default CourseSidebar
+export default CourseSidebar;

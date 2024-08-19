@@ -76,12 +76,12 @@ const CoursePage = async ({ params }: Props) => {
 					<h2 className="text-xl md:text-2xl font-bold">
 						{course.title}
 					</h2>
-					{(!userSubscriptionStatus || !enrollmentStatus) && (
-						<EnrollButton
-							course={course}
-							userSubscriptionStatus={userSubscriptionStatus}
-						/>
-					)}
+
+					<EnrollButton
+						course={course}
+						userSubscriptionStatus={userSubscriptionStatus}
+						userEnrollmentStatus={enrollmentStatus}
+					/>
 				</div>
 
 				<Separator />
