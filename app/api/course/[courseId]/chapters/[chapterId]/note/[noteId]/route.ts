@@ -17,10 +17,15 @@ export const DELETE = async (
 ) => {
 	try {
 		const { userId } = auth();
+
+		if (!userId) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
+
 		const teacher = await isTeacher(userId as string);
 		const admin = await isAdmin(userId as string);
 
-		if (!userId || (!admin && !teacher)) {
+		if (admin || teacher) {
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
 

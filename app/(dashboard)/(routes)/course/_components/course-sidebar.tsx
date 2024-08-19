@@ -10,10 +10,10 @@ type Props = {
 			userProgress: UserProgress[] | null;
 		})[];
 	};
-	enrolled: boolean;
+	enrollmentStatus: boolean;
 };
 
-const CourseSidebar = ({ course, enrolled }: Props) => {
+const CourseSidebar = ({ course, enrollmentStatus }: Props) => {
 	return (
 		<div className="flex flex-col items-center p-4 md:shadow-sm h-full overflow-y-auto">
 			<Logo />
@@ -23,7 +23,7 @@ const CourseSidebar = ({ course, enrolled }: Props) => {
 					{course.title}
 				</p>
 				{course.chapters.map((chapter) => {
-					const isLocked = !chapter.isFree && !enrolled;
+					const isLocked = !chapter.isFree && !enrollmentStatus;
 
 					return (
 						<CourseSidebarItem

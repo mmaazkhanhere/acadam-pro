@@ -11,14 +11,18 @@ type Props = {
 			userProgress: UserProgress[] | null;
 		})[];
 	};
+	enrollmentStatus: boolean;
 };
 
-const CourseNavbar = ({ course }: Props) => {
+const CourseNavbar = ({ course, enrollmentStatus }: Props) => {
 	return (
 		<div className="p-4 h-full flex items-center justify-between shadow-sm bg-white dark:bg-black dark:border-b-2">
 			<div className="flex items-center gap-x-4">
 				<div className="md:hidden">
-					<CourseMobileSidebar course={course} />
+					<CourseMobileSidebar
+						enrollmentStatus={enrollmentStatus}
+						course={course}
+					/>
 				</div>
 			</div>
 

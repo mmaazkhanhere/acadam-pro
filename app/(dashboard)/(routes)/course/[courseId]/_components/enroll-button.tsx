@@ -10,13 +10,13 @@ import { useToast } from "@/components/ui/use-toast";
 type Props = {
 	course: Course & { chapters: Chapter[] };
 	userSubscriptionStatus?: boolean;
-	userEnrollmentStatus: boolean; // New prop to track enrollment status
+	userEnrollmentStatus: boolean;
 };
 
 const EnrollButton = ({
 	course,
 	userSubscriptionStatus,
-	userEnrollmentStatus: initialEnrollmentStatus, // New prop
+	userEnrollmentStatus: initialEnrollmentStatus,
 }: Props) => {
 	const { toast } = useToast();
 	const router = useRouter();
@@ -29,14 +29,12 @@ const EnrollButton = ({
 		setIsEnrolled(initialEnrollmentStatus);
 	}, [initialEnrollmentStatus]);
 
-	console.log(initialEnrollmentStatus);
-	console.log(isEnrolled);
-
 	const onEnroll = async () => {
 		try {
+			let response;
 			if (isEnrolled) {
 				// Unenroll user
-				const response = await axios.patch(
+				response = await axios.patch(
 					`/api/course/${course.id}/un-enroll`
 				);
 				if (response.status === 200) {
@@ -45,12 +43,14 @@ const EnrollButton = ({
 						title: "Successfully Unenrolled",
 					});
 				} else {
-					throw new Error("Failed to unenroll");
+					throw new Error(
+						`Failed to unenroll: ${response.statusText}`
+					);
 				}
 			} else {
 				// Enroll user
 				if (course.isFree) {
-					const response = await axios.patch(
+					response = await axios.patch(
 						`/api/course/${course.id}/enroll`
 					);
 					if (response.status === 200) {
@@ -62,7 +62,9 @@ const EnrollButton = ({
 							`/course/${course.id}/chapter/${course.chapters[0].id}`
 						);
 					} else {
-						throw new Error("Failed to enroll");
+						throw new Error(
+							`Failed to enroll: ${response.statusText}`
+						);
 					}
 				} else if (course.isPro) {
 					if (userSubscriptionStatus) {
@@ -75,16 +77,18 @@ const EnrollButton = ({
 							title: "Successfully Enrolled",
 						});
 					} else {
-						const response = await fetch(
-							"/api/stripe-subscription",
-							{
-								method: "POST",
-								headers: {
-									"Content-Type": "application/json",
-								},
-								body: JSON.stringify({ courseId }),
-							}
-						);
+						response = await fetch("/api/stripe-subscription", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({ courseId }),
+						});
+						if (!response.ok) {
+							throw new Error(
+								`Failed to start subscription: ${response.statusText}`
+							);
+						}
 						const data = await response.json();
 						window.location.href = data.url;
 						toast({
@@ -92,21 +96,27 @@ const EnrollButton = ({
 						});
 					}
 				} else {
-					const response = await fetch("/api/stripe-purchase", {
+					response = await fetch("/api/stripe-purchase", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
 						},
 						body: JSON.stringify({ courseId, price }),
 					});
+					if (!response.ok) {
+						throw new Error(
+							`Failed to purchase: ${response.statusText}`
+						);
+					}
 					const data = await response.json();
 					window.location.href = data.url;
 				}
 			}
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Enrollment error", error);
 			toast({
 				title: "Something went wrong",
+				description: error.message,
 				variant: "destructive",
 			});
 		}

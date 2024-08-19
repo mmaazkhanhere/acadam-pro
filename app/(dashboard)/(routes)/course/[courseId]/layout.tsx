@@ -54,11 +54,17 @@ const CourseIdLayout = async ({ children, params }: Props) => {
 	return (
 		<div className="h-full">
 			<div className="md:pl-60 w-full h-[80px] fixed z-50 inset-y-0">
-				<CourseNavbar course={course} />
+				<CourseNavbar
+					enrollmentStatus={enrollmentStatus}
+					course={course}
+				/>
 			</div>
 
 			<div className="w-60 fixed z-50 hidden md:flex flex-col inset-y-0 border-r">
-				<CourseSidebar course={course} enrolled={enrollmentStatus} />
+				<CourseSidebar
+					course={course}
+					enrollmentStatus={enrollmentStatus}
+				/>
 			</div>
 
 			<div className="md:pl-60 mt-[80px]">{children}</div>

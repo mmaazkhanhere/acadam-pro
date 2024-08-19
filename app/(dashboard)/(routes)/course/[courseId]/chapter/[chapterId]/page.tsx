@@ -36,6 +36,8 @@ const ChapterPage = async ({ params }: Props) => {
 			courseId: params.courseId,
 		});
 
+	console.log(course);
+
 	const isLocked =
 		!course?.isFree; /*Chapter will be not accessible if the chapter is not free */
 

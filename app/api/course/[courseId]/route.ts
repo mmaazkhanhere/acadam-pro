@@ -73,10 +73,15 @@ export const PATCH = async (
 
 	try {
 		const { userId } = auth();
+
+		if (!userId) {
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
+
 		const admin = await isAdmin(userId as string);
 		const teacher = await isTeacher(userId as string);
 
-		if (!userId || (!admin && !teacher)) {
+		if (!admin && !teacher) {
 			return new NextResponse("Unauthorized", { status: 401 });
 		}
 
@@ -94,6 +99,7 @@ export const PATCH = async (
 		let updatedCourse;
 
 		if (Object.keys(body).includes("isFree")) {
+			console.log("Pro Loop");
 			if (!body.isFree && admin) {
 				updatedCourse = await prismadb.course.update({
 					where: {
@@ -107,6 +113,7 @@ export const PATCH = async (
 					},
 				});
 			} else {
+				console.log("Free Loop");
 				updatedCourse = await prismadb.course.update({
 					where: {
 						id: params.courseId,
@@ -132,6 +139,8 @@ export const PATCH = async (
 				...body,
 			},
 		});
+
+		console.log(updatedCourse);
 
 		return NextResponse.json(updatedCourse);
 	} catch (error) {
